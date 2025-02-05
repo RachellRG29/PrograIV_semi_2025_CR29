@@ -18,18 +18,18 @@
      <script src="https://cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/alertify.min.js"></script>
      
  </head>
- <body style="background-color: #f5fbff; font-family: 'Rethink Sans';">
+ <body>
     <nav class="navbar bg-dark">
         <div class="container">
           <a class="navbar-brand" href="#" style="color: white; font-weight: bold;">
            <img src="https://cdn3.emoji.gg/emojis/8112-yellow-book.png" width="32px" height="auto" margin-left="0" alt="">
-            REGISTRO
+            REGISTRO ACADEMICO
           </a>
         </div>
       </nav>
 
-     <div id="app" class="container-fluid mt-3">
-         <div class="d-flex flex-column flex-md-row gap-3">
+     <div id="app" class="container-fluid mt-4 mb-4 position-relative">
+         <div class="row justify-content-center">
              <!-- Formulario -->
              <div class="col-md-5 col-12">
                  <form id="frmAlumno" name="frmAlumno" @submit.prevent="guardarAlumno">
@@ -71,25 +71,25 @@
                                  </div>
                              </div>
 
-                            <div class="mb-md-4 row">
+                             <div class="mb-md-4 row">
                                 <div class="col-md-4">
-                                    <label class="col-form-label">MUNICIPIO</label>
-                                    <select required v-model="municipio" id="txtMunicipioAlumno" class="form-control">
-                                        <option value="">Seleccione un municipio</option>
-                                        <option value="Municipio1">Municipio 1</option>
-                                        <option value="Municipio2">Municipio 2</option>
-                                        <option value="Municipio3">Municipio 3</option>
+                                    <label class="col-form-label">DISTRITO</label>
+                                    <select required v-model="distritoSeleccionado" @change="filtrarMunicipios" id="txtDistritoAlumno" class="form-control">
+                                        <option value="">Seleccione un distrito</option>
+                                        <option value="Distrito Central">Distrito Central</option>
+                                        <option value="Distrito Occidental">Distrito Occidental</option>
+                                        <option value="Distrito Oriental">Distrito Oriental</option>
+                                        <option value="Distrito Paracentral">Distrito Paracentral</option>
                                     </select>
                                 </div>
                             
-                            
                                 <div class="col-md-4">
-                                    <label class="col-form-label">DISTRITO</label>
-                                    <select required v-model="distrito" id="txtDistritoAlumno" class="form-control">
-                                        <option value="">Seleccione un distrito</option>
-                                        <option value="Distrito1">Distrito 1</option>
-                                        <option value="Distrito2">Distrito 2</option>
-                                        <option value="Distrito3">Distrito 3</option>
+                                    <label class="col-form-label">MUNICIPIO</label>
+                                    <select required v-model="municipioSeleccionado" id="txtMunicipioAlumno" class="form-control">
+                                        <option value="">Seleccione un municipio</option>
+                                        <option v-for="municipio in municipiosFiltrados" :key="municipio" :value="municipio">
+                                            {{ municipio }}
+                                        </option>
                                     </select>
                                 </div>
                             </div>
@@ -127,7 +127,7 @@
              </div>
  
              <!-- Busqueda y Tabla -->
-             <div class="flex-column col-md-6 col-12">
+             <div class="flex-column col-md-7 col-12">
                  <input v-model="busquedadeAlumno" @input="busquedaAlumno(alumnos)" placeholder="Buscar alumnos" type="text" id="busquedaAlumno" class="form-control mb-3">
                  <div class="table-responsive">
                      <table class="table table-dark table-striped table-bordered table-hover">
@@ -138,7 +138,6 @@
                                  <th>EMAIL</th>
                                  <th>DIRECCION</th>
                                  <th>MUNICIPIO</th>
-                                 <th>DEPARTAMENTO</th>
                                  <th>DISTRITO</th>
                                  <th>TELEFONO</th>
                                  <th>FECHA NACIMIENTO</th>
@@ -153,7 +152,6 @@
                                  <td>{{alumno.email}}</td>
                                  <td>{{alumno.direccion}}</td>
                                  <td>{{alumno.municipio}}</td>
-                                 <td>{{alumno.departamento}}</td>
                                  <td>{{alumno.distrito}}</td>
                                  <td>{{alumno.telefono}}</td>
                                  <td>{{alumno.fechanacimiento}}</td>
