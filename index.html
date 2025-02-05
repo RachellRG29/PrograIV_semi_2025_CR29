@@ -1,5 +1,4 @@
-<!-- Cindy Rachell Ramirez G, buscar alumno, agregar la demas informacion para proximo miercoles, ademas de 
- ponerlo mas atractivo a la vista pero simple -->
+<!-- Cindy Rachell Ramirez G, buscar alumno, agregar la demas informacion para proximo miercoles-->
  <!DOCTYPE html>
  <html lang="es">
  <head>
@@ -10,9 +9,17 @@
      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
      <link href="https://fonts.googleapis.com/css2?family=Albert+Sans:ital,wght@0,100..900;1,100..900&family=Comfortaa:wght@300..700&family=League+Spartan:wght@100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Rethink+Sans:ital,wght@0,400..800;1,400..800&display=swap" rel="stylesheet">
      <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+
+     <link rel="stylesheet" href="style_index.css">
+     <!-- AlertifyJS CSS -->
+     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/alertify.min.css">
+
+     <!-- AlertifyJS JS -->
+     <script src="https://cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/alertify.min.js"></script>
+     
  </head>
  <body style="background-color: #f5fbff; font-family: 'Rethink Sans';">
-    <nav class="navbar" style="background: #012233;">
+    <nav class="navbar bg-dark">
         <div class="container">
           <a class="navbar-brand" href="#" style="color: white; font-weight: bold;">
            <img src="https://cdn3.emoji.gg/emojis/8112-yellow-book.png" width="32px" height="auto" margin-left="0" alt="">
@@ -29,39 +36,90 @@
                      <div class="card" style="background-color: #bdd3de;">
                          <div class="card-header text-white text-center" style="background-color: #013d5a; font-size: 20px;">Registro de Alumnos</div>
                          <div class="card-body">
+
+                            <div class="mb-3 row">
+                                <label class="col-md-3 col-form-label">CODIGO</label>
+                                <div class="col-md-9 position-relative">
+                                    <input required pattern="[A-Za-z]{4}\d{6}$" v-model="codigo" type="text" 
+                                        id="txtCodigoAlumno" class="form-control" 
+                                        oninput="validarCodigo(this)"  onblur="validarCodigo(this, true)">
+                                </div>
+                            </div>
+                            
                              <div class="mb-3 row">
-                                 <label class="col-md-3 col-form-label">CODIGO</label>
-                                 <div class="col-md-9">
-                                     <input required v-model="codigo" type="text" id="txtCodigoAlumno" class="form-control">
+                                <label class="col-md-3 col-form-label">NOMBRE</label>
+                                <div class="col-md-9 position-relative">
+                                    <input required pattern="[A-Za-zñÑáéíóú ]{3,150}" v-model="nombre" 
+                                        type="text" id="txtNombreAlumno" class="form-control"
+                                        oninput="validarNombre(this)" onblur="validarNombre(this, true)">
+                                </div>
+                            </div>
+
+                            <div class="mb-3 row">
+                                 <label class="col-md-3 col-form-label">EMAIL</label>
+                                 <div class="col-md-9 position-relative">
+                                     <input required v-model="email" type="email" id="txtEmailAlumno" class="form-control" 
+                                        oninput="validarEmail(this)" onblur="validarEmail(this, true)">      
                                  </div>
-                             </div>
-                             <div class="mb-3 row">
-                                 <label class="col-md-3 col-form-label">NOMBRE</label>
-                                 <div class="col-md-9">
-                                     <input required pattern="[A-Za-zñÑáéíóú ]{3,150}" v-model="nombre" type="text" id="txtNombreAlumno" class="form-control">
-                                 </div>
-                             </div>
+                             </div> 
+
                              <div class="mb-3 row">
                                  <label class="col-md-3 col-form-label">DIRECCION</label>
                                  <div class="col-md-9">
-                                     <input required v-model="direccion" type="text" id="txtDireccionAlumno" class="form-control">
+                                     <input required v-model="direccion" type="text" id="txtDireccionAlumno" class="form-control" 
+                                     oninput="validarDireccion(this)" onblur="validarDireccion(this, true)">
                                  </div>
                              </div>
-                             <div class="mb-3 row">
-                                 <label class="col-md-3 col-form-label">TELEFONO</label>
-                                 <div class="col-md-9">
-                                     <input v-model="telefono" type="text" id="txtTelefonoAlumno" class="form-control">
-                                 </div>
-                             </div>
-                             <div class="mb-3 row">
-                                 <label class="col-md-3 col-form-label">EMAIL</label>
-                                 <div class="col-md-9">
-                                     <input v-model="email" type="email" id="txtEmailAlumno" class="form-control">
-                                 </div>
-                             </div>
+
+                            <div class="mb-md-4 row">
+                                <div class="col-md-4">
+                                    <label class="col-form-label">MUNICIPIO</label>
+                                    <select required v-model="municipio" id="txtMunicipioAlumno" class="form-control">
+                                        <option value="">Seleccione un municipio</option>
+                                        <option value="Municipio1">Municipio 1</option>
+                                        <option value="Municipio2">Municipio 2</option>
+                                        <option value="Municipio3">Municipio 3</option>
+                                    </select>
+                                </div>
+                            
+                            
+                                <div class="col-md-4">
+                                    <label class="col-form-label">DISTRITO</label>
+                                    <select required v-model="distrito" id="txtDistritoAlumno" class="form-control">
+                                        <option value="">Seleccione un distrito</option>
+                                        <option value="Distrito1">Distrito 1</option>
+                                        <option value="Distrito2">Distrito 2</option>
+                                        <option value="Distrito3">Distrito 3</option>
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            <div class="mb-3 row">
+                                <label class="col-md-3 col-form-label">TELEFONO</label>
+                                <div class="col-md-9">
+                                    <input required pattern="[0-9]{4}-[0-9]{4}" v-model="telefono" type="text" id="txtTelefonoAlumno" class="form-control" 
+                                    oninput="validarTelefono(this)" onblur="validarTelefono(this, true)">
+                                </div>
+                            </div>
+                            <div class="mb-3 row">
+                            <label class="col-md-3 col-form-label">FECHA NACIMIENTO</label>
+                            <div class="col-md-9">
+                                <input required v-model="fechanacimiento" type="date" id="txtFechaNacimientoAlumno" class="form-control" onblur="validarFechaNacimiento(this)">
+                            </div>
+                        </div>
+                        <div class="mb-3 row">
+                            <label class="col-md-3 col-form-label">SEXO</label>
+                            <div class="col-md-9">
+                                <select required v-model="sexo" id="txtSexoAlumno" class="form-control">
+                                    <option value="">Seleccione una opción</option>
+                                    <option value="Femenino">Femenino</option>
+                                    <option value="Masculino">Masculino</option>
+                                </select>
+                            </div>
+                        </div>
                          </div>
                          <div class="card-footer text-center d-flex justify-content-between">
-                             <button type="reset" class="btn" style="background-color: #FFDC7F;">Nuevo</button>
+                             <button type="reset" class="btn" style="background-color: #f8bf23;">Nuevo</button>
                              <button type="submit" class="btn btn-primary">Guardar</button>
                          </div>
                      </div>
@@ -77,9 +135,14 @@
                              <tr>
                                  <th>CODIGO</th>
                                  <th>NOMBRE</th>
-                                 <th>DIRECCION</th>
-                                 <th>TELEFONO</th>
                                  <th>EMAIL</th>
+                                 <th>DIRECCION</th>
+                                 <th>MUNICIPIO</th>
+                                 <th>DEPARTAMENTO</th>
+                                 <th>DISTRITO</th>
+                                 <th>TELEFONO</th>
+                                 <th>FECHA NACIMIENTO</th>
+                                 <th>SEXO</th>
                                  <th></th>
                              </tr>
                          </thead>
@@ -87,9 +150,14 @@
                              <tr v-for="alumno in alumnos" @click="verAlumno(alumno)" :key="alumno.codigo">
                                  <td>{{alumno.codigo}}</td>
                                  <td>{{alumno.nombre}}</td>
-                                 <td>{{alumno.direccion}}</td>
-                                 <td>{{alumno.telefono}}</td>
                                  <td>{{alumno.email}}</td>
+                                 <td>{{alumno.direccion}}</td>
+                                 <td>{{alumno.municipio}}</td>
+                                 <td>{{alumno.departamento}}</td>
+                                 <td>{{alumno.distrito}}</td>
+                                 <td>{{alumno.telefono}}</td>
+                                 <td>{{alumno.fechanacimiento}}</td>
+                                 <td>{{alumno.sexo}}</td>
                                  <td>
                                      <button class="btn btn-danger btn-sm" @click="eliminarAlumno(alumno)">
                                          <i class="bi bi-trash3-fill"></i>
@@ -102,6 +170,7 @@
              </div>
          </div>
      </div>
+
  
      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
      <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
