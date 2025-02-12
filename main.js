@@ -1,3 +1,13 @@
+/*Corregir los distritos 
+Mejorar la busqueda, cajas de texto(opciones o button, fechas de nacimiento con calendario) busqueda interactiva
+Agregar eventos js v-on(.stop, .prevent, .capture, .once, .passive, .self, ect)
+Modificadores de taclas, keyup, keydown ect
+keyup.enter o .13
+clases estilos, arreglos(arrays), objetos
+estilos(v-bind=style), v-for, v-if, v-else, v-else-if
+
+*/
+
 const { createApp } = Vue;
 
 createApp({
