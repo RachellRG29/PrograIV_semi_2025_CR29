@@ -15,12 +15,15 @@ const Dexie = window.Dexie,
 createApp({
     components: {
         alumno,
+        buscarAlumno,
         materia,
+
     },
     data() {
         return {
             forms : {
                 alumno: {mostrar: false},
+                buscarAlumno: {mostrar: false},
                 materia: {mostrar: false},
                 matricula: {mostrar: false},
             },
@@ -38,3 +41,4 @@ createApp({
         });
     }
 }).mount('#app');
+

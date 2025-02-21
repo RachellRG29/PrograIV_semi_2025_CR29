@@ -1,4 +1,3 @@
-<!-- Cindy Rachell Ramirez G, buscar alumno, agregar la demas informacion para proximo miercoles-->
 <!DOCTYPE html>
 <html lang="en">
 
@@ -23,7 +22,7 @@
             <nav class="navbar navbar-expand-lg bg-body-tertiary">
                 <div class="container-fluid">
                     <a class="navbar-brand" href="#">
-                        <img width="150" src="img/logo.png" alt="Logo UGB">
+                        <img width="150" src="img/ugb_logo.png" alt="Logo UGB" style="width: 35px;">
                     </a>
                     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText"
                         aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
@@ -47,6 +46,7 @@
         </div>
         <div class="container-fluid" id="appSistema">
             <alumno v-show="forms.alumno.mostrar"></alumno>
+            <buscarAlumno v-show="forms.buscarAlumno.mostrar"></buscarAlumno>
             <materia v-show="forms.materia.mostrar"></materia>
         </div>
     </div>
@@ -55,7 +55,9 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
     <script src="componentes/alumnos.js"></script>
+    <script src="componentes/busqueda_alumnos.js"></script>
     <script src="componentes/materias.js"></script>
+    
     <script src="main.js"></script>
 </body>
 
