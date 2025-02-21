@@ -27,8 +27,8 @@
     },
     template: `
         <div class="row">
-            <div class="col-6">
-                <table class="table table-sm table-bordered table-hover">
+            <div class="col-10">
+                <table class="table table-sm table-bordered table-hover table-dark table-striped">
                     <thead>
                         <tr>
                             <th>BUSCAR POR</th>
@@ -36,21 +36,33 @@
                                 <select v-model="buscarTipo" class="form-control">
                                     <option value="codigo">CODIGO</option>
                                     <option value="nombre">NOMBRE</option>
-                                    <option value="direccion">DIRECCION</option>
-                                    <option value="telefono">TELEFONO</option>
                                     <option value="email">EMAIL</option>
+                                    <option value="direccion">DIRECCION</option>
+                                    <option value="departamento">DEPARTAMENTO</option>
+                                    <option value="municipio">MUNICIPIO</option>
+                                    <option value="distrito">DISTRITO</option>
+                                    <option value="telefono">TELEFONO</option>
+                                    <option value="fechanacimiento">FECHA NACIMIENTO</option>
+                                    <option value="sexo">SEXO</option>
+                                    
                                 </select>
                             </th>
-                            <th colspan="4">
+                            <th colspan="7">
                                 <input type="text" @keyup="listarAlumnos()" v-model="buscar" class="form-control">
                             </th>
                         </tr>
                         <tr>
                             <th>CODIGO</th>
                             <th>NOMBRE</th>
-                            <th>DIRECCION</th>
-                            <th>TELEFONO</th>
                             <th>EMAIL</th>
+                            <th>DIRECCION</th>
+                            <th>DEPARTAMENTO</th>
+                            <th>MUNICIPIO</th>
+                            <th>DISTRITO</th>
+                            <th>TELEFONO</th>
+                            <th>FECHA NACIMIENTO</th>
+                            <th>SEXO</th>
+                            
                             <th></th>
                         </tr>
                     </thead>
@@ -58,12 +70,19 @@
                         <tr v-for="alumno in alumnos" @click="modificarAlumno(alumno)" :key="alumno.idAlumno">
                             <td>{{ alumno.codigo }}</td>
                             <td>{{ alumno.nombre }}</td>
-                            <td>{{ alumno.direccion }}</td>
-                            <td>{{ alumno.telefono }}</td>
                             <td>{{ alumno.email }}</td>
+                            <td>{{ alumno.direccion }}</td>
+                            <td>{{ alumno.departamento }}</td>
+                            <td>{{ alumno.municipio }}</td>
+                            <td>{{ alumno.distrito }}</td>
+                            <td>{{ alumno.telefono }}</td>
+                            <td>{{ alumno.fechanacimiento }}</td>
+                            <td>{{ alumno.sexo }}</td>
+                            
+                            
                             <td>
                                 <button class="btn btn-danger btn-sm" 
-                                    @click.stop="eliminarAlumno(alumno)">DEL</button>
+                                    @click.stop="eliminarAlumno(alumno)"> <i class="bi bi-trash3-fill"></i> </button>
                             </td>
                         </tr>
                     </tbody>

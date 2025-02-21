@@ -33,7 +33,7 @@ const app = createApp({
     },
     created() {
         db.version(1).stores({
-            alumnos: '++idAlumno, codigo, nombre, direccion, telefono, email',
+            alumnos: '++idAlumno, codigo, nombre, email, direccion, departamento, municipio, distrito, telefono, fechanacimiento, sexo',
             materias: '++idMateria, codigo, nombre, uv',
         });
     }
