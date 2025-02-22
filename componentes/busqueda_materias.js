@@ -64,7 +64,7 @@
                             <td>{{ materia.uv }}</td>
                             <td>
                                 <button class="btn btn-danger btn-sm" 
-                                    @click.stop="eliminarMateria(materia)">DEL</button>
+                                    @click.stop="eliminarMateria(materia)"> <i class="bi bi-trash3-fill"></i> </button>
                             </td>
                         </tr>
                     </tbody>
