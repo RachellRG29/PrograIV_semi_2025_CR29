@@ -17,19 +17,19 @@
             municipioSeleccionado: '',
             distritoSeleccionado: '',
             municipios: {
-                dep_ahuachapan: {
+                Ahuachapan: {
                     norte: ["Atiquizaya", "El Refugio", "San Lorenzo", "Turín"],
                     centro: ["Ahuachapán", "Apaneca", "Concepción de Ataco", "Tacuba"],
                     sur: ["Guaymango", "Jujutla", "San Francisco Menéndez", "San Pedro Puxtla"]
                 },
-                dep_sanSalvador: {
+                San_Salvador: {
                     norte: ["Aguilares", "El Paisnal", "Guazapa"],
                     oeste: ["Apopa", "Nejapa"],
                     este: ["Ilopango" , "San Martin", "Soyapango", "Tonacatepeque"],
                     centro: ["Ayuxtepeque", "Mejicanos", "San Salvador", "Cuscatancingo","Ciudad Delgado"],
                     sur: ["Panchilmalco", "Rosario de Mora", "San Marcos", "San Tomás", "Santiago Texacuangos"]
                 },
-                dep_laLibertad:{
+                La_Libertad:{
                     norte: ["Quezaltepeque", "san Matías", "San Pablo Tacachico"],
                     centro: ["San Juan Opico", "Ciudad Arce"],
                     oeste: ["Colón", "Jayaque", "Sacacoyo", "Tepecoyo","Talnique"],
@@ -38,7 +38,7 @@
                     sur: ["Comasagua", "Santa Tecla"]
 
                 }, 
-                dep_chalatenango:{
+                Chalatenango:{
                     norte: ["La Palma", "Citalá", "San Ignacio"],
                     centro: ["Nueva Concepción", "Tejutla","La Reina", "Agua Caliente", "Dulce Nombre de María", 
                         "El Paraíso", "San Francisco Morazán", "San Rafael", "Santa Rita", "San Fernando"],
@@ -47,22 +47,65 @@
                         "San Antonio de La Cruz", "San Antonio los Ranchos", "San Francisco Lempa", "San Isidro Labrador", "San José Cascasque",
                         "San Miguel de Mercedes", "San José Las Flores", "San Luis del Carmen"]
                 }, 
-                dep_cuscatlan:{
-
+                Cuscatlan:{
+                    norte: ["Sushitoto", "San José Guayabal", "Oratorio de Concepción", "San Bartolomé Perulapán", "San Pedro Perulapán"],
+                    sur: ["Cojutepeque", "San Rafael Cedros", "Candelaria", "Monte San Juan",
+                        "El Carmen", "San Cristobal", "Santa Cruz Michapa", "San Ramón", "El Rosario", "Santa Cruz Analquito", "Tenancingo"]
                 },
-                dep_laPaz:{
+                Cabañas:{
+                    este: ["Sensuntepeque", "Victoria", "Dolores", "Guacotecti","San Isidro"],
+                    oeste: ["Ilobasco", "Tejutepeque", "Jutiapa", "Cinquera"]
+                },
+                La_Paz:{
+                    oeste: ["Cuyultitán", "Olocuilta", "San Juan Talpa", "San Luis Talpa", "San Pedro Masahuat","Tahualhuaca","San Francisco Chinameca"],
+                    centro: ["El Rosario", "Jerusalén","Mercedes La Ceiba", "Paraiso Osorio", "San Antonio Masahuat", "San Emigdio","San Juan Tepezontes",
+                        "San Luis La Herradura","San Miguel Tepezontes","San Pedro Nonualco", "Santa Maria Ostuma", "Santiago Nonualco"],
+                    este: ["San Juan Nonualco", "San Rafael Obrajuelo", "Zacatecoluca"]
 
                 }, 
-                dep_laUnion:{
+                La_Union:{
+                    norte: ["Anamorós", "Bolivar","Concepcion de Oriente","El Sauce",
+                        "Lislique","Nueva Esparta","Pasaquina","Polorós",
+                        "San José La Fuente","Santa Rosa de Lima"],
+                    sur: ["Conchagua","El Carmen","Intipucá","La Unión",
+                        "Meanguera del Golfo","San Alejo","Yayantique","Yucuaiqupin"]
 
                 },
-                dep_usulutan:{},
-                dep_sonsontate:{},
-                dep_santaAna:{},
-                dep_sanVicente:{},
-                dep_sanMiguel:{},
-                dep_morazan:{}
-    /* https://www.asamblea.gob.sv/node/12806  */
+                Usulutan:{
+                    norte: ["Santiago de María","Alegría","Berlín","Mercedes Umaña","Jucuapa","El Triunfo","Estanzuelas","San Buenaventura","Nueva Granada"],
+                    este: ["Usulután","Jucuarán","San Dionisio","Concepción Batres","Santa María","Ozatlán","Tecapán","Santa Elena","California", "Ereguayquín"],
+                    oeste: ["Jiquilisco","Puerto El Triunfo","San Agustín","San Francisco Javier"]
+                },
+                Sonsontate:{
+                    norte: ["Juayúa","Nahuizalco","Salcoatitán","Santa Catarina Masuahuat"],
+                    centro: ["Sonsonate","Sonzacate","Nahulingo","San Antonio del Monte","Santo Domingo de Guzmán"],
+                    este: ["Izalco","Armenia","Caluco","San Julián","Cuisnahuat","Santa Isabel Ishuatán"],
+                    oeste: ["Acajutla"],
+                },
+                Santa_Ana:{
+                    norte: ["Masahuat","Metapán","Santa Rosa Guachipilín","Texistepeque"],
+                    centro: ["Santa Ana"],
+                    este: ["Coatepeque","El Congo"],
+                    oeste: ["Candelaria de la Frontera", "Chalhuapa","El Porvenir","San Antonio Pajonal", "San Sebastián Salitrillo","Santiago de la Frontera"]
+                },
+                San_Vicente:{
+                    norte: ["Apastepeque","Santa Clara","San Ildefonso","San Esteban Catarina","San Lorenzo","Santo Domingo"],
+                    sur: ["San Vicente", "Guadalupe","Verapaz","Tepetitán","Tecoluca","San Cayateno Istepeque"]
+                },
+                San_Miguel:{
+                    norte: ["Ciudad Barrios","Sesori","Nuevo Eden de San Juan","San Gerardo",
+                        "San Luis de la Reina","Carolina","San Antonio del Mosco","Chapeltique"],
+                    centro: ["San Miguel","Comacarán","Uluazapa","Moncagua","Quelepa","Chirilagua"],
+                    oeste: ["Chinameca","Nueva Guadalupe","Lolotique","San Jorge","San Rafael Oriente","El Tránsito"]
+                },
+                Morazan:{
+                    norte: ["Arambala","Cacaopera","Corinto","El Rosario","Joateca","Jocoatique",
+                        "Meanguera","Perquín","San Fernando","San Isidro", "Torola"],
+                    sur: ["Chilanga","Delicias de Concepción","El Divisadero","Gualococti",
+                        "Guatajiagua","Jocoro","Lolotiquillo","Osicala","San Carlos","San Francisco Gotera",
+                        "San Simón","Sensembra","Sociedad","Yamabal","Yoloaiquín"]
+                }
+            /* https://www.asamblea.gob.sv/node/12806  */
 
             },
 
@@ -156,10 +199,10 @@
     },
     template: `
         <div class="row">
-            <div class="col-6">
+            <div class="container col-12 col-md-8">
                 <form id="frmAlumno" name="frmAlumno" @submit.prevent="guardarAlumno">
                     <div class="card border-dark mb-3 bg-dark">
-                        <div class="card-header">Registro de Alumnos</div>
+                        <div class="card-header text-white">Registro de Alumnos</div>
                         <div class="card-body bg-light">
                             <div class="row p-1">
                                 <div class="col-3 col-md-2">CODIGO</div>
@@ -182,7 +225,7 @@
                             <div class="row p-1">
                                 <div class="col-3 col-md-2">EMAIL</div>
                                 <div class="col-9 col-md-6">
-                                    <input v-model="email" type="text" 
+                                    <input requiered v-model="email" type="text" 
                                     name="txtEmailAlumno" id="txtEmailAlumno" class="form-control"
                                     oninput="validarEmail(this)" onblur="validarEmail(this, true)">
                                 </div>
@@ -192,7 +235,8 @@
                                 <div class="col-3 col-md-2">DIRECCION</div>
                                 <div class="col-9 col-md-8">
                                     <input required v-model="direccion" type="text" 
-                                    name="txtDireccionAlumno" id="txtDireccionAlumno" class="form-control">
+                                    name="txtDireccionAlumno" id="txtDireccionAlumno" class="form-control"
+                                    oninput="validarDireccion(this)" onblur="validarDireccion(this, true)">
                                 </div>
                             </div>
                             
@@ -203,19 +247,19 @@
                                     <label class="col-form-label">DEPARTAMENTO</label>
                                     <select required v-model="departamentoSeleccionado" @change="filtrarMunicipios" id="txtDepartamentoAlumno" class="form-control">
                                         <option value="">Seleccione un departamento</option>
-                                        <option value="dep_ahuachapan">Ahuachapán</option>
-                                        <option value="dep_sanSalvador">San Salvador</option>
-                                        <option value="dep_laLibertad">La libertad</option>
-                                        <option value="dep_chalatenango">Chalatenango</option>
-                                        <option value="dep_cuscatlan">Cuscatlán</option>
-                                        <option value="dep_laPaz">La Paz</option>
-                                        <option value="dep_laUnion">La Unión</option>
-                                        <option value="dep_usulutan">Usulután</option>
-                                        <option value="dep_sonsonate">Sonsonate</option>
-                                        <option value="dep_santaAna">Santa Ana</option>
-                                        <option value="dep_sanVicente">San Vicente</option>
-                                        <option value="dep_sanMiguel">San Miguel</option>
-                                        <option value="dep_morazan">Morazán</option>
+                                        <option value="Ahuachapan">Ahuachapán</option>
+                                        <option value="San_Salvador">San Salvador</option>
+                                        <option value="la_Libertad">La libertad</option>
+                                        <option value="Chalatenango">Chalatenango</option>
+                                        <option value="Cuscatlan">Cuscatlán</option>
+                                        <option value="La_Paz">La Paz</option>
+                                        <option value="La_Union">La Unión</option>
+                                        <option value="Usulutan">Usulután</option>
+                                        <option value="Sonsonate">Sonsonate</option>
+                                        <option value="Santa_Ana">Santa Ana</option>
+                                        <option value="San_Vicente">San Vicente</option>
+                                        <option value="San_Miguel">San Miguel</option>
+                                        <option value="Morazan">Morazán</option>
                                         
                                     </select>
                                 </div>
@@ -247,8 +291,9 @@
                             <div class="row p-1">
                                 <div class="col-3 col-md-2">TELEFONO</div>
                                 <div class="col-9 col-md-4">
-                                    <input v-model="telefono" type="text" 
-                                    name="txtTelefonoAlumno" id="txtTelefonoAlumno" class="form-control">
+                                    <input required pattern="[0-9]{4}-[0-9]{4}" v-model="telefono" type="text" 
+                                    name="txtTelefonoAlumno" id="txtTelefonoAlumno" class="form-control"
+                                    oninput="validarTelefono(this)" onblur="validarTelefono(this, true)">
                                 </div>
                             </div>
 
@@ -327,4 +372,69 @@ function validarNombre(input, mostrarAlerta = false) {
         }
     }
     
+}
+
+function validarEmail(input, mostrarAlerta = false) {
+    const email = input.value.trim();
+    const regexEmail = /^[a-zA-Z0-9._-]+@(ugb\.edu\.sv|gmail\.com)$/;
+
+    if (regexEmail.test(email)) {
+        input.classList.remove('is-invalid');
+        input.classList.add('is-valid');
+    } else {
+        input.classList.remove('is-valid');
+        input.classList.add('is-invalid');
+
+        if (mostrarAlerta) {
+            if (email === '') {
+                alertify.error('El email no puede estar vacío');
+            } else {
+                alertify.warning('El email debe ser institucional (@ugb.edu.sv) o de Gmail (@gmail.com)');
+            }
+        }
+    }
+}
+
+function validarDireccion(input, mostrarAlerta = false) {
+    const direccion = input.value.trim();
+    const regexDireccion = /^[A-Za-zñÑáéíóúÁÉÍÓÚ0-9\/\-,.#\s]{5,150}$/;
+
+    if(regexDireccion.test(direccion)){
+        input.classList.remove('is-invalid');
+        input.classList.add('is-valid');
+    } else {
+        input.classList.remove('is-valid');
+        input.classList.add('is-invalid');
+
+        if(mostrarAlerta){
+            if(direccion === ''){
+                alertify.error('La direccion no puede estar vacia');
+            } else {
+                alertify.warning('La direccion debe tener al menos 3 letras');
+            }
+        }
+    }
+}
+
+function validarTelefono(input, mostrarAlerta = false) {
+    const telefono = input.value.trim();
+    const regexTelefono = /^[0-9]{4}-[0-9]{4}$/;
+
+    if(regexTelefono.test(telefono)){        
+        input.classList.remove('is-invalid');
+        input.classList.add('is-valid');    
+    } else {
+        input.classList.remove('is-valid');
+        input.classList.add('is-invalid');
+
+        if(mostrarAlerta){
+            if(telefono===''){
+                alertify.error('El telefono no puede estar vacio');
+            } else if(!regexTelefono.test(telefono)){
+                alertify.warning('El telefono debe tener el siguiente formato 0000-0000');
+                input.value = telefono.replace(/[^0-9]{4}-[0-9]{4}/g, '');
+                return false;
+            }
+        }
+    }
 }

@@ -27,7 +27,7 @@
     },
     template: `
         <div class="row">
-            <div class="col-10">
+            <div class="col-12">
                 <table class="table table-sm table-bordered table-hover table-dark table-striped">
                     <thead>
                         <tr>
@@ -47,7 +47,7 @@
                                     
                                 </select>
                             </th>
-                            <th colspan="7">
+                            <th colspan="6">
                                 <input type="text" @keyup="listarAlumnos()" v-model="buscar" class="form-control">
                             </th>
                         </tr>
@@ -62,7 +62,6 @@
                             <th>TELEFONO</th>
                             <th>FECHA NACIMIENTO</th>
                             <th>SEXO</th>
-                            
                             <th></th>
                         </tr>
                     </thead>
