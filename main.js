@@ -9,7 +9,8 @@ const app = createApp({
         materia,
         buscaralumno,
         buscardocente,
-        buscarmateria
+        buscarmateria,
+        matricula
     },
     data() {
         return {
@@ -49,6 +50,8 @@ const app = createApp({
             alumnos: '++idAlumno, codigo, nombre, email, direccion, departamento, municipio, distrito, telefono, fechanacimiento, sexo',
             docentes: '++idDocente, codigo, nombre, email, direccion, departamento, municipio, distrito, telefono, fechanacimiento, sexo', 
             materias: '++idMateria, codigo, nombre, uv',
+            matriculas: '++idMatricula, idAlumno, codigo, nombre, email, direccion, departamento, municipio, distrito, telefono, fechanacimiento, sexo',
+
         });
     }
 });
