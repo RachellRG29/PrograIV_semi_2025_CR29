@@ -225,7 +225,7 @@
                             <div class="row p-1">
                                 <div class="col-3 col-md-2">EMAIL</div>
                                 <div class="col-9 col-md-6">
-                                    <input requiered v-model="email" type="text" 
+                                    <input required v-model="email" type="text" 
                                     name="txtEmailAlumno" id="txtEmailAlumno" class="form-control"
                                     oninput="validarEmail(this)" onblur="validarEmail(this, true)">
                                 </div>
@@ -418,7 +418,7 @@ function validarDireccion(input, mostrarAlerta = false) {
 
 function validarTelefono(input, mostrarAlerta = false) {
     const telefono = input.value.trim();
-    const regexTelefono = /^[0-9]{4}-[0-9]{4}$/;
+    const regexTelefono = /^[0-9]{4}-[0-9]{4}$/; 
 
     if(regexTelefono.test(telefono)){        
         input.classList.remove('is-invalid');

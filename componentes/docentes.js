@@ -163,6 +163,7 @@
             this.telefono = '';
             this.fechanacimiento = '';
             this.sexo = '';
+            
         },
         /* Filtrar municipios */
         filtrarMunicipios() {
@@ -215,7 +216,7 @@
                             <div class="row p-1">
                                 <div class="col-3 col-md-2">EMAIL</div>
                                 <div class="col-9 col-md-6">
-                                    <input requiered v-model="email" type="text" 
+                                    <input required v-model="email" type="text" 
                                     name="txtEmailDocente" id="txtEmailDocente" class="form-control"
                                     oninput="validarEmail(this)" onblur="validarEmail(this, true)">
                                 </div>
@@ -234,7 +235,7 @@
                             <div class="mb-md-4 row">
                                 <div class="col-md-4">
                                     <label class="col-form-label">DEPARTAMENTO</label>
-                                    <select required v-model="departamentoSeleccionado" @change="filtrarMunicipios" id="txtDepartamentoDocente" class="form-control">
+                                    <select required v-model="departamentoSeleccionado" @change="filtrarMunicipios" id="txtDepartamentoDocente" class="form-control" :class="{'is-invalid': !departamentoSeleccionado, 'is-valid': departamentoSeleccionado}">
                                         <option value="">Seleccione un departamento</option>
                                         <option value="Ahuachapan">Ahuachapán</option>
                                         <option value="San_Salvador">San Salvador</option>
@@ -255,7 +256,7 @@
                                 <!-- MUNICIPIO -->
                                 <div class="col-md-4">
                                     <label class="col-form-label">MUNICIPIO</label>
-                                    <select required v-model="municipioSeleccionado" @change="filtrarDistritos" id="txtMunicipioDocente" class="form-control">
+                                    <select required v-model="municipioSeleccionado" @change="filtrarDistritos" id="txtMunicipioDocente" class="form-control" :class="{'is-invalid': !municipioSeleccionado, 'is-valid': municipioSeleccionado}">
                                         <option value="">Seleccione un municipio</option>
                                         <option v-for="municipio in municipiosFiltrados" :key="municipio" :value="municipio">
                                             {{ municipio }}
@@ -266,7 +267,7 @@
                                 <!-- DISTRITO -->
                                 <div class="col-md-4">
                                     <label class="col-form-label">DISTRITO</label>
-                                    <select required v-model="distritoSeleccionado" id="txtDistritoDocente" class="form-control">
+                                    <select required v-model="distritoSeleccionado" id="txtDistritoDocente" class="form-control" :class="{'is-invalid': !distritoSeleccionado, 'is-valid': distritoSeleccionado}"> 
                                         <option value="">Seleccione un distrito</option>
                                         <option v-for="distrito in distritosFiltrados" :key="distrito" :value="distrito">
                                             {{ distrito }}
@@ -279,7 +280,7 @@
                                 <div class="col-3 col-md-2">TELEFONO</div>
                                 <div class="col-9 col-md-4">
                                     <input required pattern="[0-9]{4}-[0-9]{4}" v-model="telefono" type="text" 
-                                    name="txtTelefonoDocente" id="txtTelefonoDocente" class="form-control"
+                                    name="txtTelefonoDocente" id="txtTelefonoDocente" class="form-control" :class="{'is-invalid': !telefono, 'is-valid': telefono}"
                                     oninput="validarTelefono(this)" onblur="validarTelefono(this, true)">
                                 </div>
                             </div>
@@ -289,13 +290,14 @@
                                 <div class="col-md-4">
                                     <label class="col-form-label">FECHA NACIMIENTO</label>
                                     <input required v-model="fechanacimiento" type="date" id="txtFechaNacimientoDocente" 
-                                        class="form-control" onblur="validarFechaNacimiento(this)">
+                                        class="form-control" :class="{'is-invalid': !fechanacimiento, 'is-valid': fechanacimiento}" onblur="validarFechaNacimiento(this)">
                                 </div>
 
                                 <!-- SEXO -->
                                 <div class="col-md-4">
                                     <label class="col-form-label">SEXO</label>
-                                    <select required v-model="sexo" id="txtSexoDocente" class="form-control">
+                                    <select required v-model="sexo" id="txtSexoDocente" class="form-control" :class="{'is-invalid': !sexo, 'is-valid': sexo}">
+
                                         <option value="">Seleccione una opción</option>
                                         <option value="Femenino">Femenino</option>
                                         <option value="Masculino">Masculino</option>
