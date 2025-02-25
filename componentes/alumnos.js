@@ -117,59 +117,75 @@
         }
     },
     methods: {
-        buscarAlumno() {
-            this.forms.buscarAlumno.mostrar = !this.forms.buscarAlumno.mostrar;
-            this.$emit('buscar');
-        },
-        modificarAlumno(alumno) {
+    nuevoAlumno() {
+        this.accion = 'nuevo';
+        this.idAlumno = null;
+        this.limpiarFormulario();
+    },
+    limpiarFormulario() {
+        this.codigo = "";
+        this.nombre = "";
+        this.email = "";
+        this.direccion = "";
+        this.departamentoSeleccionado = "";
+        this.municipioSeleccionado = "";
+        this.distritoSeleccionado = "";
+        this.telefono = "";
+        this.fechanacimiento = "";
+        this.sexo = "";
+
+        // Limpia las clases de validación visual
+        document.querySelectorAll('.form-control').forEach(input => {
+            input.classList.remove('is-valid', 'is-invalid');
+        });
+    },
+    buscarAlumno() {
+        this.forms.buscarAlumno.mostrar = !this.forms.buscarAlumno.mostrar;
+        this.$emit('buscar', this.actualizarDatos);
+    },
+    actualizarDatos(alumno) {
+        if (alumno) {
             this.accion = 'modificar';
             this.idAlumno = alumno.idAlumno;
-            this.codigo = alumno.codigo;
-            this.nombre = alumno.nombre;
-            this.email = alumno.email;
-            this.direccion = alumno.direccion;
-            this.departamentoSeleccionado = alumno.departamento;
-            this.municipioSeleccionado = alumno.municipio;
-            this.distritoSeleccionado = alumno.distrito;
-            this.telefono = alumno.telefono;
-            this.fechanacimiento = alumno.fechanacimiento;
-            this.sexo = alumno.sexo;
+            this.codigo = alumno.codigo || "";
+            this.nombre = alumno.nombre || "";
+            this.email = alumno.email || "";
+            this.direccion = alumno.direccion || "";
+            this.departamentoSeleccionado = alumno.departamento || "";
+            this.municipioSeleccionado = alumno.municipio || "";
+            this.distritoSeleccionado = alumno.distrito || "";
+            this.telefono = alumno.telefono || "";
+            this.fechanacimiento = alumno.fechanacimiento || "";
+            this.sexo = alumno.sexo || "";
+        } else {
+            alertify.error("Alumno no encontrado");
+        }
+    },
+    modificarAlumno(alumno) {
+        this.accion = 'modificar';
+        this.actualizarDatos(alumno);
+    },
+    guardarAlumno() {
+        let alumno = {
+            codigo: this.codigo,
+            nombre: this.nombre,
+            email: this.email,
+            direccion: this.direccion,
+            departamento: this.departamentoSeleccionado,
+            municipio: this.municipioSeleccionado,
+            distrito: this.distritoSeleccionado,
+            telefono: this.telefono,
+            fechanacimiento: this.fechanacimiento,
+            sexo: this.sexo,
+        };
 
-        },
-        guardarAlumno() {
-            let alumno = {
-                codigo: this.codigo,
-                nombre: this.nombre,
-                email: this.email,
-                direccion: this.direccion,
-                departamento: this.departamentoSeleccionado,
-                municipio: this.municipioSeleccionado,
-                distrito: this.distritoSeleccionado,
-                telefono: this.telefono,
-                fechanacimiento: this.fechanacimiento,
-                sexo: this.sexo   
-            };
-            if (this.accion == 'modificar') {
-                alumno.idAlumno = this.idAlumno;
-            }
-            db.alumnos.put(alumno);
-            this.nuevoAlumno();
-        },
-        nuevoAlumno() {
-            this.accion = 'nuevo';
-            this.idAlumno = '';
-            this.codigo = '';
-            this.nombre = '';
-            this.email = '';
-            this.direccion = '';
-            this.departamentoSeleccionado = '';
-            this.municipioSeleccionado = '';
-            this.distritoSeleccionado = '';
-            this.telefono = '';
-            this.fechanacimiento = '';
-            this.sexo = '';
-            
-        },
+        // Si estamos modificando, añadimos el id
+        if (this.accion === 'modificar' && this.idAlumno) {
+            alumno.idAlumno = this.idAlumno;
+        }
+        db.alumnos.put(alumno);
+        this.nuevoAlumno();
+    },
         /* Filtrar municipios */
         filtrarMunicipios() {
             // Comprobamos si se ha seleccionado un departamento
@@ -184,7 +200,6 @@
                 this.distritosFiltrados = [];
             }
         },
-
         // Filtra los distritos según el municipio seleccionado
         filtrarDistritos() {
             if (this.municipioSeleccionado && this.departamentoSeleccionado) {
@@ -291,9 +306,10 @@
                             <div class="row p-1">
                                 <div class="col-3 col-md-2">TELEFONO</div>
                                 <div class="col-9 col-md-4">
-                                    <input required pattern="[0-9]{4}-[0-9]{4}" v-model="telefono" type="text" 
-                                    name="txtTelefonoAlumno" id="txtTelefonoAlumno" class="form-control"
-                                    oninput="validarTelefono(this)" onblur="validarTelefono(this, true)">
+                                    <input required pattern="[0-9]{4}-[0-9]{4}" v-model="telefono" type="text"
+                                        name="txtTelefonoDocente" id="txtTelefonoDocente" class="form-control"
+                                        oninput="validarTelefono(this)" onblur="validarTelefono(this, true)"
+                                        placeholder="1234-5678">
                                 </div>
                             </div>
 
@@ -318,7 +334,7 @@
                             
                         </div>
                         <div class="card-footer text-center d-flex justify-content-between">
-                             <button type="reset" value="Nuevo" class="btn" style="background-color: #f8bf23;">Nuevo</button>
+                             <button type="reset" value="Nuevo" class="btn"  @click="nuevoAlumno"  style="background-color: #f8bf23;">Nuevo</button>
                              <button type="submit" value="Guardar" class="btn btn-primary" style="color: #000000;">Guardar</button>
                              <button type="button" @click="buscarAlumno" class="btn btn-info"> Buscar</button>
                         </div>
