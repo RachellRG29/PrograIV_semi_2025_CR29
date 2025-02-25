@@ -20,9 +20,9 @@ const matricula = {
             this.matriculados = await db.matriculas.toArray();
         },
         async matricularAlumno(alumno) {
-            const existe = await db.matriculas.get(alumno.idAlumno);
+            const existe = await db.matriculas.where('idAlumno').equals(alumno.idAlumno).first();
             if (existe) {
-                alertify.warning(`El alumno ${alumno.nombre} ya est谩 matriculado.`);
+                alertify.warning(`El alumno ${alumno.nombre} ya está matriculado.`);
                 return;
             }
 
@@ -41,15 +41,18 @@ const matricula = {
             });
 
             alertify.success(`El alumno ${alumno.nombre} ha sido matriculado.`);
-            this.listarAlumnos();
-            this.listarMatriculados();
+            await this.actualizarLista();
         },
         async quitarMatriculacion(alumno) {
-            await db.matriculas.delete(alumno.idAlumno);
-            alertify.success(`La matriculaci贸n del alumno ${alumno.nombre} ha sido eliminada.`);
-
-            this.listarAlumnos();
-            this.listarMatriculados();
+            const existe = await db.matriculas.where('idAlumno').equals(alumno.idAlumno).first();
+            if (!existe) {
+                alertify.warning(`El alumno ${alumno.nombre} no está matriculado.`);
+                return;
+            }
+            
+            await db.matriculas.where('idAlumno').equals(alumno.idAlumno).delete();
+            alertify.success(`La matriculación del alumno ${alumno.nombre} ha sido eliminada.`);
+            await this.actualizarLista();
         },
         async actualizarLista() {
             await this.listarAlumnos();
@@ -72,8 +75,7 @@ const matricula = {
         }
     },
     created() {
-        this.listarAlumnos();
-        this.listarMatriculados();
+        this.actualizarLista();
     },
     template: `
         <div class='container mt-4'>
