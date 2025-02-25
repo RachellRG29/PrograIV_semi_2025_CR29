@@ -49,17 +49,27 @@ const matricula = {
                 alertify.warning(`El alumno ${alumno.nombre} no está matriculado.`);
                 return;
             }
-            
-            await db.matriculas.where('idAlumno').equals(alumno.idAlumno).delete();
-            alertify.success(`La matriculación del alumno ${alumno.nombre} ha sido eliminada.`);
-            await this.actualizarLista();
+        
+            alertify.confirm(
+                'Confirmar eliminación',
+                `¿Estás seguro de que deseas quitar la matriculación de ${alumno.nombre}?`,
+                async () => {
+                    await db.matriculas.where('idAlumno').equals(alumno.idAlumno).delete();
+                    alertify.success(`La matriculación del alumno ${alumno.nombre} ha sido eliminada.`);
+                    await this.actualizarLista();
+                },
+                () => {
+                    alertify.message('Acción cancelada');
+                }
+            );
         },
+        
         async actualizarLista() {
             await this.listarAlumnos();
             await this.listarMatriculados();
             alertify.message('Datos actualizados correctamente');
         }
-    },
+    },        
     computed: {
         alumnosFiltrados() {
             return this.alumnos.filter(alumno => 
