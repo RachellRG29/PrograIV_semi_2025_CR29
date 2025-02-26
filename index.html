@@ -25,15 +25,14 @@
 </head>
 <body>
 
-    <div idd="app" ref="app">
+    <div id="app" ref="app">
         <div class="container-fluid">
             <nav class="navbar navbar-expand-lg border-bottom border-body" data-bs-theme="dark" style="background: linear-gradient(90deg, #133E87 20%, #03346E 80%);">
                 <div class="container-fluid">
                     <a class="navbar-brand" href="#">
-                        <img width="200" src="img/logo_ugb_blue.png" class="navbar_logo">
+                        <img width="200" src="img/logo_ugb_blue.png" class="navbar_logo" alt="UGB Logo">
                     </a>
-                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText"
-                        aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
                         <span class="navbar-toggler-icon"></span>
                     </button>
                     <div class="collapse navbar-collapse" id="navbarText">
@@ -42,9 +41,8 @@
                                 <a class="nav-link" @click="abrirFormulario('autor')" href="#">Autor</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" @click="abrirFormulario('libros')" href="#">Libros</a>
+                                <a class="nav-link" @click="abrirFormulario('libro')" href="#">Libro</a>
                             </li>
-                            
                         </ul>
                     </div>
                 </div>
@@ -54,9 +52,9 @@
         <div class="container-fluid" id="appSistema">
             <autor v-show="forms.autor.mostrar" :forms="forms" ref="autor" @buscar="buscar('buscarautor', 'listarautor')"></autor>
             <buscarautor v-show="forms.buscarAutor.mostrar" ref="buscarautor" @modificar="modificar('autor', 'modificarAutor', $event)"></buscarautor>
-            <libros v-show="forms.libros.mostrar" :forms="forms" ref="libros" @buscar="buscar('buscarlibros', 'listarLibros')"></libros>
-            <buscarlibros v-show="forms.buscarLibros.mostrar" ref="buscarlibros" @modificar="modificar('libros', 'modificarLibros', $event)"></buscarlibros>
-            
+
+            <libro v-show="forms.libro.mostrar" :forms="forms" ref="libro" @buscar="buscar('buscarlibro', 'listarLibros')"></libro>
+            <buscarlibro v-show="forms.buscarLibro.mostrar" ref="buscarlibro" @modificar="modificar('libro', 'modificarLibro', $event)"></buscarlibro>
         </div>
 
         
@@ -66,6 +64,10 @@
         <script src="https://unpkg.com/dexie/dist/dexie.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
         <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+        <script src="componentes/busqueda_libros.js"></script>
+        <script src="componentes/libros.js"></script>
+        <script src="componentes/busqueda_autores.js"></script>
+        <script src="componentes/autor.js"></script>
         <script src="main.js"></script>
 
     

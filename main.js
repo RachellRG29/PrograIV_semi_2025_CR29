@@ -2,21 +2,25 @@ const { createApp, ref } = Vue;
 const Dexie = window.Dexie;
 const db = new Dexie('db_codigo_estudiante');
 
+db.version(1).stores({
+    libros: '++idLibro, idAutor, codigo, titulo, editorial, edicion',
+    autores: '++idAutor, codigo, nombre, pais, telefono'
+});
+
 const app = createApp({
     components: {
         autor,
-        libros, 
+        libro,
         buscarautor,
-        buscarlibros,
-
+        buscarlibro
     },
     data() {
         return {
             forms: {
                 autor: { mostrar: false },
-                libros: { mostrar: false }, 
+                libro: { mostrar: false },
                 buscarAutor: { mostrar: false },
-                buscarLibros: { mostrar: false },
+                buscarLibro: { mostrar: false },
             },
         };
     },
@@ -27,11 +31,9 @@ const app = createApp({
             }
         },
         abrirFormulario(componente) {
-            
             Object.keys(this.forms).forEach(key => {
                 this.forms[key].mostrar = false;
             });
-        
             this.forms[componente].mostrar = true;
         },
         modificar(form, metodo, datos) {
@@ -39,14 +41,6 @@ const app = createApp({
                 this.$refs[form][metodo](datos);
             }
         }
-    },
-    created() {
-        db.version(1).stores({
-           // alumnos: '++idAlumno, codigo, nombre, email, direccion, departamento, municipio, distrito, telefono, fechanacimiento, sexo',
-           // docentes: '++idDocente, codigo, nombre, email, direccion, departamento, municipio, distrito, telefono, fechanacimiento, sexo', 
-           
-
-        });
     }
 });
 
