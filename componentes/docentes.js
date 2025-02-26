@@ -113,23 +113,60 @@
         }
     },
     methods: {
+        nuevoDocente() {
+            this.accion = 'nuevo';
+            this.idDocente = null;
+            this.limpiarFormulario();
+            
+        },
+        limpiarFormulario() {
+            this.codigo = "";
+            this.nombre = "";
+            this.email = "";
+            this.direccion = "";
+            this.departamentoSeleccionado = "";
+            this.municipioSeleccionado = "";
+            this.distritoSeleccionado = "";
+            this.telefono = "";
+            this.fechanacimiento = "";
+            this.sexo = "";
+    
+            this.municipiosFiltrados = [];
+            this.distritosFiltrados = [];
+    
+            // Limpia las clases de validación visual
+            document.querySelectorAll('.form-control').forEach(input => {
+                input.classList.remove('is-valid', 'is-invalid');
+            });
+        },
         buscarDocente() {
             this.forms.buscarDocente.mostrar = !this.forms.buscarDocente.mostrar;
-            this.$emit('buscar');
+            this.$emit('buscar', this.actualizarDatos);
+        },
+        actualizarDatos(docente){
+            if (docente) {
+                this.accion = 'modificar';
+                this.idDocente = docente.idAlumno;
+                this.codigo = docente.codigo || "";
+                this.nombre = docente.nombre || "";
+                this.email = docente.email || "";
+                this.direccion = docente.direccion || "";
+                this.departamentoSeleccionado = docente.departamento || "";
+                this.filtrarMunicipios();
+                this.municipioSeleccionado = docente.municipio || "";
+                this.filtrarDistritos();
+                this.distritoSeleccionado = docente.distrito || "";
+                this.telefono = docente.telefono || "";
+                this.fechanacimiento = docente.fechanacimiento || "";
+                this.sexo = docente.sexo || "";
+            } else {
+                alertify.error("Docente no encontrado");
+            }
+
         },
         modificarDocente(docente) {
             this.accion = 'modificar';
-            this.idDocente = docente.idDocente;
-            this.codigo = docente.codigo;
-            this.nombre = docente.nombre;
-            this.email = docente.email;
-            this.direccion = docente.direccion;
-            this.departamentoSeleccionado = docente.departamento;
-            this.municipioSeleccionado = docente.municipio;
-            this.distritoSeleccionado = docente.distrito;
-            this.telefono = docente.telefono;
-            this.fechanacimiento = docente.fechanacimiento;
-            this.sexo = docente.sexo;
+            this.actualizarDatos(docente);
         },
         guardarDocente() {
             let docente = {
@@ -144,49 +181,39 @@
                 fechanacimiento: this.fechanacimiento,
                 sexo: this.sexo   
             };
-            if (this.accion == 'modificar') {
+            if (this.accion == 'modificar' && this.idDocente) {
                 docente.idDocente = this.idDocente;
             }
             db.docentes.put(docente);
             this.nuevoDocente();
         },
-        nuevoDocente() {
-            this.accion = 'nuevo';
-            this.idDocente = '';
-            this.codigo = '';
-            this.nombre = '';
-            this.email = '';
-            this.direccion = '';
-            this.departamentoSeleccionado = '';
-            this.municipioSeleccionado = '';
-            this.distritoSeleccionado = '';
-            this.telefono = '';
-            this.fechanacimiento = '';
-            this.sexo = '';
-            
-        },
+        
         /* Filtrar municipios */
+        
         filtrarMunicipios() {
+            // Comprobamos si se ha seleccionado un departamento
             if (this.departamentoSeleccionado) {
+                // Filtramos los municipios del departamento seleccionado
                 this.municipiosFiltrados = Object.keys(this.municipios[this.departamentoSeleccionado]);
-                this.municipioSeleccionado = '';
-                this.distritosFiltrados = [];
-                this.distritoSeleccionado = '';
+                this.municipioSeleccionado = '';  // Resetear municipio
+                this.distritosFiltrados = [];     // Resetear distritos
+                this.distritoSeleccionado = '';   // Resetear distrito
             } else {
                 this.municipiosFiltrados = [];
                 this.distritosFiltrados = [];
             }
         },
-
         // Filtra los distritos según el municipio seleccionado
         filtrarDistritos() {
             if (this.municipioSeleccionado && this.departamentoSeleccionado) {
+                // Filtramos los distritos del municipio seleccionado dentro del departamento
                 this.distritosFiltrados = this.municipios[this.departamentoSeleccionado][this.municipioSeleccionado] || [];
             } else {
                 this.distritosFiltrados = [];
             }
             this.distritoSeleccionado = '';
         }
+        
     },
     template: `
         <div class="row">
@@ -235,7 +262,8 @@
                             <div class="mb-md-4 row">
                                 <div class="col-md-4">
                                     <label class="col-form-label">DEPARTAMENTO</label>
-                                    <select required v-model="departamentoSeleccionado" @change="filtrarMunicipios" id="txtDepartamentoDocente" class="form-control" :class="{'is-invalid': !departamentoSeleccionado, 'is-valid': departamentoSeleccionado}">
+                                    <select required v-model="departamentoSeleccionado" @change="filtrarMunicipios" id="txtDepartamentoAlumno"
+                                    oninput="validarDepartamento(this)" onblur="validarDepartamento(this, true)" class="form-control">
                                         <option value="">Seleccione un departamento</option>
                                         <option value="Ahuachapan">Ahuachapán</option>
                                         <option value="San_Salvador">San Salvador</option>
@@ -250,13 +278,15 @@
                                         <option value="San_Vicente">San Vicente</option>
                                         <option value="San_Miguel">San Miguel</option>
                                         <option value="Morazan">Morazán</option>
+                                        
                                     </select>
                                 </div>
 
                                 <!-- MUNICIPIO -->
                                 <div class="col-md-4">
                                     <label class="col-form-label">MUNICIPIO</label>
-                                    <select required v-model="municipioSeleccionado" @change="filtrarDistritos" id="txtMunicipioDocente" class="form-control" :class="{'is-invalid': !municipioSeleccionado, 'is-valid': municipioSeleccionado}">
+                                    <select required v-model="municipioSeleccionado" @change="filtrarDistritos" id="txtMunicipioAlumno" 
+                                    oninput="validarMunicipio(this)" onblur="validarMunicipio(this, true)" class="form-control">
                                         <option value="">Seleccione un municipio</option>
                                         <option v-for="municipio in municipiosFiltrados" :key="municipio" :value="municipio">
                                             {{ municipio }}
@@ -267,21 +297,24 @@
                                 <!-- DISTRITO -->
                                 <div class="col-md-4">
                                     <label class="col-form-label">DISTRITO</label>
-                                    <select required v-model="distritoSeleccionado" id="txtDistritoDocente" class="form-control" :class="{'is-invalid': !distritoSeleccionado, 'is-valid': distritoSeleccionado}"> 
+                                    <select required v-model="distritoSeleccionado" id="txtDistritoAlumno" 
+                                    oninput="validarDistrito(this)" onblur="validarDistrito(this, true)" class="form-control">
                                         <option value="">Seleccione un distrito</option>
                                         <option v-for="distrito in distritosFiltrados" :key="distrito" :value="distrito">
                                             {{ distrito }}
                                         </option>
                                     </select>
                                 </div>
+
                             </div>
 
                             <div class="row p-1">
                                 <div class="col-3 col-md-2">TELEFONO</div>
                                 <div class="col-9 col-md-4">
-                                    <input required pattern="[0-9]{4}-[0-9]{4}" v-model="telefono" type="text" 
-                                    name="txtTelefonoDocente" id="txtTelefonoDocente" class="form-control" :class="{'is-invalid': !telefono, 'is-valid': telefono}"
-                                    oninput="validarTelefono(this)" onblur="validarTelefono(this, true)">
+                                    <input required pattern="[0-9]{4}-[0-9]{4}" v-model="telefono" type="text"
+                                        name="txtTelefonoDocente" id="txtTelefonoDocente" class="form-control"
+                                        oninput="validarTelefono(this)" onblur="validarTelefono(this, true)"
+                                        placeholder="1234-5678">
                                 </div>
                             </div>
 
@@ -289,14 +322,15 @@
                                 <!-- FECHA NACIMIENTO -->
                                 <div class="col-md-4">
                                     <label class="col-form-label">FECHA NACIMIENTO</label>
-                                    <input required v-model="fechanacimiento" type="date" id="txtFechaNacimientoDocente" 
-                                        class="form-control" :class="{'is-invalid': !fechanacimiento, 'is-valid': fechanacimiento}" onblur="validarFechaNacimiento(this)">
+                                    <input required v-model="fechanacimiento" type="date" id="txtFechaNacimientoAlumno" 
+                                        class="form-control" onblur="validarFechaNacimiento(this, true)">
                                 </div>
 
                                 <!-- SEXO -->
                                 <div class="col-md-4">
                                     <label class="col-form-label">SEXO</label>
-                                    <select required v-model="sexo" id="txtSexoDocente" class="form-control" :class="{'is-invalid': !sexo, 'is-valid': sexo}">
+                                    <select required v-model="sexo" id="txtSexoDocente" class="form-control" 
+                                    oninput="validarSexo(this)" onblur="validarSexo(this, true)" >
 
                                         <option value="">Seleccione una opción</option>
                                         <option value="Femenino">Femenino</option>
@@ -306,7 +340,7 @@
                             </div>
                         </div>
                         <div class="card-footer text-center d-flex justify-content-between">
-                             <button type="reset" value="Nuevo" class="btn" style="background-color: #f8bf23;">Nuevo</button>
+                             <button type="reset" value="Nuevo" class="btn"  @click="nuevoDocente"  style="background-color: #f8bf23;">Nuevo</button>
                              <button type="submit" value="Guardar" class="btn btn-primary" style="color: #000000;">Guardar</button>
                              <button type="button" @click="buscarDocente" class="btn btn-info"> Buscar</button>
                         </div>
@@ -402,6 +436,55 @@ function validarDireccion(input, mostrarAlerta = false) {
     }
 }
 
+
+function validarDepartamento(input, mostrarAlerta = false) {
+    const departamento = input.value.trim();
+
+    if (departamento !== "") {
+        input.classList.remove('is-invalid');
+        input.classList.add('is-valid');
+    } else {
+        input.classList.remove('is-valid');
+        input.classList.add('is-invalid');
+
+        if (mostrarAlerta) {
+            alertify.error('Debe seleccionar un departamento.');
+        }
+    }
+}
+
+function validarMunicipio(input, mostrarAlerta = false) {
+    const municipio = input.value.trim();
+
+    if (municipio !== "") {
+        input.classList.remove('is-invalid');
+        input.classList.add('is-valid');
+    } else {
+        input.classList.remove('is-valid');
+        input.classList.add('is-invalid');
+
+        if (mostrarAlerta) {
+            alertify.error('Debe seleccionar un municipio.');
+        }
+    }
+}
+
+function validarDistrito(input, mostrarAlerta = false) {
+    const distrito = input.value.trim();
+
+    if (distrito !== "") {
+        input.classList.remove('is-invalid');
+        input.classList.add('is-valid');
+    } else {
+        input.classList.remove('is-valid');
+        input.classList.add('is-invalid');
+
+        if (mostrarAlerta) {
+            alertify.error('Debe seleccionar un distrito.');
+        }
+    }
+}
+
 function validarTelefono(input, mostrarAlerta = false) {
     const telefono = input.value.trim();
     const regexTelefono = /^[0-9]{4}-[0-9]{4}$/;
@@ -421,6 +504,71 @@ function validarTelefono(input, mostrarAlerta = false) {
                 input.value = telefono.replace(/[^0-9]{4}-[0-9]{4}/g, '');
                 return false;
             }
+        }
+    }
+}
+
+
+function validarFechaNacimiento(input, mostrarAlerta = false) {
+    const fechaNacimiento = input.value.trim();
+    const regexFechaNacimiento = /^\d{4}-\d{2}-\d{2}$/;
+
+    // Validar el formato AAAA-MM-DD
+    if (!regexFechaNacimiento.test(fechaNacimiento)) {
+        input.classList.remove('is-valid');
+        input.classList.add('is-invalid');
+        if (mostrarAlerta) {
+            alertify.warning('La fecha de nacimiento debe tener el siguiente formato AAAA-MM-DD');
+        }
+        return false;
+    }
+
+    // Obtener la fecha ingresada y la fecha actual
+    const fechaIngresada = new Date(fechaNacimiento);
+    const hoy = new Date();
+
+    // Calcular la edad del estudiante
+    let edad = hoy.getFullYear() - fechaIngresada.getFullYear();
+    const mesActual = hoy.getMonth();
+    const diaActual = hoy.getDate();
+
+    // Ajustar la edad si no ha cumplido años este año
+    if (mesActual < fechaIngresada.getMonth() || (mesActual === fechaIngresada.getMonth() && diaActual < fechaIngresada.getDate())) {
+        edad--;
+    }
+
+    // Validar que la fecha no sea futura
+    if (fechaIngresada > hoy) {
+        if (mostrarAlerta) alertify.error('La fecha de nacimiento no puede ser futura.');
+        input.classList.add('is-invalid');
+        return false;
+    }
+
+    // ✅ Validar que la edad esté entre 15 y 80 años
+    if (edad < 15 || edad > 80) {
+        if (mostrarAlerta) alertify.error('La edad debe estar entre 15 y 80 años.');
+        input.classList.add('is-invalid');
+        return false;
+    }
+
+    // Si todo es válido, agregar la clase 'is-valid'
+    input.classList.remove('is-invalid');
+    input.classList.add('is-valid');
+    return true; // Fecha válida
+}
+
+function validarSexo(input, mostrarAlerta = false) {
+    const sexo = input.value.trim();
+
+    if (sexo !== "") {
+        input.classList.remove('is-invalid');
+        input.classList.add('is-valid');
+    } else {
+        input.classList.remove('is-valid');
+        input.classList.add('is-invalid');
+
+        if (mostrarAlerta) {
+            alertify.error('Debe seleccionar un sexo.');
         }
     }
 }

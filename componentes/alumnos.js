@@ -332,7 +332,8 @@
                                 <!-- SEXO -->
                                 <div class="col-md-4">
                                     <label class="col-form-label">SEXO</label>
-                                    <select required v-model="sexo" id="txtSexoAlumno" class="form-control" onblur="validarSexo(this, true)">
+                                    <select required v-model="sexo" id="txtSexoAlumno" class="form-control" 
+                                        oninput="validarSexo(this)" onblur="validarSexo(this, true)">
                                         <option value="">Seleccione una opción</option>
                                         <option value="Femenino">Femenino</option>
                                         <option value="Masculino">Masculino</option>
@@ -443,40 +444,49 @@ function validarDireccion(input, mostrarAlerta = false) {
 function validarDepartamento(input, mostrarAlerta = false) {
     const departamento = input.value.trim();
 
-    input.classList.remove('is-valid');
-    input.classList.add('is-invalid');
+    if (departamento !== "") {
+        input.classList.remove('is-invalid');
+        input.classList.add('is-valid');
+    } else {
+        input.classList.remove('is-valid');
+        input.classList.add('is-invalid');
 
-    if(mostrarAlerta){
-        if(departamento === ''){
-            alertify.error('El departamento no puede estar vacio');
-        } 
-    } 
+        if (mostrarAlerta) {
+            alertify.error('Debe seleccionar un departamento.');
+        }
+    }
 }
 
 function validarMunicipio(input, mostrarAlerta = false) {
     const municipio = input.value.trim();
 
-    input.classList.remove('is-valid');
-    input.classList.add('is-invalid');
+    if (municipio !== "") {
+        input.classList.remove('is-invalid');
+        input.classList.add('is-valid');
+    } else {
+        input.classList.remove('is-valid');
+        input.classList.add('is-invalid');
 
-    if(mostrarAlerta){
-        if(municipio === ''){
-            alertify.error('El municipio no puede estar vacio');
-        } 
-    } 
+        if (mostrarAlerta) {
+            alertify.error('Debe seleccionar un municipio.');
+        }
+    }
 }
 
-function validarDistrito (input, mostrarAlerta = false) {
+function validarDistrito(input, mostrarAlerta = false) {
     const distrito = input.value.trim();
 
-    input.classList.remove('is-valid');
-    input.classList.add('is-invalid');
+    if (distrito !== "") {
+        input.classList.remove('is-invalid');
+        input.classList.add('is-valid');
+    } else {
+        input.classList.remove('is-valid');
+        input.classList.add('is-invalid');
 
-    if(mostrarAlerta){
-        if(distrito === ''){
-            alertify.error('El distrito no puede estar vacio');
-        } 
-    } 
+        if (mostrarAlerta) {
+            alertify.error('Debe seleccionar un distrito.');
+        }
+    }
 }
 
 function validarTelefono(input, mostrarAlerta = false) {
@@ -553,12 +563,15 @@ function validarFechaNacimiento(input, mostrarAlerta = false) {
 function validarSexo(input, mostrarAlerta = false) {
     const sexo = input.value.trim();
 
-    input.classList.remove('is-valid');
-    input.classList.add('is-invalid');
+    if (sexo !== "") {
+        input.classList.remove('is-invalid');
+        input.classList.add('is-valid');
+    } else {
+        input.classList.remove('is-valid');
+        input.classList.add('is-invalid');
 
-    if(mostrarAlerta){
-        if(sexo === ''){
-            alertify.error('El sexo no puede estar vacio');
-        } 
-    } 
+        if (mostrarAlerta) {
+            alertify.error('Debe seleccionar un sexo.');
+        }
+    }
 }
