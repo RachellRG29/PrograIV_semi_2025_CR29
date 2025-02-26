@@ -1,71 +1,71 @@
-const libro = {
+    
+ const libro = {
     props: ['forms'],
     data() {
         return {
             accion: 'nuevo',
             idLibro: '',
             codigo: '',
-            titulo: '',
-            editorial: '',
-            edicion: '',
-            idAutor: '', // Para almacenar el ID del autor
+            titulo:'',
+            editorial:'',
+            edicion:''
         }
     },
     methods: {
-        nuevoLibro() {
-            this.accion = 'nuevo';
-            this.idLibro = null;
-            this.limpiarFormulario();
-        },
-        limpiarFormulario() {
-            this.codigo = "";
-            this.titulo = "";
-            this.editorial = "";
-            this.edicion = "";
-            this.idAutor = "";
+    nuevoLibro() {
+        this.accion = 'nuevo';
+        this.idLibro = null;
+        this.limpiarFormulario();
+    },
+    limpiarFormulario() {
+        this.codigo = "";
+        this.titulo = "";
+        this.editorial = "";
+        this.edicion = "";
 
-            // Limpia las clases de validación visual
-            document.querySelectorAll('.form-control').forEach(input => {
-                input.classList.remove('is-valid', 'is-invalid');
-            });
-        },
-        buscarLibro() {
-            this.forms.buscarLibro.mostrar = !this.forms.buscarLibro.mostrar;
-            this.$emit('buscar', this.actualizarDatos);
-        },
-        actualizarDatos(libro) {
-            if (libro) {
-                this.accion = 'modificar';
-                this.idLibro = libro.idLibro;
-                this.codigo = libro.codigo || "";
-                this.titulo = libro.titulo || "";
-                this.editorial = libro.editorial || "";
-                this.edicion = libro.edicion || "";
-                this.idAutor = libro.idAutor || ""; // Asignar el ID del autor
-            } else {
-                alertify.error("Libro no encontrado");
-            }
-        },
-        modificarLibro(libro) {
+        // Limpia las clases de validación visual
+        document.querySelectorAll('.form-control').forEach(input => {
+            input.classList.remove('is-valid', 'is-invalid');
+        });
+    },
+    buscarLibro() {
+        this.forms.buscarLibro.mostrar = !this.forms.buscarLibro.mostrar;
+        this.$emit('buscar', this.actualizarDatos);
+    },
+    actualizarDatos(libro) {
+        if (libro) {
             this.accion = 'modificar';
-            this.actualizarDatos(libro);
-        },
-        guardarLibro() {
-            let nuevoLibro = {
-                codigo: this.codigo,
-                titulo: this.titulo,
-                editorial: this.editorial,
-                edicion: this.edicion,
-                idAutor: this.idAutor // Incluir el ID del autor
-            };
+            this.idLibro = libro.idLibro;
+            this.codigo = libro.codigo || "";
+            this.titulo = libro.titulo || "";
+            this.editorial = libro.editorial || "";
+            this.edicion = libro.edicion || "";
 
-            // Si estamos modificando, añadimos el id
-            if (this.accion === 'modificar' && this.idLibro) {
-                nuevoLibro.idLibro = this.idLibro;
-            }
-            db.libros.put(nuevoLibro); // Guardar en la base de datos
-            this.nuevoLibro(); // Limpiar el formulario
+        } else {
+            alertify.error("libro no encontrado");
         }
+    },
+    modificarLibro(libro) {
+        this.accion = 'modificar';
+        this.actualizarDatos(libro);
+    },
+    guardarLibro() {
+        let libro = {
+            codigo: this.codigo,
+            titulo: this.titulo,
+            editorial: this.editorial,
+            edicion: this.edicion
+        };
+
+        // Si estamos modificando, añadimos el id
+        if (this.accion === 'modificar' && this.idLibro) {
+            libro.idLibro = this.idLibro;
+        }
+        db.libros.put(libro);
+        this.nuevoLibro();
+    },
+    
+
     },
     template: `
         <div class="row">
@@ -75,51 +75,44 @@ const libro = {
                         <div class="card-header text-white">Registro de Libros</div>
                         <div class="card-body bg-light">
                             <div class="row p-1">
-                                <div class="col-3 col-md-2">CODIGO</div>
+                                <div class="col-3 col-md-2">CODIGO/ISBN</div>
                                 <div class="col-9 col-md-4">
                                     <input required pattern="[A-Za-z]{4}[0-9]{6}" v-model="codigo" type="text" 
                                     name="txtCodigoLibro" id="txtCodigoLibro" class="form-control" 
-                                    oninput="validarCodigo(this)" onblur="validarCodigo(this, true)">
+                                    oninput="validarCodigo(this)"  onblur="validarCodigo(this, true)">
                                 </div>
                             </div>
 
                             <div class="row p-1">
-                                <div class="col-3 col-md-2">TITULO</div>
+                                <div class="col-3 col-md-2">NOMBRE</div>
                                 <div class="col-9 col-md-6">
-                                    <input required v-model="titulo" type="text" 
-                                    name="txtTituloLibro" id="txtTituloLibro" class="form-control">
+                                    <input required pattern="[A-Za-zñÑáéíóú ]{3,150}" v-model="nombre" type="text" 
+                                    name="txtNombreLibro" id="txtNombreLibro" class="form-control"
+                                    oninput="validarNombre(this)" onblur="validarNombre(this, true)">
                                 </div>
                             </div>
 
+                            
                             <div class="row p-1">
-                                <div class="col-3 col-md-2">EDITORIAL</div>
-                                <div class="col-9 col-md-6">
-                                    <input required v-model="editorial" type="text" 
-                                    name="txtEditorialLibro" id="txtEditorialLibro" class="form-control">
+                                <div class="col-3 col-md-2">TELEFONO</div>
+                                <div class="col-9 col-md-4">
+                                    <input required pattern="[0-9]{4}-[0-9]{4}" v-model="telefono" type="text"
+                                        name="txtTelefonoDocente" id="txtTelefonoDocente" class="form-control"
+                                        oninput="validarTelefono(this)" onblur="validarTelefono(this, true)"
+                                        placeholder="1234-5678">
                                 </div>
                             </div>
 
-                            <div class="row p-1">
-                                <div class="col-3 col-md-2">EDICION</div>
-                                <div class="col-9 col-md-6">
-                                    <input required v-model="edicion" type="text" 
-                                    name="txtEdicionLibro" id="txtEdicionLibro" class="form-control">
-                                </div>
-                            </div>
-
-                            <div class="row p-1">
-                                <div class="col-3 col-md-2">ID AUTOR</div>
-                                <div class="col-9 col-md-6">
-                                    <input required v-model="idAutor" type="text" 
-                                    name="txtIdAutor" id="txtIdAutor" class="form-control">
-                                </div>
-                            </div>
+                            
+                            
                         </div>
+
                         <div class="card-footer text-center d-flex justify-content-between">
-                             <button type="reset" value="Nuevo" class="btn" @click="nuevoLibro" style="background-color: #f8bf23;">Nuevo</button>
+                             <button type="reset" value="Nuevo" class="btn"  @click="nuevoLibro"  style="background-color: #f8bf23;">Nuevo</button>
                              <button type="submit" value="Guardar" class="btn btn-primary" style="color: #000000;">Guardar</button>
                              <button type="button" @click="buscarLibro" class="btn btn-info"> Buscar</button>
                         </div>
+
                     </div>
                 </form>
             </div>
@@ -148,3 +141,51 @@ function validarCodigo(input, mostrarAlerta = false) {
         }
     }
 }
+
+function validarNombre(input, mostrarAlerta = false) {
+    const nombre = input.value.trim();
+    const regexNombre = /^[A-Za-zñÑáéíóúÁÉÍÓÚ\s]{3,150}$/;
+
+    if (regexNombre.test(nombre)) {
+        input.classList.remove('is-invalid');
+        input.classList.add('is-valid');
+    } else {
+        input.classList.remove('is-valid');
+        input.classList.add('is-invalid');
+        
+        if (mostrarAlerta) {
+            if (nombre === '') {
+                alertify.error('El nombre no puede estar vacío');
+            } else {
+                alertify.warning('El nombre debe tener al menos 3 letras');
+            }
+        }
+    }
+    
+}
+
+
+
+function validarTelefono(input, mostrarAlerta = false) {
+    const telefono = input.value.trim();
+    const regexTelefono = /^[0-9]{4}-[0-9]{4}$/; 
+
+    if(regexTelefono.test(telefono)){        
+        input.classList.remove('is-invalid');
+        input.classList.add('is-valid');    
+    } else {
+        input.classList.remove('is-valid');
+        input.classList.add('is-invalid');
+
+        if(mostrarAlerta){
+            if(telefono===''){
+                alertify.error('El telefono no puede estar vacio');
+            } else if(!regexTelefono.test(telefono)){
+                alertify.warning('El telefono debe tener el siguiente formato 0000-0000');
+                input.value = telefono.replace(/[^0-9]{4}-[0-9]{4}/g, '');
+                return false;
+            }
+        }
+    }
+}
+

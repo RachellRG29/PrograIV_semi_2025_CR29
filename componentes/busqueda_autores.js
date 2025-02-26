@@ -1,4 +1,5 @@
-const buscarAutor = {
+    
+ const buscarautor = {
     data() {
         return {
             buscar: '',
@@ -7,27 +8,35 @@ const buscarAutor = {
         }
     },
     methods: {
-        modificarAutor(autor) {
+        modificarAutor(autor){
             this.$emit('modificar', autor);
         },
         eliminarAutor(autor) {
-            alertify.confirm('Eliminar Autor', `¿Está seguro de eliminar el autor ${autor.nombre}?`, () => {
+            alertify.confirm('Eliminar Autor', `¿Esta seguro de eliminar el autor ${autor.nombre}?`, () => {
                 db.autores.delete(autor.idAutor);
-                this.listarAutores();
+                this.listarAutors();
                 alertify.success(`Autor ${autor.nombre} eliminado`);
             }, () => { });
         },
-        async listarAutores() {
+        async listarAutor() {
             this.autores = await db.autores.filter(autor => autor[this.buscarTipo].toLowerCase().includes(this.buscar.toLowerCase())).toArray();
         },
+        nuevoAutor() {
+            this.accion = 'nuevo';
+            this.idAutor = '';
+            this.codigo = '';
+            this.nombre = '';
+            this.pais = ''; 
+            this.telefono = '';
+        }
     },
     created() {
-        this.listarAutores();
+        this.listarAutor();
     },
     template: `
         <div class="row">
-            <div class="col-12">
-                <table class="table table-sm table-bordered table-hover table-dark table-striped">
+            <div class="col-6">
+                <table class="table table-sm table-bordered table-hover">
                     <thead>
                         <tr>
                             <th>BUSCAR POR</th>
@@ -35,15 +44,19 @@ const buscarAutor = {
                                 <select v-model="buscarTipo" class="form-control">
                                     <option value="codigo">CODIGO</option>
                                     <option value="nombre">NOMBRE</option>
+                                    <option value="pais">PAIS</option>
+                                    <option value="telefono">TELEFONO</option>
                                 </select>
                             </th>
-                            <th colspan="6">
-                                <input type="text" @keyup="listarAutores()" v-model="buscar" class="form-control">
+                            <th colspan="4">
+                                <input type="text" @keyup="listarAutor()" v-model="buscar" class="form-control">
                             </th>
                         </tr>
                         <tr>
                             <th>CODIGO</th>
                             <th>NOMBRE</th>
+                            <th>PAIS</th>  
+                            <th>TELEFONO</th>
                             <th></th>
                         </tr>
                     </thead>
@@ -51,6 +64,7 @@ const buscarAutor = {
                         <tr v-for="autor in autores" @click="modificarAutor(autor)" :key="autor.idAutor">
                             <td>{{ autor.codigo }}</td>
                             <td>{{ autor.nombre }}</td>
+                            <td>{{ autor.uv }}</td>
                             <td>
                                 <button class="btn btn-danger btn-sm" 
                                     @click.stop="eliminarAutor(autor)"> <i class="bi bi-trash3-fill"></i> </button>

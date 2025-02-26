@@ -1,4 +1,5 @@
-const buscarLibro = {
+    
+ const buscarlibro = {
     data() {
         return {
             buscar: '',
@@ -7,14 +8,14 @@ const buscarLibro = {
         }
     },
     methods: {
-        modificarLibro(libro) {
+        modificarLibro(libro){
             this.$emit('modificar', libro);
         },
         eliminarLibro(libro) {
-            alertify.confirm('Eliminar Libro', `¿Está seguro de eliminar el libro ${libro.titulo}?`, () => {
+            alertify.confirm('Eliminar libro', `¿Esta seguro de eliminar el libro ${libro.titulo}?`, () => {
                 db.libros.delete(libro.idLibro);
                 this.listarLibros();
-                alertify.success(`Libro ${libro.titulo} eliminado`);
+                alertify.success(`libro ${libro.titulo} eliminado`);
             }, () => { });
         },
         async listarLibros() {
@@ -35,6 +36,9 @@ const buscarLibro = {
                                 <select v-model="buscarTipo" class="form-control">
                                     <option value="codigo">CODIGO</option>
                                     <option value="titulo">TITULO</option>
+                                    <option value="editorial">EDITORIAL</option>
+                                    <option value="edicion">EDICION</option>
+                                
                                 </select>
                             </th>
                             <th colspan="6">
@@ -44,9 +48,9 @@ const buscarLibro = {
                         <tr>
                             <th>CODIGO</th>
                             <th>TITULO</th>
-                            <th>AUTOR</th>
                             <th>EDITORIAL</th>
                             <th>EDICION</th>
+                            
                             <th></th>
                         </tr>
                     </thead>
@@ -54,9 +58,10 @@ const buscarLibro = {
                         <tr v-for="libro in libros" @click="modificarLibro(libro)" :key="libro.idLibro">
                             <td>{{ libro.codigo }}</td>
                             <td>{{ libro.titulo }}</td>
-                            <td>{{ libro.idAutor }}</td>
                             <td>{{ libro.editorial }}</td>
                             <td>{{ libro.edicion }}</td>
+                        
+                            
                             <td>
                                 <button class="btn btn-danger btn-sm" 
                                     @click.stop="eliminarLibro(libro)"> <i class="bi bi-trash3-fill"></i> </button>
@@ -68,3 +73,5 @@ const buscarLibro = {
         </div>
     `
 };
+
+
