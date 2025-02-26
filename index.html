@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Parcial I</title>
+     <!-- Google Fonts - Outfit -->
+     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap" rel="stylesheet">
+     <!-- CSS -->
+     <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.14.0/build/css/alertify.min.css" />
+     <!-- Default theme -->
+     <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.14.0/build/css/themes/default.min.css" />
+     <!-- Semantic UI theme -->
+     <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.14.0/build/css/themes/semantic.min.css" />
+     <!-- Bootstrap theme -->
+     <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.14.0/build/css/themes/bootstrap.min.css" />
+     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+     <!-- Style -->
+     <link rel="stylesheet" href="style_index.css">
+     <!-- icon app sistema academico - ugb -->
+     <link rel="icon" href="img/ugb_logo_blue.svg">
+
+</head>
+<body>
+
+    <div idd="app" ref="app">
+        <div class="container-fluid">
+            <nav class="navbar navbar-expand-lg border-bottom border-body" data-bs-theme="dark" style="background: linear-gradient(90deg, #133E87 20%, #03346E 80%);">
+                <div class="container-fluid">
+                    <a class="navbar-brand" href="#">
+                        <img width="200" src="img/logo_ugb_blue.png" class="navbar_logo">
+                    </a>
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText"
+                        aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="collapse navbar-collapse" id="navbarText">
+                        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                            <li class="nav-item">
+                                <a class="nav-link" @click="abrirFormulario('alumno')" href="#">Alumno</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" @click="abrirFormulario('materia')" href="#">Materia</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" @click="abrirFormulario('docente')" href="#">Docente</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" @click="abrirFormulario('matricula')" href="#">Matriculacion</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+        </div>
+
+
+
+    </div>
+
+    
+</body>
+</html>
