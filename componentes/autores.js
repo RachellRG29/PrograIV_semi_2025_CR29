@@ -105,7 +105,8 @@
 };
 
 
-/* validaciones del formulario materias */
+/* validaciones del formulario autores */
+
 function validarCodigo(input, mostrarAlerta = false) {
     const codigo = input.value.trim();
     const regexCodigo = /^[A-Za-z]{4}\d{6}$/; // Formato ABCD123456
@@ -119,9 +120,53 @@ function validarCodigo(input, mostrarAlerta = false) {
         
         if (mostrarAlerta) {
             if (codigo === '') {
-                alertify.error('El código no puede estar vacío');
+                alertify.error('El codigo no puede estar vacío');
             } else {
-                alertify.warning('El código debe tener el siguiente formato ABCD123456');
+                alertify.warning('El codigo debe tener el siguiente formato ABCD123456');
+            }
+        }
+    }
+}
+function validarTelefono(input, mostrarAlerta = false) {
+    const telefono = input.value.trim();
+    const regexTelefono = /^[0-9]{4}-[0-9]{4}$/; 
+
+    if(regexTelefono.test(telefono)){        
+        input.classList.remove('is-invalid');
+        input.classList.add('is-valid');    
+    } else {
+        input.classList.remove('is-valid');
+        input.classList.add('is-invalid');
+
+        if(mostrarAlerta){
+            if(telefono===''){
+                alertify.error('El telefono no puede estar vacio');
+            } else if(!regexTelefono.test(telefono)){
+                alertify.warning('El telefono debe tener el siguiente formato 0000-0000');
+                input.value = telefono.replace(/[^0-9]{4}-[0-9]{4}/g, '');
+                return false;
+            }
+        }
+    }
+}
+
+function validarPais(input, mostrarAlerta = false) {
+    const pais = input.value.trim();
+    const regexPais = /^[A-Za-zñÑáéíóúÁÉÍÓÚ\s]+$/; 
+
+    if (regexPais.test(pais)) {
+        input.classList.remove('is-invalid');
+        input.classList.add('is-valid');
+    } else {
+        input.classList.remove('is-valid');
+        input.classList.add('is-invalid');
+
+        if (mostrarAlerta) {
+            if (pais === '') {
+                alertify.error('El país no puede estar vacío');
+            } else {
+                alertify.warning('El país solo puede contener letras y espacios');
+                input.value = pais.replace(/[^A-Za-zñÑáéíóúÁÉÍÓÚ\s]/g, ''); 
             }
         }
     }
@@ -147,5 +192,7 @@ function validarNombre(input, mostrarAlerta = false) {
         }
     }
 }
+
+
 
 

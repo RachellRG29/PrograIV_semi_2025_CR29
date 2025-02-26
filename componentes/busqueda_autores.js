@@ -14,7 +14,7 @@
         eliminarAutor(autor) {
             alertify.confirm('Eliminar Autor', `¿Esta seguro de eliminar el autor ${autor.nombre}?`, () => {
                 db.autores.delete(autor.idAutor);
-                this.listarAutors();
+                this.listarAutor();
                 alertify.success(`Autor ${autor.nombre} eliminado`);
             }, () => { });
         },
