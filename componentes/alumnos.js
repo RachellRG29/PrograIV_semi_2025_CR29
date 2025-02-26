@@ -265,7 +265,8 @@
                             <div class="mb-md-4 row">
                                 <div class="col-md-4">
                                     <label class="col-form-label">DEPARTAMENTO</label>
-                                    <select required v-model="departamentoSeleccionado" @change="filtrarMunicipios" id="txtDepartamentoAlumno" class="form-control">
+                                    <select required v-model="departamentoSeleccionado" @change="filtrarMunicipios" id="txtDepartamentoAlumno"
+                                    oninput="validarDepartamento(this)" onblur="validarDepartamento(this, true)" class="form-control">
                                         <option value="">Seleccione un departamento</option>
                                         <option value="Ahuachapan">Ahuachapán</option>
                                         <option value="San_Salvador">San Salvador</option>
@@ -287,7 +288,8 @@
                                 <!-- MUNICIPIO -->
                                 <div class="col-md-4">
                                     <label class="col-form-label">MUNICIPIO</label>
-                                    <select required v-model="municipioSeleccionado" @change="filtrarDistritos" id="txtMunicipioAlumno" class="form-control">
+                                    <select required v-model="municipioSeleccionado" @change="filtrarDistritos" id="txtMunicipioAlumno" 
+                                    oninput="validarMunicipio(this)" onblur="validarMunicipio(this, true)" class="form-control">
                                         <option value="">Seleccione un municipio</option>
                                         <option v-for="municipio in municipiosFiltrados" :key="municipio" :value="municipio">
                                             {{ municipio }}
@@ -298,7 +300,8 @@
                                 <!-- DISTRITO -->
                                 <div class="col-md-4">
                                     <label class="col-form-label">DISTRITO</label>
-                                    <select required v-model="distritoSeleccionado" id="txtDistritoAlumno" class="form-control">
+                                    <select required v-model="distritoSeleccionado" id="txtDistritoAlumno" 
+                                    oninput="validarDistrito(this)" onblur="validarDistrito(this, true)" class="form-control">
                                         <option value="">Seleccione un distrito</option>
                                         <option v-for="distrito in distritosFiltrados" :key="distrito" :value="distrito">
                                             {{ distrito }}
@@ -323,13 +326,13 @@
                                 <div class="col-md-4">
                                     <label class="col-form-label">FECHA NACIMIENTO</label>
                                     <input required v-model="fechanacimiento" type="date" id="txtFechaNacimientoAlumno" 
-                                        class="form-control" onblur="validarFechaNacimiento(this)">
+                                        class="form-control" onblur="validarFechaNacimiento(this, true)">
                                 </div>
 
                                 <!-- SEXO -->
                                 <div class="col-md-4">
                                     <label class="col-form-label">SEXO</label>
-                                    <select required v-model="sexo" id="txtSexoAlumno" class="form-control">
+                                    <select required v-model="sexo" id="txtSexoAlumno" class="form-control" onblur="validarSexo(this, true)">
                                         <option value="">Seleccione una opción</option>
                                         <option value="Femenino">Femenino</option>
                                         <option value="Masculino">Masculino</option>
@@ -437,6 +440,45 @@ function validarDireccion(input, mostrarAlerta = false) {
     }
 }
 
+function validarDepartamento(input, mostrarAlerta = false) {
+    const departamento = input.value.trim();
+
+    input.classList.remove('is-valid');
+    input.classList.add('is-invalid');
+
+    if(mostrarAlerta){
+        if(departamento === ''){
+            alertify.error('El departamento no puede estar vacio');
+        } 
+    } 
+}
+
+function validarMunicipio(input, mostrarAlerta = false) {
+    const municipio = input.value.trim();
+
+    input.classList.remove('is-valid');
+    input.classList.add('is-invalid');
+
+    if(mostrarAlerta){
+        if(municipio === ''){
+            alertify.error('El municipio no puede estar vacio');
+        } 
+    } 
+}
+
+function validarDistrito (input, mostrarAlerta = false) {
+    const distrito = input.value.trim();
+
+    input.classList.remove('is-valid');
+    input.classList.add('is-invalid');
+
+    if(mostrarAlerta){
+        if(distrito === ''){
+            alertify.error('El distrito no puede estar vacio');
+        } 
+    } 
+}
+
 function validarTelefono(input, mostrarAlerta = false) {
     const telefono = input.value.trim();
     const regexTelefono = /^[0-9]{4}-[0-9]{4}$/; 
@@ -458,4 +500,65 @@ function validarTelefono(input, mostrarAlerta = false) {
             }
         }
     }
+}
+
+function validarFechaNacimiento(input, mostrarAlerta = false) {
+    const fechaNacimiento = input.value.trim();
+    const regexFechaNacimiento = /^\d{4}-\d{2}-\d{2}$/;
+
+    // Validar el formato AAAA-MM-DD
+    if (!regexFechaNacimiento.test(fechaNacimiento)) {
+        input.classList.remove('is-valid');
+        input.classList.add('is-invalid');
+        if (mostrarAlerta) {
+            alertify.warning('La fecha de nacimiento debe tener el siguiente formato AAAA-MM-DD');
+        }
+        return false;
+    }
+
+    // Obtener la fecha ingresada y la fecha actual
+    const fechaIngresada = new Date(fechaNacimiento);
+    const hoy = new Date();
+
+    // Calcular la edad del estudiante
+    let edad = hoy.getFullYear() - fechaIngresada.getFullYear();
+    const mesActual = hoy.getMonth();
+    const diaActual = hoy.getDate();
+
+    // Ajustar la edad si no ha cumplido años este año
+    if (mesActual < fechaIngresada.getMonth() || (mesActual === fechaIngresada.getMonth() && diaActual < fechaIngresada.getDate())) {
+        edad--;
+    }
+
+    // Validar que la fecha no sea futura
+    if (fechaIngresada > hoy) {
+        if (mostrarAlerta) alertify.error('La fecha de nacimiento no puede ser futura.');
+        input.classList.add('is-invalid');
+        return false;
+    }
+
+    // ✅ Validar que la edad esté entre 15 y 80 años
+    if (edad < 15 || edad > 80) {
+        if (mostrarAlerta) alertify.error('La edad debe estar entre 15 y 80 años.');
+        input.classList.add('is-invalid');
+        return false;
+    }
+
+    // Si todo es válido, agregar la clase 'is-valid'
+    input.classList.remove('is-invalid');
+    input.classList.add('is-valid');
+    return true; // Fecha válida
+}
+
+function validarSexo(input, mostrarAlerta = false) {
+    const sexo = input.value.trim();
+
+    input.classList.remove('is-valid');
+    input.classList.add('is-invalid');
+
+    if(mostrarAlerta){
+        if(sexo === ''){
+            alertify.error('El sexo no puede estar vacio');
+        } 
+    } 
 }
