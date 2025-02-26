@@ -74,36 +74,59 @@
                     <div class="card border-dark mb-3 bg-dark">
                         <div class="card-header text-white">Registro de Libros</div>
                         <div class="card-body bg-light">
-                            <div class="row p-1">
-                                <div class="col-3 col-md-2">CODIGO/ISBN</div>
-                                <div class="col-9 col-md-4">
-                                    <input required pattern="[A-Za-z]{4}[0-9]{6}" v-model="codigo" type="text" 
-                                    name="txtCodigoLibro" id="txtCodigoLibro" class="form-control" 
-                                    oninput="validarCodigo(this)"  onblur="validarCodigo(this, true)">
-                                </div>
-                            </div>
 
+                            <!-- Campo para Código ISBN -->
                             <div class="row p-1">
-                                <div class="col-3 col-md-2">NOMBRE</div>
+                                <div class="col-3 col-md-2">CÓDIGO/ISBN</div>
                                 <div class="col-9 col-md-6">
-                                    <input required pattern="[A-Za-zñÑáéíóú ]{3,150}" v-model="nombre" type="text" 
-                                    name="txtNombreLibro" id="txtNombreLibro" class="form-control"
-                                    oninput="validarNombre(this)" onblur="validarNombre(this, true)">
+                                    <input required pattern="^[0-9]{3}-[0-9]{3}-[0-9]{3}-[0-9]{3}-[0-9]{1}$" v-model="codigo" type="text" 
+                                    name="txtCodigoLibro" id="txtCodigoLibro" class="form-control" 
+                                    oninput="validarCodigo(this)" onblur="validarCodigo(this, true)">
                                 </div>
                             </div>
 
-                            
                             <div class="row p-1">
-                                <div class="col-3 col-md-2">TELEFONO</div>
-                                <div class="col-9 col-md-4">
-                                    <input required pattern="[0-9]{4}-[0-9]{4}" v-model="telefono" type="text"
-                                        name="txtTelefonoDocente" id="txtTelefonoDocente" class="form-control"
-                                        oninput="validarTelefono(this)" onblur="validarTelefono(this, true)"
-                                        placeholder="1234-5678">
+                                <div class="col-3 col-md-2">TITULO</div>
+                                <div class="col-9 col-md-6">
+                                    <input required pattern="[A-Za-zñÑáéíóú ]{5,150}" v-model="titulo" type="text" 
+                                    name="txtTituloLibro" id="txtTituloLibro" class="form-control"
+                                    oninput="validarTitulo(this)" onblur="validarTitulo(this, true)">
                                 </div>
                             </div>
 
-                            
+                            <!-- Campo para Editorial -->
+                            <div class="row p-1">
+                                <div class="col-3 col-md-2">EDITORIAL</div>
+                                <div class="col-9 col-md-6">
+                                    <input required pattern="[A-Za-zñÑáéíóú ]{3,100}" v-model="editorial" type="text" 
+                                    name="txtEditorial" id="txtEditorial" class="form-control"
+                                    oninput="validarEditorial(this)" onblur="validarEditorial(this, true)">
+                                </div>
+                            </div>
+
+                            <!-- Campo para Edicion -->
+                            <div class="row p-1">
+                                <div class="col-3 col-md-2">EDICION</div>
+                                <div class="col-9 col-md-6">
+                                    <input required pattern="[A-Za-zñÑáéíóú ]{5,100}" v-model="edicion" type="text" 
+                                    name="txtEdicion" id="txtEdicion" class="form-control"
+                                    oninput="validarEdicion(this)" onblur="validarEdicion(this, true)">
+                                </div>
+                            </div> 
+
+                            <!-- Campo para Seleccionar Autor -->
+                            <div class="row p-1">
+                                <div class="col-3 col-md-2">AUTOR</div>
+                                <div class="col-9 col-md-6">
+                                    <select v-model="idAutorSeleccionado" id="idAutor" class="form-control">
+                                        <option value="" disabled selected>Seleccione un autor</option>
+                                        <option v-for="autor in autores" :key="autor.idAutor" :value="autor.idAutor">
+                                            {{ autor.nombre }}
+                                        </option>
+                                    </select>
+                                </div>
+                            </div>
+
                             
                         </div>
 
@@ -122,31 +145,34 @@
 
 /* Validaciones de formulario de libros */
 function validarCodigo(input, mostrarAlerta = false) {
-    const codigo = input.value.trim();
-    const regexCodigo = /^[A-Za-z]{4}\d{6}$/; // Formato ABCD123456
+    const codigo= input.value.trim();
+    const regexCodigo = /^[0-9]{3}-[0-9]{3}-[0-9]{3}-[0-9]{3}-[0-9]{1}$/;  // formato 978-950-563-656-3
 
-    if (regexCodigo.test(codigo)) {
+    if(regexCodigo.test(codigo)){        
         input.classList.remove('is-invalid');
-        input.classList.add('is-valid');
+        input.classList.add('is-valid');    
     } else {
         input.classList.remove('is-valid');
         input.classList.add('is-invalid');
-        
-        if (mostrarAlerta) {
-            if (codigo === '') {
-                alertify.error('El codigo no puede estar vacío');
-            } else {
-                alertify.warning('El codigo debe tener el siguiente formato ABCD123456');
+
+        if(mostrarAlerta){
+            if(codigo===''){
+                alertify.error('El codigo no puede estar vacio');
+            } else if(!regexCodigo.test(codigo)){
+                alertify.warning('El codigo debe tener el siguiente formato 978-950-563-656-3');
+                input.value = codigo.replace(/[0-9]{3}-[0-9]{3}-[0-9]{3}-[0-9]{3}-[0-9]{1}/g, '');
+                return false;
             }
         }
     }
 }
 
-function validarNombre(input, mostrarAlerta = false) {
-    const nombre = input.value.trim();
-    const regexNombre = /^[A-Za-zñÑáéíóúÁÉÍÓÚ\s]{3,150}$/;
 
-    if (regexNombre.test(nombre)) {
+function validarTitulo(input, mostrarAlerta = false) {
+    const titulo = input.value.trim();
+    const regexTitulo = /^[A-Za-zñÑáéíóúÁÉÍÓÚ\s]{5,150}$/;
+
+    if (regexTitulo.test(titulo)) {
         input.classList.remove('is-invalid');
         input.classList.add('is-valid');
     } else {
@@ -154,10 +180,10 @@ function validarNombre(input, mostrarAlerta = false) {
         input.classList.add('is-invalid');
         
         if (mostrarAlerta) {
-            if (nombre === '') {
-                alertify.error('El nombre no puede estar vacío');
+            if (titulo === '') {
+                alertify.error('El titulo no puede estar vacío');
             } else {
-                alertify.warning('El nombre debe tener al menos 3 letras');
+                alertify.warning('El titulo debe tener al menos 3 letras');
             }
         }
     }
@@ -166,26 +192,44 @@ function validarNombre(input, mostrarAlerta = false) {
 
 
 
-function validarTelefono(input, mostrarAlerta = false) {
-    const telefono = input.value.trim();
-    const regexTelefono = /^[0-9]{4}-[0-9]{4}$/; 
+function validarEditorial(input, mostrarAlerta = false) {
+    const editorial = input.value.trim();
+    const regexEditorial = /^[A-Za-zñÑáéíóúÁÉÍÓÚ\s]{5,100}$/;    
 
-    if(regexTelefono.test(telefono)){        
+    if (regexEditorial.test(editorial)) {
         input.classList.remove('is-invalid');
-        input.classList.add('is-valid');    
+        input.classList.add('is-valid');
     } else {
         input.classList.remove('is-valid');
         input.classList.add('is-invalid');
 
-        if(mostrarAlerta){
-            if(telefono===''){
-                alertify.error('El telefono no puede estar vacio');
-            } else if(!regexTelefono.test(telefono)){
-                alertify.warning('El telefono debe tener el siguiente formato 0000-0000');
-                input.value = telefono.replace(/[^0-9]{4}-[0-9]{4}/g, '');
-                return false;
+        if (mostrarAlerta) {
+            if (editorial === '') {
+                alertify.error('La editorial no puede estar vacía');
+            } else {
+                alertify.warning('La editorial debe tener al menos 5 letras');
             }
         }
     }
 }
 
+function validarEdicion(input, mostrarAlerta = false) {
+    const edicion = input.value.trim();
+    const regexEdicion = /^[A-Za-zñÑáéíóúÁÉÍÓÚ\s]{5,100}$/;    
+
+    if (regexEdicion.test(edicion)) {
+        input.classList.remove('is-invalid');
+        input.classList.add('is-valid');
+    } else {
+        input.classList.remove('is-valid');
+        input.classList.add('is-invalid');
+
+        if (mostrarAlerta) {
+            if (edicion === '') {
+                alertify.error('La edicion no puede estar vacía');
+            } else {
+                alertify.warning('La edicion debe tener al menos 5 letras');
+            }
+        }
+    }
+}

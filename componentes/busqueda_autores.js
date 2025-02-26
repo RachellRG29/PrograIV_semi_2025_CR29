@@ -64,7 +64,8 @@
                         <tr v-for="autor in autores" @click="modificarAutor(autor)" :key="autor.idAutor">
                             <td>{{ autor.codigo }}</td>
                             <td>{{ autor.nombre }}</td>
-                            <td>{{ autor.uv }}</td>
+                            <td>{{ autor.pais }}</td>
+                            <td>{{ autor.telefono }}</td>
                             <td>
                                 <button class="btn btn-danger btn-sm" 
                                     @click.stop="eliminarAutor(autor)"> <i class="bi bi-trash3-fill"></i> </button>

@@ -148,27 +148,4 @@ function validarNombre(input, mostrarAlerta = false) {
     }
 }
 
-function validarTelefono(input, mostrarAlerta = false) {
-    const telefono = input.value.trim();
-    const regexTelefono = /^[0-9]{4}-[0-9]{4}$/; 
-
-    if(regexTelefono.test(telefono)){        
-        input.classList.remove('is-invalid');
-        input.classList.add('is-valid');    
-    } else {
-        input.classList.remove('is-valid');
-        input.classList.add('is-invalid');
-
-        if(mostrarAlerta){
-            if(telefono===''){
-                alertify.error('El telefono no puede estar vacio');
-            } else if(!regexTelefono.test(telefono)){
-                alertify.warning('El telefono debe tener el siguiente formato 0000-0000');
-                input.value = telefono.replace(/[^0-9]{4}-[0-9]{4}/g, '');
-                return false;
-            }
-        }
-    }
-}
-
 
