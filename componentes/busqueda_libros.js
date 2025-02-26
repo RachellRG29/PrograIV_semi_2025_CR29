@@ -1,5 +1,4 @@
-    
- const buscarlibro = {
+const buscarLibro = {
     data() {
         return {
             buscar: '',
@@ -8,22 +7,22 @@
         }
     },
     methods: {
-        modificarLibros(libro){
+        modificarLibro(libro) {
             this.$emit('modificar', libro);
         },
-        eliminarLibros(libro) {
-            alertify.confirm('Eliminar Libros', `¿Esta seguro de eliminar el libro ${libro.titulo}?`, () => {
-                db.libros.delete(libro.idLibros);
+        eliminarLibro(libro) {
+            alertify.confirm('Eliminar Libro', `¿Está seguro de eliminar el libro ${libro.titulo}?`, () => {
+                db.libros.delete(libro.idLibro);
                 this.listarLibros();
-                alertify.success(`Libros ${libro.titulo} eliminado`);
+                alertify.success(`Libro ${libro.titulo} eliminado`);
             }, () => { });
         },
-        async listarALibros() {
+        async listarLibros() {
             this.libros = await db.libros.filter(libro => libro[this.buscarTipo].toLowerCase().includes(this.buscar.toLowerCase())).toArray();
         },
     },
     created() {
-        this.listarALibros();
+        this.listarLibros();
     },
     template: `
         <div class="row">
@@ -34,12 +33,8 @@
                             <th>BUSCAR POR</th>
                             <th>
                                 <select v-model="buscarTipo" class="form-control">
-                                    <option value="codigo">CODIGO/IBSN</option>
+                                    <option value="codigo">CODIGO</option>
                                     <option value="titulo">TITULO</option>
-                                    <option value="editorial">EDITORIAL</option>
-                                    <option value="edicion">EDICION</option>
-                                   
-                                    
                                 </select>
                             </th>
                             <th colspan="6">
@@ -49,9 +44,9 @@
                         <tr>
                             <th>CODIGO</th>
                             <th>TITULO</th>
+                            <th>AUTOR</th>
                             <th>EDITORIAL</th>
                             <th>EDICION</th>
-
                             <th></th>
                         </tr>
                     </thead>
@@ -59,10 +54,9 @@
                         <tr v-for="libro in libros" @click="modificarLibro(libro)" :key="libro.idLibro">
                             <td>{{ libro.codigo }}</td>
                             <td>{{ libro.titulo }}</td>
+                            <td>{{ libro.idAutor }}</td>
                             <td>{{ libro.editorial }}</td>
                             <td>{{ libro.edicion }}</td>
-    
-                            
                             <td>
                                 <button class="btn btn-danger btn-sm" 
                                     @click.stop="eliminarLibro(libro)"> <i class="bi bi-trash3-fill"></i> </button>
@@ -74,5 +68,3 @@
         </div>
     `
 };
-
-
