@@ -134,6 +134,9 @@
         this.fechanacimiento = "";
         this.sexo = "";
 
+        this.municipiosFiltrados = [];
+        this.distritosFiltrados = [];
+
         // Limpia las clases de validación visual
         document.querySelectorAll('.form-control').forEach(input => {
             input.classList.remove('is-valid', 'is-invalid');
@@ -152,7 +155,9 @@
             this.email = alumno.email || "";
             this.direccion = alumno.direccion || "";
             this.departamentoSeleccionado = alumno.departamento || "";
+            this.filtrarMunicipios();
             this.municipioSeleccionado = alumno.municipio || "";
+            this.filtrarDistritos();
             this.distritoSeleccionado = alumno.distrito || "";
             this.telefono = alumno.telefono || "";
             this.fechanacimiento = alumno.fechanacimiento || "";
