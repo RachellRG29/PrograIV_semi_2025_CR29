@@ -34,7 +34,7 @@ class alumnos {
         if( empty($this->datos['telefono']) ){
             $this->respuesta['msg'] = 'El teléfono es requerido';
         }
-        if( empty($this->datos['email']) ){
+        if( !isset($this->datos['email']) || empty($this->datos['email']) ){
             $this->respuesta['msg'] = 'El email es requerido';
         }
         return $this->administrar_alumnos();

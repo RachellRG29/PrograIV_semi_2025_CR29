@@ -26,7 +26,7 @@
         guardarAlumno() {
             let alumno = {...this.alumno};
             db.alumnos.put(alumno);
-            fetch(`private/modulos/alumnos/alumno.php?accion=${this.accion}&alumnos=${JSON.stringify(alumno)}`)
+            fetch('private/modulos/alumnos/alumno.php?accion=${this.accion}&alumnos=${JSON.stringify(alumno)}')
                 .then(response => response.json())
                 .then(data => alertify.success(data.msg))
                 .catch(error => console.log(error));
@@ -72,7 +72,7 @@
                             <div class="row p-1">
                                 <div class="col-3 col-md-2">TELEFONO</div>
                                 <div class="col-9 col-md-4">
-                                    <input v-model="alumno.telefono" type="text" name="txtTelefonoAlumno" id="txtTelefonoAlumno" class="form-control">
+                                    <input required v-model="alumno.telefono" type="text" name="txtTelefonoAlumno" id="txtTelefonoAlumno" class="form-control">
                                 </div>
                             </div>
                             <div class="row p-1">
