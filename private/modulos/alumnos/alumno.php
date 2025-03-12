@@ -34,7 +34,7 @@ class alumnos {
         if( empty($this->datos['telefono']) ){
             $this->respuesta['msg'] = 'El teléfono es requerido';
         }
-        if( !isset($this->datos['email']) || empty($this->datos['email']) ){
+        if( empty($this->datos['email']) ){
             $this->respuesta['msg'] = 'El email es requerido';
         }
         return $this->administrar_alumnos();
@@ -44,12 +44,10 @@ class alumnos {
         if($this->respuesta['msg'] == 'ok'){
             if($accion == 'nuevo'){
                 return $this->db->consultasql('INSERT INTO alumnos(codigo,nombre,direccion,telefono,email,codigo_transaccion) VALUES(?, ?, ?, ?, ?, ?)', 
-                    $this->datos['codigo'], $this->datos['nombre'], $this->datos['direccion'], 
-                    $this->datos['telefono'], $this->datos['email'], $this->datos['codigo_transaccion']);
+                    $this->datos['codigo'], $this->datos['nombre'], $this->datos['direccion'], $this->datos['telefono'], $this->datos['email'], $this->datos['codigo_transaccion']);
             }else if($accion == 'modificar'){
-                return $this->db->consultasql('UPDATE alumnos SET codigo=?,nombre=?,direccion=?,telefono=?,email=? WHERE codigo_transaccion = ?', 
-                $this->datos['codigo'], $this->datos['nombre'], $this->datos['direccion'], $this->datos['telefono'], 
-                    $this->datos['email'], $this->datos['codigo_transaccion']);
+                return $this->db->consultasql('UPDATE alumnos SET codigo=?,nombre=?,direccion=?,telefono=?,email=? WHERE codigo_transaccion=?', 
+                $this->datos['codigo'], $this->datos['nombre'], $this->datos['direccion'], $this->datos['telefono'], $this->datos['email'], $this->datos['codigo_transaccion']);
             }else if($accion == 'eliminar'){
                 return $this->db->consultasql('DELETE FROM alumnos WHERE codigo_transaccion = ?', $this->datos['codigo_transaccion']);
             }else if($accion == 'consultar'){
