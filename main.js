@@ -23,13 +23,22 @@ const app = createApp({
     },
     methods: {
         buscar(form, metodo) {
-            this.$refs[form][metodo]();
+            if (this.$refs[form]) {
+                this.$refs[form][metodo]();
+            }
         },
         abrirFormulario(componente) {
-            this.forms[componente].mostrar = !this.forms[componente].mostrar;
+            
+            Object.keys(this.forms).forEach(key => {
+                this.forms[key].mostrar = false;
+            });
+        
+            this.forms[componente].mostrar = true;
         },
         modificar(form, metodo, datos) {
-            this.$refs[form][metodo](datos);
+            if (this.$refs[form]) {
+                this.$refs[form][metodo](datos);
+            }
         }
     },
     created() {
