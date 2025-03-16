@@ -69,30 +69,56 @@
                                     <input required pattern="[A-Za-zñÑáéíóú ]{3,150}" v-model="alumno.nombre" type="text" name="txtNombreAlumno" id="txtNombreAlumno" class="form-control">
                                 </div>
                             </div>
+
                             <div class="row p-1">
                                 <div class="col-3 col-md-2">DIRECCION</div>
                                 <div class="col-9 col-md-8">
                                     <input required v-model="alumno.direccion" type="text" name="txtDireccionAlumno" id="txtDireccionAlumno" class="form-control">
                                 </div>
                             </div>
+
                             <div class="row p-1">
                                 <div class="col-3 col-md-2">TELEFONO</div>
                                 <div class="col-9 col-md-4">
                                     <input v-model="alumno.telefono" type="text" name="txtTelefonoAlumno" id="txtTelefonoAlumno" class="form-control">
                                 </div>
                             </div>
+
                             <div class="row p-1">
                                 <div class="col-3 col-md-2">EMAIL</div>
                                 <div class="col-9 col-md-6">
                                     <input v-model="alumno.email" type="text" name="txtEmailAlumno" id="txtEmailAlumno" class="form-control">
                                 </div>
                             </div>
+
+                              <div class="mb-md-4 row">
+                                <!-- FECHA NACIMIENTO -->
+                                <div class="col-md-4">
+                                    <label class="col-form-label">FECHA NACIMIENTO</label>
+                                    <input required v-model="fechanacimiento" type="date" id="txtFechaNacimientoAlumno" 
+                                        class="form-control" onblur="validarFechaNacimiento(this, true)">
+                                </div>
+
+                                <!-- SEXO -->
+                                <div class="col-md-4">
+                                    <label class="col-form-label">SEXO</label>
+                                    <select required v-model="sexo" id="txtSexoAlumno" class="form-control" 
+                                        oninput="validarSexo(this)" onblur="validarSexo(this, true)">
+                                        <option value="">Seleccione una opción</option>
+                                        <option value="Femenino">Femenino</option>
+                                        <option value="Masculino">Masculino</option>
+                                    </select>
+                                </div>
+                            </div>
+
                         </div>
-                        <div class="card-footer bg-dark text-center">
-                            <input type="submit" value="Guardar" class="btn btn-primary"> 
-                            <input type="reset" value="Nuevo" class="btn btn-warning">
+
+                        <div class="card-footer bg-dark text-center d-flex justify-content-between">
+                            <input type="reset" value="Nuevo" class="btn btn-warning"  style="background-color: #f8bf23;">
+                            <input type="submit" value="Guardar" class="btn btn-primary" style="color: #000000;"> 
                             <input type="button" @click="buscarAlumno" value="Buscar" class="btn btn-info">
                         </div>
+
                     </div>
                 </form>
             </div>
