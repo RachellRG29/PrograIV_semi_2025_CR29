@@ -287,7 +287,7 @@
                             
                                 <!-- MUNICIPIO -->
                                 <div class="col-md-4">
-                                    <label class="col-form-label">MUNICIPIO</label>
+                                    <label class="col-form-label">DISTRITO</label>
                                     <select required v-model="municipioSeleccionado" @change="filtrarDistritos" id="txtMunicipioAlumno" 
                                     oninput="validarMunicipio(this)" onblur="validarMunicipio(this, true)" class="form-control">
                                         <option value="">Seleccione un municipio</option>
@@ -299,7 +299,7 @@
 
                                 <!-- DISTRITO -->
                                 <div class="col-md-4">
-                                    <label class="col-form-label">DISTRITO</label>
+                                    <label class="col-form-label">MUNICIPIO</label>
                                     <select required v-model="distritoSeleccionado" id="txtDistritoAlumno" 
                                     oninput="validarDistrito(this)" onblur="validarDistrito(this, true)" class="form-control">
                                         <option value="">Seleccione un distrito</option>
