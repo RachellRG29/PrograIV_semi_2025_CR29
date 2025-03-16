@@ -41,7 +41,7 @@
     },
     template: `
         <div class="row">
-            <div class="col-6">
+            <div class="col-7">
                 <table class="table table-sm table-bordered table-hover">
                     <thead>
                         <tr>
@@ -53,9 +53,11 @@
                                     <option value="direccion">DIRECCION</option>
                                     <option value="telefono">TELEFONO</option>
                                     <option value="email">EMAIL</option>
+                                    <option value="fechanacimiento">FECHA NACIMIENTO</option>
+                                    <option value="sexo">SEXO</option>
                                 </select>
                             </th>
-                            <th colspan="4">
+                            <th colspan="5">
                                 <input type="text" @keyup="listarAlumnos()" v-model="buscar" class="form-control">
                             </th>
                         </tr>
@@ -65,6 +67,8 @@
                             <th>DIRECCION</th>
                             <th>TELEFONO</th>
                             <th>EMAIL</th>
+                            <th>FECHA NACIMIENTO</th>
+                            <th>SEXO</th>
                             <th></th>
                         </tr>
                     </thead>
@@ -75,6 +79,8 @@
                             <td>{{ alumno.direccion }}</td>
                             <td>{{ alumno.telefono }}</td>
                             <td>{{ alumno.email }}</td>
+                            <td>{{ alumno.fechanacimiento }}</td>
+                            <td>{{ alumno.sexo }}</td>
                             <td>
                                 <button class="btn btn-danger btn-sm" 
                                     @click.stop="eliminarAlumno(alumno)">DEL</button>

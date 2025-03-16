@@ -8,7 +8,8 @@ const app = createApp({
         alumno,
         materia,
         buscaralumno,
-        buscarmateria
+        buscarmateria,
+        matricula
     },
     data() {
         return {
@@ -43,8 +44,9 @@ const app = createApp({
     },
     created() {
         db.version(1).stores({
-            alumnos: 'codigo_transaccion, codigo, nombre, direccion, telefono, email',
+            alumnos: 'codigo_transaccion, codigo, nombre, direccion, telefono, email, fechanacimiento, sexo',
             materias: '++idMateria, codigo, nombre, uv',
+            matriculas: '++idMatricula, idAlumno, codigo, nombre, email, direccion, departamento, municipio, distrito, telefono, fechanacimiento, sexo',
         });
     }
 });

@@ -37,21 +37,27 @@ class alumnos {
         if( empty($this->datos['email']) ){
             $this->respuesta['msg'] = 'El email es requerido';
         }
+        if( empty($this->datos['fechanacimiento']) ){
+            $this->respuesta['msg'] = 'La fecha nacimiento es requerido';
+        }
+        if( empty($this->datos['sexo']) ){
+            $this->respuesta['msg'] = 'El sexo es requerido';
+        }
         return $this->administrar_alumnos();
     }
     private function administrar_alumnos(){
         global $accion;
         if($this->respuesta['msg'] == 'ok'){
             if($accion == 'nuevo'){
-                return $this->db->consultasql('INSERT INTO alumnos(codigo,nombre,direccion,telefono,email,codigo_transaccion) VALUES(?, ?, ?, ?, ?, ?)', 
-                    $this->datos['codigo'], $this->datos['nombre'], $this->datos['direccion'], $this->datos['telefono'], $this->datos['email'], $this->datos['codigo_transaccion']);
+                return $this->db->consultasql('INSERT INTO alumnos(codigo,nombre,direccion,telefono,email,fechanacimiento,sexo,codigo_transaccion) VALUES(?, ?, ?, ?, ?, ?, ?, ?)', 
+                    $this->datos['codigo'], $this->datos['nombre'], $this->datos['direccion'], $this->datos['telefono'], $this->datos['email'], $this->datos['fechanacimiento'], $this->datos['sexo'], $this->datos['codigo_transaccion']);
             }else if($accion == 'modificar'){
                 return $this->db->consultasql('UPDATE alumnos SET codigo=?,nombre=?,direccion=?,telefono=?,email=? WHERE codigo_transaccion=?', 
-                $this->datos['codigo'], $this->datos['nombre'], $this->datos['direccion'], $this->datos['telefono'], $this->datos['email'], $this->datos['codigo_transaccion']);
+                $this->datos['codigo'], $this->datos['nombre'], $this->datos['direccion'], $this->datos['telefono'], $this->datos['email'], $this->datos['fechanacimiento'], $this->datos['sexo'], $this->datos['codigo_transaccion']);
             }else if($accion == 'eliminar'){
                 return $this->db->consultasql('DELETE FROM alumnos WHERE codigo_transaccion = ?', $this->datos['codigo_transaccion']);
             }else if($accion == 'consultar'){
-                $this->db->consultasql('SELECT idAlumno, codigo, nombre, direccion, telefono, email, codigo_transaccion FROM alumnos');
+                $this->db->consultasql('SELECT idAlumno, codigo, nombre, direccion, telefono, email, fechanacimiento, sexo, codigo_transaccion FROM alumnos');
                 return $this->db->obtener_datos();
             }
         }else{
