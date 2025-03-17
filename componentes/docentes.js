@@ -64,28 +64,28 @@ const docente = {
                                 <div class="col-3 col-md-2">CODIGO</div>
                                 <div class="col-9 col-md-4">
                                     <input required v-model="docente.codigo" type="text" name="txtCodigoDocente" id="txtCodigoDocente" class="form-control"
-                                    pattern="[A-Za-z]{4}[0-9]{6}" oninput="validarCodigo(this)" onblur="validarCodigo(this, true)">
+                                    pattern="[A-Za-z]{4}[0-9]{6}" oninput="validarCodigoDocente(this)" onblur="validarCodigoDocente(this, true)">
                                 </div>
                             </div>
                             <div class="row p-1">
                                 <div class="col-3 col-md-2">NOMBRE</div>
                                 <div class="col-9 col-md-6">
                                     <input required v-model="docente.nombre" type="text" name="txtNombreDocente" id="txtNombreDocente" class="form-control"
-                                    pattern="[A-Za-zñÑáéíóú ]{3,150}" oninput="validarNombre(this)" onblur="validarNombre(this, true)">
+                                    pattern="[A-Za-zñÑáéíóú ]{3,150}" oninput="validarNombreDocente(this)" onblur="validarNombreDocente(this, true)">
                                 </div>
                             </div>
                             <div class="row p-1">
                                 <div class="col-3 col-md-2">DIRECCION</div>
                                 <div class="col-9 col-md-8">
                                     <input required v-model="docente.direccion" type="text" name="txtDireccionDocente" id="txtDireccionDocente" class="form-control"
-                                     oninput="validarDireccion(this)" onblur="validarDireccion(this, true)">
+                                     oninput="validarDireccionDocente(this)" onblur="validarDireccionDocente(this, true)">
                                 </div>
                             </div>
                             <div class="row p-1">
                                 <div class="col-3 col-md-2">TELEFONO</div>
                                 <div class="col-9 col-md-4">
                                     <input v-model="docente.telefono" type="text" name="txtTelefonoDocente" id="txtTelefonoDocente" class="form-control"
-                                    oninput="validarTelefono(this)" onblur="validarTelefono(this, true)"
+                                    oninput="validarTelefonoDocente(this)" onblur="validarTelefonoDocente(this, true)"
                                     pattern="[0-9]{4}-[0-9]{4}" placeholder="1234-5678">
                                 </div>
                             </div>
@@ -93,19 +93,19 @@ const docente = {
                                 <div class="col-3 col-md-2">EMAIL</div>
                                 <div class="col-9 col-md-6">
                                     <input v-model="docente.email" type="text" name="txtEmailDocente" id="txtEmailDocente" class="form-control"
-                                    oninput="validarEmail(this)" onblur="validarEmail(this, true)">
+                                    oninput="validarEmailDocente(this)" onblur="validarEmailDocente(this, true)">
                                 </div>
                             </div>
                             <div class="mb-md-4 row">
                                 <div class="col-md-4">
                                     <label class="col-form-label">FECHA NACIMIENTO</label>
                                     <input required v-model="docente.fechanacimiento" type="date" id="txtFechaNacimientoDocente" 
-                                        class="form-control" onblur="validarFechaNacimiento(this, true)">
+                                        class="form-control" oninput="validarFechaNacimientoDocente(this)" onblur="validarFechaNacimientoDocente(this, true)">
                                 </div>
                                 <div class="col-md-4">
                                     <label class="col-form-label">SEXO</label>
                                     <select required v-model="docente.sexo" id="txtSexoDocente" class="form-control" 
-                                        oninput="validarSexo(this)" onblur="validarSexo(this, true)">
+                                        oninput="validarSexoDocente(this)" onblur="validarSexoDocente(this, true)">
                                         <option value="">Seleccione una opción</option>
                                         <option value="Femenino">Femenino</option>
                                         <option value="Masculino">Masculino</option>
@@ -127,7 +127,7 @@ const docente = {
 
 
 /* Validaciones de formulario de docentes */
-function validarCodigo(input, mostrarAlerta = false) {
+function validarCodigoDocente(input, mostrarAlerta = false) {
     const codigo = input.value.trim();
     const regexCodigo = /^[A-Za-z]{4}\d{6}$/; // Formato ABCD123456
 
@@ -148,7 +148,7 @@ function validarCodigo(input, mostrarAlerta = false) {
     }
 }
 
-function validarNombre(input, mostrarAlerta = false) {
+function validarNombreDocente(input, mostrarAlerta = false) {
     const nombre = input.value.trim();
     const regexNombre = /^[A-Za-zñÑáéíóúÁÉÍÓÚ\s]{3,150}$/;
 
@@ -170,7 +170,7 @@ function validarNombre(input, mostrarAlerta = false) {
     
 }
 
-function validarEmail(input, mostrarAlerta = false) {
+function validarEmailDocente(input, mostrarAlerta = false) {
     const email = input.value.trim();
     const regexEmail = /^[a-zA-Z0-9._-]+@(ugb\.edu\.sv|gmail\.com)$/;
 
@@ -191,7 +191,7 @@ function validarEmail(input, mostrarAlerta = false) {
     }
 }
 
-function validarDireccion(input, mostrarAlerta = false) {
+function validarDireccionDocente(input, mostrarAlerta = false) {
     const direccion = input.value.trim();
     const regexDireccion = /^[A-Za-zñÑáéíóúÁÉÍÓÚ0-9\/\-,.#\s]{5,150}$/;
 
@@ -212,7 +212,7 @@ function validarDireccion(input, mostrarAlerta = false) {
     }
 }
 
-function validarTelefono(input, mostrarAlerta = false) {
+function validarTelefonoDocente(input, mostrarAlerta = false) {
     const telefono = input.value.trim();
     const regexTelefono = /^[0-9]{4}-[0-9]{4}$/; 
 
@@ -235,7 +235,7 @@ function validarTelefono(input, mostrarAlerta = false) {
     }
 }
 
-function validarFechaNacimiento(input, mostrarAlerta = false) {
+function validarFechaNacimientoDocente(input, mostrarAlerta = false) {
     const fechaNacimiento = input.value.trim();
     const regexFechaNacimiento = /^\d{4}-\d{2}-\d{2}$/;
 
@@ -283,7 +283,7 @@ function validarFechaNacimiento(input, mostrarAlerta = false) {
     return true; // Fecha válida
 }
 
-function validarSexo(input, mostrarAlerta = false) {
+function validarSexoDocente(input, mostrarAlerta = false) {
     const sexo = input.value.trim();
 
     if (sexo !== "") {

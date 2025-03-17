@@ -57,19 +57,22 @@
                             <div class="row p-1">
                                 <div class="col-3 col-md-2">CODIGO</div>
                                 <div class="col-9 col-md-4">
-                                    <input required v-model="materia.codigo" type="text" name="txtCodigoMateria" id="txtCodigoMateria" class="form-control">
+                                    <input required v-model="materia.codigo" type="text" name="txtCodigoMateria" id="txtCodigoMateria" class="form-control"
+                                     oninput="validarCodigoMateria(this)"  onblur="validarCodigoMateria(this, true)">
                                 </div>
                             </div>
                             <div class="row p-1">
                                 <div class="col-3 col-md-2">NOMBRE</div>
                                 <div class="col-9 col-md-6">
-                                    <input required pattern="[A-Za-zñÑáéíóú ]{3,150}" v-model="materia.nombre" type="text" name="txtNombreMateria" id="txtNombreMateria" class="form-control">
+                                    <input required pattern="[A-Za-zñÑáéíóú ]{3,150}" v-model="materia.nombre" type="text" name="txtNombreMateria" id="txtNombreMateria" class="form-control"
+                                    pattern="[A-Za-zñÑáéíóú ]{3,150}" oninput="validarNombreMateria(this)" onblur="validarNombreMateria(this, true)">
                                 </div>
                             </div>
                             <div class="row p-1">
                                 <div class="col-3 col-md-2">UV</div>
                                 <div class="col-9 col-md-8">
-                                    <input required v-model="materia.uv" type="text" name="txtUVMateria" id="txtUVMateria" class="form-control">
+                                    <input required v-model="materia.uv" type="text" name="txtUVMateria" id="txtUVMateria" class="form-control"
+                                     oninput="validarUV(this)" onblur="validarUV(this, true)">
                                 </div>
                             </div>
                         </div>
@@ -84,3 +87,69 @@
         </div>
     `
 };
+
+/* validaciones del formulario materias */
+function validarCodigoMateria(input, mostrarAlerta = false) {
+    const codigo = input.value.trim();
+    const regexCodigo = /^\d{3,4}$/; //
+
+    if (regexCodigo.test(codigo)) {
+        input.classList.remove('is-invalid');
+        input.classList.add('is-valid');
+    } else {
+        input.classList.remove('is-valid');
+        input.classList.add('is-invalid');
+        
+        if (mostrarAlerta) {
+            if (uv === '') {
+                alertify.error('La UV no puede estar vacía');
+            } else {
+                alertify.warning('La UV solo permite dos números');
+            }
+        }
+    }
+}
+
+
+
+function validarNombreMateria(input, mostrarAlerta = false) {
+    const nombre = input.value.trim();
+    const regexNombre = /^[A-Za-zñÑáéíóúÁÉÍÓÚ\s]{3,150}$/;
+
+    if (regexNombre.test(nombre)) {
+        input.classList.remove('is-invalid');
+        input.classList.add('is-valid');
+    } else {
+        input.classList.remove('is-valid');
+        input.classList.add('is-invalid');
+        
+        if (mostrarAlerta) {
+            if (nombre === '') {
+                alertify.error('El nombre no puede estar vacío');
+            } else {
+                alertify.warning('El nombre debe tener al menos 3 letras');
+            }
+        }
+    }
+}
+
+function validarUV(input, mostrarAlerta = false) {
+    const uv = input.value.trim();
+    const regexUV = /^\d{1,2}$/; // Solo permite uno o dos números
+
+    if (regexUV.test(uv)) {
+        input.classList.remove('is-invalid');
+        input.classList.add('is-valid');
+    } else {
+        input.classList.remove('is-valid');
+        input.classList.add('is-invalid');
+        
+        if (mostrarAlerta) {
+            if (uv === '') {
+                alertify.error('La UV no puede estar vacía');
+            } else {
+                alertify.warning('La UV solo permite dos números');
+            }
+        }
+    }
+}
