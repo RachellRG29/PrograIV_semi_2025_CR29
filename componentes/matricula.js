@@ -32,9 +32,6 @@ const matricula = {
                 nombre: alumno.nombre,
                 email: alumno.email,
                 direccion: alumno.direccion,
-                departamento: alumno.departamento,
-                municipio: alumno.municipio,
-                distrito: alumno.distrito,
                 telefono: alumno.telefono,
                 fechanacimiento: alumno.fechanacimiento,
                 sexo: alumno.sexo
@@ -90,7 +87,7 @@ const matricula = {
     template: `
         <div class='container mt-4'>
             <h5 class="text-primary fw-bold">Buscar Alumno para Matricular</h5>
-            <input type='text' v-model='filtroAlumnos' class='form-control mb-3 shadow-sm' placeholder='馃攷 Buscar por c贸digo o nombre'>
+            <input type='text' v-model='filtroAlumnos' class='form-control mb-3 shadow-sm' placeholder=' Buscar por codigo o nombre'>
 
             <button class='btn btn-secondary shadow-lg fw-bold' @click='actualizarLista'>
                 <i class="bi bi-arrow-clockwise"></i> Actualizar Datos
@@ -101,9 +98,9 @@ const matricula = {
                 <table class='table table-hover table-bordered shadow-sm'>
                     <thead class="table-danger">
                         <tr>
-                            <th>C贸digo</th><th>Nombre</th><th>Email</th><th>Direcci贸n</th>
-                            <th>Departamento</th><th>Municipio</th><th>Distrito</th>
-                            <th>Tel茅fono</th><th>Fecha Nacimiento</th><th>Sexo</th><th>Acci贸n</th>
+                            <th>Codigo</th><th>Nombre</th><th>Email</th><th>Direccion</th>
+                            
+                            <th>Telefono</th><th>Fecha Nacimiento</th><th>Sexo</th><th>Accion</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -112,9 +109,6 @@ const matricula = {
                             <td>{{ alumno.nombre }}</td>
                             <td>{{ alumno.email }}</td>
                             <td>{{ alumno.direccion }}</td>
-                            <td>{{ alumno.departamento }}</td>
-                            <td>{{ alumno.municipio }}</td>
-                            <td>{{ alumno.distrito }}</td>
                             <td>{{ alumno.telefono }}</td>
                             <td>{{ alumno.fechanacimiento }}</td>
                             <td>{{ alumno.sexo }}</td>
@@ -129,16 +123,16 @@ const matricula = {
             </div>
 
             <h5 class="mt-4 text-primary fw-bold">Buscar Alumno Matriculado</h5>
-            <input type='text' v-model='filtroMatriculados' class='form-control mb-3 shadow-sm' placeholder='馃攷 Buscar por c贸digo o nombre'>
+            <input type='text' v-model='filtroMatriculados' class='form-control mb-3 shadow-sm' placeholder='Buscar por codigo o nombre'>
 
             <h5 class="mt-4 text-primary fw-bold">Alumnos Matriculados</h5>
             <div class="table-responsive">
                 <table class='table table-hover table-bordered shadow-sm'>
                     <thead class="table-primary">
                         <tr>
-                            <th>C贸digo</th><th>Nombre</th><th>Email</th><th>Direcci贸n</th>
-                            <th>Departamento</th><th>Municipio</th><th>Distrito</th>
-                            <th>Tel茅fono</th><th>Fecha Nacimiento</th><th>Sexo</th><th>Acci贸n</th>
+                            <th>Codigo</th><th>Nombre</th><th>Email</th><th>Direccion</th>
+                            
+                            <th>Telefono</th><th>Fecha Nacimiento</th><th>Sexo</th><th>Accion</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -147,9 +141,6 @@ const matricula = {
                             <td>{{ matriculado.nombre }}</td>
                             <td>{{ matriculado.email }}</td>
                             <td>{{ matriculado.direccion }}</td>
-                            <td>{{ matriculado.departamento }}</td>
-                            <td>{{ matriculado.municipio }}</td>
-                            <td>{{ matriculado.distrito }}</td>
                             <td>{{ matriculado.telefono }}</td>
                             <td>{{ matriculado.fechanacimiento }}</td>
                             <td>{{ matriculado.sexo }}</td>

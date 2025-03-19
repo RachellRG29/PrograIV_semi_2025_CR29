@@ -45,13 +45,30 @@ const app = createApp({
             if (this.$refs[form]) {
                 this.$refs[form][metodo](datos);
             }
+        },
+        matricularAlumno(idAlumno) {
+            let datos = new FormData();
+            datos.append('accion', 'nuevo');
+            datos.append('idAlumno', idAlumno);
+    
+            fetch('backend/matricula.php', {
+                method: 'POST',
+                body: datos
+            })
+            .then(response => response.json())
+            .then(data => {
+                alertify.success("Alumno matriculado exitosamente");
+            })
+            .catch(error => {
+                alertify.error("Error al matricular al alumno");
+            });
         }
     },
     created() {
         db.version(1).stores({
             alumnos: 'codigo_transaccion, codigo, nombre, direccion, telefono, email, fechanacimiento, sexo',
             materias: '++idMateria, codigo, nombre, uv',
-            matriculas: '++idMatricula, idAlumno, codigo, nombre, email, direccion, departamento, municipio, distrito, telefono, fechanacimiento, sexo',
+            matriculas: '++idMatricula, idAlumno, codigo, nombre, email, direccion,  telefono, fechanacimiento, sexo',
             docentes: 'codigo_transaccion, codigo, nombre, direccion, telefono, email, fechanacimiento, sexo'
         });
     }
