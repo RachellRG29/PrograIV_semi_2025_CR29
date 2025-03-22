@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 17-03-2025 a las 16:58:41
+-- Tiempo de generación: 22-03-2025 a las 21:19:07
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -36,18 +36,23 @@ CREATE TABLE `alumnos` (
   `email` char(75) NOT NULL,
   `fechanacimiento` date DEFAULT NULL,
   `sexo` enum('Femenino','Masculino') NOT NULL,
-  `codigo_transaccion` char(36) NOT NULL
+  `codigo_transaccion` char(36) NOT NULL,
+  `hash` char(36) NOT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+-- --------------------------------------------------------
+
 --
--- Volcado de datos para la tabla `alumnos`
+-- Estructura de tabla para la tabla `bitacora`
 --
 
-INSERT INTO `alumnos` (`idAlumno`, `codigo`, `nombre`, `direccion`, `telefono`, `email`, `fechanacimiento`, `sexo`, `codigo_transaccion`) VALUES
-(9, 'USSS029394', 'Ezequiel Martinez Argueta', 'Isla el joval', '7764-2333', 'ezquiel@ugb.edu.sv', '2001-03-03', 'Masculino', 'b588da09-f7b9-4d7b-ae8e-6aa1568785f5'),
-(8, 'USIS333031', 'Estefani Areli Martinez Argueta', 'San Rafael Oriente', '7764-0012', 'estefany@ugb.edu.sv', '2001-03-28', 'Femenino', '4fe54231-31d3-4a60-b345-56187da1f269'),
-(10, 'USIS333030', 'Ana Rosa Martinez Claros', 'Santa Maria', '7660-4233', 'ana@ugb.edu.sv', '2001-03-27', 'Femenino', '387a7309-331d-4e6d-b3c8-376c7ce3fc64'),
-(7, 'USSS029920', 'Jose Saul Lopez Jimenez', 'Usulutan santamaria', '7665-2321', 'elias@ugb.edu.sv', '2001-03-20', 'Masculino', '0a0e4e0c-f258-46d1-8ed6-9ff7776b083f');
+CREATE TABLE `bitacora` (
+  `idBitacora` int(10) NOT NULL,
+  `idDocumento` int(10) NOT NULL,
+  `hash` char(36) NOT NULL,
+  `data` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL CHECK (json_valid(`data`)),
+  `fecha_hora` datetime NOT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -67,13 +72,6 @@ CREATE TABLE `docentes` (
   `codigo_transaccion` char(36) NOT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Volcado de datos para la tabla `docentes`
---
-
-INSERT INTO `docentes` (`idDocente`, `codigo`, `nombre`, `direccion`, `telefono`, `email`, `fechanacimiento`, `sexo`, `codigo_transaccion`) VALUES
-(1, 'USSS039922', 'Osmaro Parada Fuentes', 'Ugb El salvador usulutan', '6575-3455', 'oscar@ugb.edu.sv', '1980-01-04', 'Masculino', 'c4ea2c06-b155-470c-b201-714f4672ec8f');
-
 -- --------------------------------------------------------
 
 --
@@ -88,13 +86,6 @@ CREATE TABLE `materias` (
   `codigo_transaccion` char(36) NOT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Volcado de datos para la tabla `materias`
---
-
-INSERT INTO `materias` (`idMateria`, `codigo`, `nombre`, `uv`, `codigo_transaccion`) VALUES
-(0, '0022', 'Programación III', 10, '58601bca-133b-4172-8cc6-ee15be3cc618');
-
 -- --------------------------------------------------------
 
 --
@@ -104,7 +95,9 @@ INSERT INTO `materias` (`idMateria`, `codigo`, `nombre`, `uv`, `codigo_transacci
 CREATE TABLE `matricula` (
   `idMatricula` int(11) NOT NULL,
   `idAlumno` int(11) NOT NULL,
-  `fecha_matricula` date NOT NULL
+  `codigo_transaccion` char(36) NOT NULL,
+  `hash` char(36) NOT NULL,
+  `data` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL CHECK (json_valid(`data`))
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -117,6 +110,14 @@ CREATE TABLE `matricula` (
 ALTER TABLE `alumnos`
   ADD PRIMARY KEY (`idAlumno`),
   ADD UNIQUE KEY `codigo_transaccion` (`codigo_transaccion`) USING BTREE;
+
+--
+-- Indices de la tabla `bitacora`
+--
+ALTER TABLE `bitacora`
+  ADD PRIMARY KEY (`idBitacora`,`idDocumento`),
+  ADD UNIQUE KEY `hash` (`hash`),
+  ADD UNIQUE KEY `idDocumento` (`idDocumento`);
 
 --
 -- Indices de la tabla `docentes`
@@ -147,13 +148,19 @@ ALTER TABLE `matricula`
 -- AUTO_INCREMENT de la tabla `alumnos`
 --
 ALTER TABLE `alumnos`
-  MODIFY `idAlumno` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `idAlumno` int(10) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT de la tabla `bitacora`
+--
+ALTER TABLE `bitacora`
+  MODIFY `idBitacora` int(10) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT de la tabla `docentes`
 --
 ALTER TABLE `docentes`
-  MODIFY `idDocente` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `idDocente` int(10) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT de la tabla `matricula`
