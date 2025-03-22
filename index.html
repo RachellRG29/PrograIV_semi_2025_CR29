@@ -48,9 +48,7 @@
                             <li class="nav-item">
                                 <a class="nav-link" @click="abrirFormulario('docente')" href="#">Docente</a>
                             </li>
-                            <li class="nav-item">
-                                <a class="nav-link" @click="abrirFormulario('matricula')" href="#">Matriculacion</a>
-                            </li>
+                           
                         </ul>
                     </div>
                 </div>
@@ -61,7 +59,6 @@
             <buscaralumno v-show="forms.buscarAlumno.mostrar" ref="buscaralumno" @modificar="modificar('alumno', 'modificarAlumno', $event)"></buscaralumno>
             <materia v-show="forms.materia.mostrar" :forms="forms" ref="materia" @buscar="buscar('buscarmateria', 'listarMaterias')"></materia>
             <buscarmateria v-show="forms.buscarMateria.mostrar" ref="buscarmateria" @modificar="modificar('materia', 'modificarMateria', $event)"></buscarmateria>
-            <matricula v-show="forms.matricula.mostrar"></matricula>
             <docente v-show="forms.docente.mostrar" :forms="forms" ref="docente" @buscar="buscar('buscardocente', 'listarDocentes')"></docente>
             <buscardocente v-show="forms.buscarDocente.mostrar" ref="buscardocente" @modificar="modificar('docente', 'modificarDocente', $event)"></buscardocente>
             
@@ -69,6 +66,7 @@
         </div>
     </div>
     
+    <script src="https://cdn.jsdelivr.net/npm/crypto-js@4.1.1/crypto-js.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/uuid/8.2.0/uuid.min.js"></script>
     <script src="//cdn.jsdelivr.net/npm/alertifyjs@1.14.0/build/alertify.min.js"></script>
     <script src="https://unpkg.com/dexie/dist/dexie.js"></script>
@@ -78,11 +76,11 @@
     <script src="componentes/alumnos.js"></script>
     <script src="componentes/busqueda_materias.js"></script>
     <script src="componentes/materias.js"></script>
-    <script src="componentes/matricula.js"></script>
     <script src="componentes/docentes.js"></script>
     <script src="componentes/busqueda_docentes.js"></script>
 
     <script src="main.js"></script>
+
 </body>
 
 </html>

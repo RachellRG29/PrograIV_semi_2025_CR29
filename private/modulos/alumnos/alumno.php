@@ -48,16 +48,25 @@ class alumnos {
     private function administrar_alumnos(){
         global $accion;
         if($this->respuesta['msg'] == 'ok'){
+            $this->db->consultasql('INSERT INTO bitacora(idDocumento, hash, data, fecha_hora) VALUES(?, ?, ?, ?)', 
+            $this->datos['codigo_transaccion'], $this->datos['hash'], json_encode($this->datos), date('Y-m-d H:i:s') );
+
             if($accion == 'nuevo'){
-                return $this->db->consultasql('INSERT INTO alumnos(codigo,nombre,direccion,telefono,email,fechanacimiento,sexo,codigo_transaccion) VALUES(?, ?, ?, ?, ?, ?, ?, ?)', 
-                    $this->datos['codigo'], $this->datos['nombre'], $this->datos['direccion'], $this->datos['telefono'], $this->datos['email'], $this->datos['fechanacimiento'], $this->datos['sexo'], $this->datos['codigo_transaccion']);
-            }else if($accion == 'modificar'){
-                return $this->db->consultasql('UPDATE alumnos SET codigo=?,nombre=?,direccion=?,telefono=?,email=? WHERE codigo_transaccion=?', 
-                $this->datos['codigo'], $this->datos['nombre'], $this->datos['direccion'], $this->datos['telefono'], $this->datos['email'], $this->datos['fechanacimiento'], $this->datos['sexo'], $this->datos['codigo_transaccion']);
-            }else if($accion == 'eliminar'){
+                return $this->db->consultasql('INSERT INTO alumnos(codigo,nombre,direccion,telefono,email,fechanacimiento,sexo,codigo_transaccion, hash) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)', 
+                    $this->datos['codigo'], $this->datos['nombre'], $this->datos['direccion'], $this->datos['telefono'], 
+                    $this->datos['email'], $this->datos['fechanacimiento'], $this->datos['sexo'], $this->datos['codigo_transaccion'], 
+                    $this->datos['hash']);
+            }
+            else if($accion == 'modificar'){
+                return $this->db->consultasql('UPDATE alumnos SET codigo=?,nombre=?,direccion=?,telefono=?,email=?,fechanacimiento=?,sexo=?, hash=? WHERE codigo_transaccion = ?', 
+                $this->datos['codigo'], $this->datos['nombre'], $this->datos['direccion'], $this->datos['telefono'], 
+                $this->datos['email'], $this->datos['fechanacimiento'],$this->datos['sexo'], $this->datos['hash'], $this->datos['codigo_transaccion']);
+            }
+            else if($accion == 'eliminar'){
                 return $this->db->consultasql('DELETE FROM alumnos WHERE codigo_transaccion = ?', $this->datos['codigo_transaccion']);
-            }else if($accion == 'consultar'){
-                $this->db->consultasql('SELECT idAlumno, codigo, nombre, direccion, telefono, email, fechanacimiento, sexo, codigo_transaccion FROM alumnos');
+            }
+            else if($accion == 'consultar'){
+                $this->db->consultasql('SELECT idAlumno, codigo, nombre, direccion, telefono, email, fechanacimiento, sexo, codigo_transaccion, hash FROM alumnos');
                 return $this->db->obtener_datos();
             }
         }else{

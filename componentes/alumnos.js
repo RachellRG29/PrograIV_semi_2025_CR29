@@ -27,6 +27,15 @@
         },
         guardarAlumno() {
             let alumno = {...this.alumno};
+            alumno.hash = CryptoJS.SHA256(JSON.stringify({
+                codigo: alumno.codigo,
+                nombre: alumno.nombre,
+                direccion: alumno.direccion,
+                telefono: alumno.telefono,
+                email: alumno.email,
+                fechanacimiento: alumno.fechanacimiento,
+                sexo: alumno.sexo
+            })).toString();
             db.alumnos.put(alumno);
             fetch(`private/modulos/alumnos/alumno.php?accion=${this.accion}&alumnos=${JSON.stringify(alumno)}`)
                 .then(response => response.json())

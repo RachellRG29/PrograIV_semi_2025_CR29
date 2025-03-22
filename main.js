@@ -6,32 +6,27 @@ const Dexie = window.Dexie,
 const app = createApp({
     components: {
         alumno,
+        docente, 
         materia,
         buscaralumno,
-        buscarmateria,
-        docente,
         buscardocente,
-        matricula
-        
+        buscarmateria,
     },
     data() {
         return {
             forms : {
-                alumno: {mostrar: false},
-                buscarAlumno: {mostrar: false},
-                materia: {mostrar: false},
-                buscarMateria: {mostrar: false},
-                docente: {mostrar: false},
-                buscarDocente: {mostrar: false},
-                matricula: {mostrar: false},
+                alumno: { mostrar: false },
+                docente: { mostrar: false }, 
+                buscarAlumno: { mostrar: false },
+                buscarDocente: { mostrar: false },
+                materia: { mostrar: false },
+                buscarMateria: { mostrar: false },
             },
         };
     },
     methods: {
         buscar(form, metodo) {
-            if (this.$refs[form]) {
-                this.$refs[form][metodo]();
-            }
+            this.$refs[form][metodo]();
         },
         abrirFormulario(componente) {
             
@@ -42,34 +37,15 @@ const app = createApp({
             this.forms[componente].mostrar = true;
         },
         modificar(form, metodo, datos) {
-            if (this.$refs[form]) {
-                this.$refs[form][metodo](datos);
-            }
-        },
-        matricularAlumno(idAlumno) {
-            let datos = new FormData();
-            datos.append('accion', 'nuevo');
-            datos.append('idAlumno', idAlumno);
-    
-            fetch('backend/matricula.php', {
-                method: 'POST',
-                body: datos
-            })
-            .then(response => response.json())
-            .then(data => {
-                alertify.success("Alumno matriculado exitosamente");
-            })
-            .catch(error => {
-                alertify.error("Error al matricular al alumno");
-            });
+            this.$refs[form][metodo](datos);
         }
+    
     },
     created() {
         db.version(1).stores({
-            alumnos: 'codigo_transaccion, codigo, nombre, direccion, telefono, email, fechanacimiento, sexo',
-            materias: '++idMateria, codigo, nombre, uv',
-            matriculas: '++idMatricula, idAlumno, codigo, nombre, email, direccion,  telefono, fechanacimiento, sexo',
-            docentes: 'codigo_transaccion, codigo, nombre, direccion, telefono, email, fechanacimiento, sexo'
+            alumnos: 'codigo_transaccion, codigo, nombre, direccion, telefono, email, fechanacimiento, sexo, hash',
+            docentes:'codigo_transaccion, codigo, nombre, direccion, telefono, email, fechanacimiento, sexo, hash',
+            materias: 'codigo_transaccion, codigo, nombre, uv, hash',
         });
     }
 });
