@@ -23,7 +23,7 @@ const matricula = {
         async listarMatriculados() {
             this.matriculados = await db.matricula.toArray();
         },
-        async matricularAlumno(alumno) {
+        /*async matricularAlumno(alumno) {
             const existe = await db.matricula.where('idAlumno').equals(alumno.idAlumno).first();
             if (existe) {
                 alertify.warning(`El alumno ${alumno.nombre} ya está matriculado.`);
@@ -43,13 +43,66 @@ const matricula = {
 
             alertify.success(`El alumno ${alumno.nombre} ha sido matriculado.`);
             await this.actualizarLista();
+        },*/
+        async matricularAlumno(alumno) {
+            const existe = await db.matricula.where('idAlumno').equals(alumno.idAlumno).first();
+            if (existe) {
+                alertify.warning(`El alumno ${alumno.nombre} ya está matriculado.`);
+                return;
+            }
+        
+            const transaccion = uuidv4();
+            const datosMatricula = {
+                idAlumno: alumno.idAlumno,
+                codigo_transaccion: transaccion,
+                hash: CryptoJS.SHA256(JSON.stringify(alumno)).toString(),
+                ...alumno
+            };
+        
+            // Guardar en IndexedDB
+            await db.matricula.put({
+                ...datosMatricula
+            });
+        
+            // Guardar en MySQL y/o en phpmyadmin :3
+            fetch(`private/modulos/matriculas/matricula.php?accion=matricular&matricula=${encodeURIComponent(JSON.stringify(datosMatricula))}`)
+                .then(res => res.json())
+                .then(res => {
+                    if (res !== true) {
+                        alertify.error("Error al guardar en MySQL: " + res);
+                    }
+                })
+                .catch(err => {
+                    console.error("Error al guardar en MySQL:", err);
+                    alertify.error("Error al conectar con el servidor.");
+                });
+        
+            alertify.success(`El alumno ${alumno.nombre} ha sido matriculado.`);
+            await this.actualizarLista();
         },
+        
         async quitarMatriculacion(alumno) {
             const existe = await db.matricula.where('idAlumno').equals(alumno.idAlumno).first();
             if (!existe) {
                 alertify.warning(`El alumno ${alumno.nombre} no está matriculado.`);
                 return;
             }
+
+            await db.matricula.where('idAlumno').equals(alumno.idAlumno).delete();
+
+            // También en MySQL phpmyadmin :3
+            fetch(`private/modulos/matriculas/matricula.php?accion=eliminar&matricula=${encodeURIComponent(JSON.stringify({idAlumno: alumno.idAlumno}))}`)
+                .then(res => res.json())
+                .then(res => {
+                    if (res !== true) {
+                        alertify.error("Error al eliminar en MySQL: " + res);
+                    }
+                })
+                .catch(err => {
+                    console.error("Error al eliminar en MySQL:", err);
+                    alertify.error("Error al conectar con el servidor.");
+                });
+
         
             alertify.confirm(
                 'Confirmar eliminación',
@@ -63,9 +116,7 @@ const matricula = {
                     alertify.message('Acción cancelada');
                 }
             );
-        }
-        ,
-        
+        },
         async actualizarLista() {
             await this.listarAlumnos();
             await this.listarMatriculados();
