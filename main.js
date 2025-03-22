@@ -11,6 +11,7 @@ const app = createApp({
         buscaralumno,
         buscardocente,
         buscarmateria,
+        matricula
     },
     data() {
         return {
@@ -21,6 +22,7 @@ const app = createApp({
                 buscarDocente: { mostrar: false },
                 materia: { mostrar: false },
                 buscarMateria: { mostrar: false },
+                matricula: { mostrar: false },
             },
         };
     },
@@ -43,9 +45,11 @@ const app = createApp({
     },
     created() {
         db.version(1).stores({
-            alumnos: 'codigo_transaccion, codigo, nombre, direccion, telefono, email, fechanacimiento, sexo, hash',
+            alumnos: 'codigo_transaccion, codigo, nombre, direccion, telefono, email, fechanacimiento, sexo, hash', /*no poner idAlumno */
             docentes:'codigo_transaccion, codigo, nombre, direccion, telefono, email, fechanacimiento, sexo, hash',
             materias: 'codigo_transaccion, codigo, nombre, uv, hash',
+            matricula: '++idMatricula, idAlumno, codigo_transaccion, data, hash'
+
         });
     }
 });

@@ -48,6 +48,9 @@
                             <li class="nav-item">
                                 <a class="nav-link" @click="abrirFormulario('docente')" href="#">Docente</a>
                             </li>
+                            <li class="nav-item">
+                                <a class="nav-link" @click="abrirFormulario('matricula')" href="#">Matrícula</a>
+                            </li>
                            
                         </ul>
                     </div>
@@ -62,6 +65,7 @@
             <docente v-show="forms.docente.mostrar" :forms="forms" ref="docente" @buscar="buscar('buscardocente', 'listarDocentes')"></docente>
             <buscardocente v-show="forms.buscarDocente.mostrar" ref="buscardocente" @modificar="modificar('docente', 'modificarDocente', $event)"></buscardocente>
             
+            <matricula v-show="forms.matricula.mostrar" :forms="forms" ref="matricula" @buscar="buscar('buscarmatricula', 'listarMatricula')"></matricula>
             
         </div>
     </div>
@@ -78,6 +82,7 @@
     <script src="componentes/materias.js"></script>
     <script src="componentes/docentes.js"></script>
     <script src="componentes/busqueda_docentes.js"></script>
+    <script src="componentes/matricula.js"></script>
 
     <script src="main.js"></script>
 

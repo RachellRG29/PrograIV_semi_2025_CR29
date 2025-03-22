@@ -27,6 +27,8 @@
         },
         guardarAlumno() {
             let alumno = {...this.alumno};
+        
+            // Generar hash para la seguridad
             alumno.hash = CryptoJS.SHA256(JSON.stringify({
                 codigo: alumno.codigo,
                 nombre: alumno.nombre,
@@ -36,19 +38,30 @@
                 fechanacimiento: alumno.fechanacimiento,
                 sexo: alumno.sexo
             })).toString();
-            db.alumnos.put(alumno);
-            fetch(`private/modulos/alumnos/alumno.php?accion=${this.accion}&alumnos=${JSON.stringify(alumno)}`)
-                .then(response => response.json())
-                .then(data => {
-                    if( data != true ){
-                        alertify.error(data);
-                    }else{
-                        this.nuevoAlumno();
-                        this.$emit('buscar');
-                    }
-                })
-                .catch(error => console.log(error));
-        },
+        
+            db.alumnos.put(alumno).then(() => {
+                console.log("Alumno guardado en IndexedDB:", alumno);
+                alertify.success("Alumno guardado en IndexedDB.");
+        
+                // Guardar en MySQL
+                fetch(`private/modulos/alumnos/alumno.php?accion=${this.accion}&alumnos=${JSON.stringify(alumno)}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data !== true) {
+                            alertify.error(data);
+                        } else {
+                            this.nuevoAlumno();
+                            this.$emit('buscar');
+                        }
+                    })
+                    .catch(error => console.error("Error al guardar en MySQL:", error));
+            }).catch(error => {
+                console.error("Error al guardar en IndexedDB:", error);
+                alertify.error("No se pudo guardar en IndexedDB.");
+            });
+        }
+        
+        ,
         nuevoAlumno() {
             this.accion = 'nuevo';
             this.alumno = {
