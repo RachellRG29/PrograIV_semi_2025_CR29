@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 22-03-2025 a las 21:19:07
+-- Tiempo de generación: 23-03-2025 a las 03:19:40
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -69,7 +69,8 @@ CREATE TABLE `docentes` (
   `email` char(75) NOT NULL,
   `fechanacimiento` date DEFAULT NULL,
   `sexo` enum('Femenino','Masculino') NOT NULL,
-  `codigo_transaccion` char(36) NOT NULL
+  `codigo_transaccion` char(36) NOT NULL,
+  `hash` char(36) NOT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -83,7 +84,8 @@ CREATE TABLE `materias` (
   `codigo` char(5) NOT NULL,
   `nombre` char(100) NOT NULL,
   `uv` tinyint(2) NOT NULL,
-  `codigo_transaccion` char(36) NOT NULL
+  `codigo_transaccion` char(36) NOT NULL,
+  `hash` char(36) NOT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -161,6 +163,12 @@ ALTER TABLE `bitacora`
 --
 ALTER TABLE `docentes`
   MODIFY `idDocente` int(10) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT de la tabla `materias`
+--
+ALTER TABLE `materias`
+  MODIFY `idMateria` int(10) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT de la tabla `matricula`

@@ -4,11 +4,10 @@
     data() {
         return {
             accion: 'nuevo',
-            materias: [],
             materia : {
                 codigo: '',
                 nombre: '',
-                uv: '',
+                uv:'',
                 codigo_transaccion: uuidv4()
             },
         }
@@ -24,19 +23,36 @@
         },
         guardarMateria() {
             let materia = {...this.materia};
-            db.materias.put(materia);
-            fetch(`private/modulos/materias/materia.php?accion=${this.accion}&materias=${JSON.stringify(materia)}`)
-                .then(response => response.json())
-                .then(data => {
-                    if( data != true ){
-                        alertify.error(data);
-                    }else{
-                        this.nuevoMateria();
-                        this.$emit('buscar');
-                    }
-                })
-                .catch(error => console.log(error));
-        },
+        
+            // Generar hash para la seguridad
+            materia.hash = CryptoJS.SHA256(JSON.stringify({
+                codigo: materia.codigo,
+                nombre: materia.nombre,
+                uv: materia.uv
+            })).toString();
+        
+            db.materias.put(materia).then(() => {
+                console.log("Materia guardada en IndexedDB:", materia);
+                alertify.success("Materia guardada en IndexedDB.");
+        
+                // Guardar en MySQL
+                fetch(`private/modulos/materias/materia.php?accion=${this.accion}&materias=${JSON.stringify(materia)}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data !== true) {
+                            alertify.error(data);
+                        } else {
+                            this.nuevoMateria();
+                            this.$emit('buscar');
+                        }
+                    })
+                    .catch(error => console.error("Error al guardar en MySQL:", error));
+            }).catch(error => {
+                console.error("Error al guardar en IndexedDB:", error);
+                alertify.error("No se pudo guardar en IndexedDB.");
+            });
+        }
+        ,
         nuevoMateria() {
             this.accion = 'nuevo';
             this.materia = {
@@ -44,7 +60,7 @@
                 nombre: '',
                 uv: '',
                 codigo_transaccion: uuidv4()
-            }
+            };
         }
     },
     template: `
@@ -76,11 +92,12 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="card-footer bg-dark text-center">
-                            <input type="submit" value="Guardar" class="btn btn-primary"> 
-                            <input type="reset" value="Nuevo" class="btn btn-warning">
+                        <div class="card-footer bg-dark text-center d-flex justify-content-between">
+                            <input type="reset" value="Nuevo" class="btn btn-warning" style="background-color: #f8bf23;">
+                            <input type="submit" value="Guardar" class="btn btn-primary"  style="color: #000000;"> 
                             <input type="button" @click="buscarMateria" value="Buscar" class="btn btn-info">
                         </div>
+
                     </div>
                 </form>
             </div>
@@ -109,8 +126,6 @@ function validarCodigoMateria(input, mostrarAlerta = false) {
         }
     }
 }
-
-
 
 function validarNombreMateria(input, mostrarAlerta = false) {
     const nombre = input.value.trim();

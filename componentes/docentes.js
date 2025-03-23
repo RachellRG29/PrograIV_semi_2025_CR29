@@ -1,3 +1,4 @@
+
 const docente = { 
     props: ['forms'],
     data() {
@@ -26,19 +27,40 @@ const docente = {
         },
         guardarDocente() {
             let docente = {...this.docente};
-            db.docentes.put(docente);
-            fetch(`private/modulos/docentes/docente.php?accion=${this.accion}&docentes=${JSON.stringify(docente)}`)
-                .then(response => response.json())
-                .then(data => {
-                    if( data != true ){
-                        alertify.error(data);
-                    }else{
-                        this.nuevoDocente();
-                        this.$emit('buscar');
-                    }
-                })
-                .catch(error => console.log(error));
+        
+            // Generar hash para la seguridad
+            docente.hash = CryptoJS.SHA256(JSON.stringify({
+                codigo: docente.codigo,
+                nombre: docente.nombre,
+                direccion: docente.direccion,
+                telefono:  docente.telefono,
+                email: docente.email,
+                fechanacimiento: docente.fechanacimiento,
+                sexo: docente.sexo
+            })).toString();
+        
+            db.docentes.put(docente).then(() => {
+                console.log("Docente guardado en IndexedDB:", docente);
+                alertify.success("Docente guardado en IndexedDB.");
+        
+                // Guardar en MySQL
+                fetch(`private/modulos/docentes/docente.php?accion=${this.accion}&docentes=${JSON.stringify(docente)}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data !== true) {
+                            alertify.error(data);
+                        } else {
+                            this.nuevoDocente();
+                            this.$emit('buscar');
+                        }
+                    })
+                    .catch(error => console.error("Error al guardar en MySQL:", error));
+            }).catch(error => {
+                console.error("Error al guardar en IndexedDB:", error);
+                alertify.error("No se pudo guardar en IndexedDB.");
+            });
         },
+        
         nuevoDocente() {
             this.accion = 'nuevo';
             this.docente = {
@@ -270,9 +292,9 @@ function validarFechaNacimientoDocente(input, mostrarAlerta = false) {
         return false;
     }
 
-    // ✅ Validar que la edad esté entre 15 y 80 años
-    if (edad < 15 || edad > 80) {
-        if (mostrarAlerta) alertify.error('La edad debe estar entre 15 y 80 años.');
+    // ✅ Validar que la edad esté entre 23 es decir recien egresado y 80 años
+    if (edad < 23 || edad > 80) {
+        if (mostrarAlerta) alertify.error('La edad debe estar entre 23 y 80 años.');
         input.classList.add('is-invalid');
         return false;
     }

@@ -37,16 +37,20 @@ class materias {
     private function administrar_materias(){
         global $accion;
         if($this->respuesta['msg'] == 'ok'){
+
             if($accion == 'nuevo'){
-                return $this->db->consultasql('INSERT INTO materias(codigo,nombre,uv,codigo_transaccion) VALUES(?, ?, ?, ?)', 
-                    $this->datos['codigo'], $this->datos['nombre'], $this->datos['uv'], $this->datos['codigo_transaccion']);
-            }else if($accion == 'modificar'){
-                return $this->db->consultasql('UPDATE materias SET codigo=?,nombre=?,uv=? WHERE codigo_transaccion=?', 
-                $this->datos['codigo'], $this->datos['nombre'], $this->datos['uv'], $this->datos['codigo_transaccion']);
-            }else if($accion == 'eliminar'){
+                return $this->db->consultasql('INSERT INTO materias(codigo,nombre,uv,codigo_transaccion,hash) VALUES(?, ?, ?, ?, ?)', 
+                    $this->datos['codigo'], $this->datos['nombre'], $this->datos['uv'], $this->datos['codigo_transaccion'], $this->datos['hash']);
+            }
+            else if($accion == 'modificar'){
+                return $this->db->consultasql('UPDATE materias SET codigo=?, nombre=?, uv=?, hash=? WHERE codigo_transaccion=?', 
+                $this->datos['codigo'], $this->datos['nombre'], $this->datos['uv'], $this->datos['hash'], $this->datos['codigo_transaccion']);            
+            }
+            else if($accion == 'eliminar'){
                 return $this->db->consultasql('DELETE FROM materias WHERE codigo_transaccion = ?', $this->datos['codigo_transaccion']);
-            }else if($accion == 'consultar'){
-                $this->db->consultasql('SELECT idMateria, codigo, nombre, uv, codigo_transaccion FROM materias');
+            }
+            else if($accion == 'consultar'){
+                $this->db->consultasql('SELECT idMateria, codigo, nombre, uv, codigo_transaccion,hash FROM materias');
                 return $this->db->obtener_datos();
             }
         }else{
