@@ -8,205 +8,98 @@ const matricula = {
         };
     },
     methods: {
-       /* async listarAlumnos() {
-            try {
-                // Primero intentamos obtener de MySQL
-                const response = await fetch('private/modulos/matriculas/matricula.php?accion=consultar');
-                const alumnosMySQL = await response.json();
-                
-                // Si hay conexión y obtenemos datos, actualizamos IndexedDB
-                if (response.ok && alumnosMySQL.length > 0) {
-                    await db.alumnos.clear();
-                    await db.alumnos.bulkPut(alumnosMySQL);
-                }
-                
-                // Obtenemos todos los alumnos de IndexedDB
-                const todosLosAlumnos = await db.alumnos.toArray();
-                const alumnosMatriculados = await db.matricula.toArray();
-                
-                this.alumnos = todosLosAlumnos.filter(alumno =>
-                    !alumnosMatriculados.some(matriculado => matriculado.idAlumno === alumno.idAlumno)
-                );
-            } catch (error) {
-                console.error("Error al listar alumnos:", error);
-                // Si falla la conexión, usamos solo IndexedDB
-                const todosLosAlumnos = await db.alumnos.toArray();
-                const alumnosMatriculados = await db.matricula.toArray();
-                
-                this.alumnos = todosLosAlumnos.filter(alumno =>
-                    !alumnosMatriculados.some(matriculado => matriculado.idAlumno === alumno.idAlumno)
-                );
-            }
-        },*/
         async listarAlumnos() {
             try {
-                const response = await fetch('private/modulos/matriculas/matricula.php?accion=consultar');
-                if (!response.ok) throw new Error('Error en la respuesta del servidor');
-                
-                const alumnosMySQL = await response.json();
-                
-                if (alumnosMySQL && alumnosMySQL.length > 0) {
-                    // Asegurarnos que cada alumno tenga idAlumno
+                if (navigator.onLine) {
+                    const response = await fetch('private/modulos/matriculas/matricula.php?accion=consultar');
+                    if (!response.ok) throw new Error('Error en la respuesta del servidor');
+                    
+                    const alumnosMySQL = await response.json();
                     const alumnosParaIndexedDB = alumnosMySQL.map(alumno => ({
                         ...alumno,
-                        idAlumno: alumno.idAlumno || uuidv4(), // Si no tiene id, generamos uno
-                        sincronizado: 1 // Marcamos como sincronizado
+                        idAlumno: alumno.idAlumno ? String(alumno.idAlumno) : uuidv4(), // Convertimos a string si es necesario
+                        sincronizado: 1 
                     }));
                     
                     await db.alumnos.bulkPut(alumnosParaIndexedDB);
                 }
-                 // Obtenemos de IndexedDB
-                 const todosLosAlumnos = await db.alumnos.toArray();
-                 const alumnosMatriculados = await db.matricula.toArray();
-                 
-                 this.alumnos = todosLosAlumnos.filter(alumno =>
-                     !alumnosMatriculados.some(matriculado => matriculado.idAlumno === alumno.idAlumno)
-                 );
-             } catch (error) {
-                 console.error("Error al listar alumnos:", error);
-                 // Modo offline: usamos solo IndexedDB
-                 const todosLosAlumnos = await db.alumnos.toArray();
-                 const alumnosMatriculados = await db.matricula.toArray();
-                 
-                 this.alumnos = todosLosAlumnos.filter(alumno =>
-                     !alumnosMatriculados.some(matriculado => matriculado.idAlumno === alumno.idAlumno)
-                 );
-                 if (!navigator.onLine) {
-                    alertify.warning("Modo offline: mostrando datos locales");
-                } else {
-                    alertify.error("Error al cargar alumnos del servidor");
-                }
-            }
-        }
-        ,
-        async listarMatriculados() {
-            try {
-                // Primero intentamos obtener de MySQL
-                const response = await fetch('private/modulos/matriculas/matricula.php?accion=consultarMatriculados');
-                const matriculadosMySQL = await response.json();
-                
-                // Si hay conexión y obtenemos datos, actualizamos IndexedDB
-                if (response.ok && matriculadosMySQL.length > 0) {
-                    await db.matricula.clear();
-                    await db.matricula.bulkPut(matriculadosMySQL);
-                }
-                
-                // Obtenemos de IndexedDB
-                this.matriculados = await db.matricula.toArray();
             } catch (error) {
-                console.error("Error al listar matriculados:", error);
-                // Si falla la conexión, usamos solo IndexedDB
-                this.matriculados = await db.matricula.toArray();
-            }
-        },
-        
-        async matricularAlumno(alumno) {
-            const existe = await db.matricula.where('idAlumno').equals(alumno.idAlumno).first();
-            if (existe) {
-                alertify.warning(`El alumno ${alumno.nombre} ya está matriculado.`);
-                return;
-            }
-        
-            const transaccion = uuidv4();
-            const datosMatricula = {
-                idAlumno: alumno.idAlumno,
-                codigo: alumno.codigo,
-                nombre: alumno.nombre,
-                direccion: alumno.direccion,
-                telefono: alumno.telefono,
-                email: alumno.email,
-                fechanacimiento: alumno.fechanacimiento,
-                sexo: alumno.sexo,
-                codigo_transaccion: transaccion,
-                hash: CryptoJS.SHA256(JSON.stringify(alumno)).toString()
-            };
-        
-            // Guardar en IndexedDB primero
-            await db.matricula.put(datosMatricula);
-            
-            try {
-                // Intentar guardar en MySQL
-                const response = await fetch(`private/modulos/matriculas/matricula.php?accion=matricular&matricula=${encodeURIComponent(JSON.stringify(datosMatricula))}`);
-                const result = await response.json();
-                
-                if (result !== true) {
-                    alertify.error("No se pudo guardar en el servidor. Los datos se guardaron localmente.");
-                } else {
-                    alertify.success(`El alumno ${alumno.nombre} ha sido matriculado.`);
-                }
-            } catch (error) {
-                console.error("Error al conectar con el servidor:", error);
-                alertify.warning("No hay conexión. Los datos se guardaron localmente y se sincronizarán cuando haya conexión.");
+                console.error("Error al listar alumnos:", error);
             }
             
-            await this.actualizarLista();
-        },
-        
-        async quitarMatriculacion(matriculado) {
-            alertify.confirm(
-                'Confirmar eliminación',
-                `¿Estás seguro de que deseas quitar la matriculación de ${matriculado.nombre}?`,
-                async () => {
-                    // Eliminar de IndexedDB primero
-                    await db.matricula.where('idAlumno').equals(matriculado.idAlumno).delete();
-                    
-                    try {
-                        // Intentar eliminar de MySQL
-                        const response = await fetch(`private/modulos/matriculas/matricula.php?accion=eliminar&matricula=${encodeURIComponent(JSON.stringify({idAlumno: matriculado.idAlumno}))}`);
-                        const result = await response.json();
-                        
-                        if (result !== true) {
-                            alertify.error("No se pudo eliminar en el servidor. Se eliminó solo localmente.");
-                        } else {
-                            alertify.success(`La matriculación del alumno ${matriculado.nombre} ha sido eliminada.`);
-                        }
-                    } catch (error) {
-                        console.error("Error al conectar con el servidor:", error);
-                        alertify.warning("No hay conexión. La eliminación se realizó solo localmente.");
-                    }
-                    
-                    await this.actualizarLista();
-                },
-                () => {
-                    alertify.message('Acción cancelada');
-                }
+            const todosLosAlumnos = await db.alumnos.toArray();
+            const alumnosMatriculados = await db.matricula.toArray();
+            this.alumnos = todosLosAlumnos.filter(alumno =>
+                !alumnosMatriculados.some(matriculado => matriculado.idAlumno === alumno.idAlumno)
             );
         },
         
-        async actualizarLista() {
-            await this.listarAlumnos();
-            await this.listarMatriculados();
+        async listarMatriculados() {
+            try {
+                if (navigator.onLine) {
+                    const response = await fetch('private/modulos/matriculas/matricula.php?accion=consultarMatriculados');
+                    if (!response.ok) throw new Error('Error en la respuesta del servidor');
+                    
+                    const matriculadosMySQL = await response.json();
+                    if (matriculadosMySQL.length > 0) {
+                        await db.matricula.clear();
+                        await db.matricula.bulkPut(matriculadosMySQL);
+                    }
+                }
+            } catch (error) {
+                console.error("Error al listar matriculados:", error);
+            }
+            
+            this.matriculados = await db.matricula.toArray();
         },
         
-        async sincronizarDatos() {
-            try {
-                // Sincronizar alumnos pendientes
-                const alumnosPendientes = await db.alumnos.where('sincronizado').equals(0).toArray();
-                for (const alumno of alumnosPendientes) {
-                    const response = await fetch(`private/modulos/alumnos/alumno.php?accion=${alumno.accion || 'nuevo'}&alumnos=${encodeURIComponent(JSON.stringify(alumno))}`);
-                    const result = await response.json();
-                    
-                    if (result === true) {
-                        // Actualizamos el estado de sincronización
-                        await db.alumnos.update(alumno.codigo_transaccion, { sincronizado: 1 });
-                    } else {
-                        console.error("Error al sincronizar alumno", alumno);
-                        alertify.warning(`Error al sincronizar alumno: ${alumno.nombre}`);
+        async matricularAlumno(idAlumno, materias) {
+            if (!idAlumno) {
+                console.error("Error: idAlumno es inválido", idAlumno);
+                return;
+            }
+        
+            idAlumno = String(idAlumno); // Convertimos a string si es necesario
+        
+            const existe = await db.matricula.where('idAlumno').equals(idAlumno).first();
+            if (existe) {
+                console.warn("El alumno ya está matriculado:", idAlumno);
+                return;
+            }
+        
+            await db.matricula.add({ idAlumno, materias });
+            console.log("Alumno matriculado con éxito:", idAlumno);
+        }
+        ,
+        
+        async quitarMatriculacion(matriculado) {
+            alertify.confirm('Confirmar eliminación', `¿Eliminar la matrícula de ${matriculado.nombre}?`, async () => {
+                await db.matricula.where('idAlumno').equals(matriculado.idAlumno).delete();
+                
+                if (navigator.onLine) {
+                    try {
+                        await fetch(`private/modulos/matriculas/matricula.php?accion=eliminar&matricula=${encodeURIComponent(JSON.stringify({idAlumno: matriculado.idAlumno}))}`);
+                    } catch (error) {
+                        console.error("Error al eliminar en el servidor:", error);
                     }
                 }
                 
-                // Sincronizar matrículas pendientes
+                alertify.success(`La matrícula de ${matriculado.nombre} ha sido eliminada.`);
+                await this.actualizarLista();
+            }, () => alertify.message('Acción cancelada'));
+        },
+        
+        async sincronizarDatos() {
+            if (!navigator.onLine) return;
+            
+            try {
                 const matriculasPendientes = await db.matricula.where('sincronizado').equals(0).toArray();
                 for (const matricula of matriculasPendientes) {
                     const response = await fetch(`private/modulos/matriculas/matricula.php?accion=matricular&matricula=${encodeURIComponent(JSON.stringify(matricula))}`);
                     const result = await response.json();
                     
                     if (result === true) {
-                        // Actualizamos el estado de sincronización
                         await db.matricula.update(matricula.codigo_transaccion, { sincronizado: 1 });
-                    } else {
-                        console.error("Error al sincronizar matrícula", matricula);
-                        alertify.warning(`Error al sincronizar matrícula para el alumno ${matricula.nombre}`);
                     }
                 }
                 
@@ -216,19 +109,23 @@ const matricula = {
                 console.error("Error en sincronización:", error);
                 alertify.error("Error al sincronizar datos");
             }
-        }
+        },
         
+        async actualizarLista() {
+            await this.listarAlumnos();
+            await this.listarMatriculados();
+        }
     },        
     
     computed: {
         alumnosFiltrados() {
-            return (this.alumnos || []).filter(alumno => 
+            return this.alumnos.filter(alumno => 
                 alumno.nombre.toLowerCase().includes(this.filtroAlumnos.toLowerCase()) ||
                 alumno.codigo.toLowerCase().includes(this.filtroAlumnos.toLowerCase())
             );
         },
         matriculadosFiltrados() {
-            return (this.matriculados || []).filter(matriculado => 
+            return this.matriculados.filter(matriculado => 
                 matriculado.nombre.toLowerCase().includes(this.filtroMatriculados.toLowerCase()) ||
                 matriculado.codigo.toLowerCase().includes(this.filtroMatriculados.toLowerCase())
             );
@@ -238,17 +135,13 @@ const matricula = {
     created() {
         this.actualizarLista();
         
-        // Verificar conexión periódicamente
         setInterval(async () => {
-            try {
-                await fetch('private/modulos/matriculas/matricula.php?accion=ping');
-                // Si hay conexión, sincronizar
+            if (navigator.onLine) {
                 await this.sincronizarDatos();
-            } catch (error) {
-                console.log("Sin conexión, trabajando en modo offline");
             }
-        }, 30000); // Cada 30 segundos
+        }, 30000);
     },
+
     
     template: `
         <div class='container mt-4'>
