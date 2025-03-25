@@ -1,13 +1,26 @@
 <?php
 include('../../Config/Config.php');
-extract($_REQUEST); //extrae todas las variables
+header('Content-Type: application/json'); // Asegurar que la respuesta sea JSON
+
+extract($_REQUEST);
 
 $alumnos = $alumnos ?? '[]';
 $accion = $accion ?? '';
 $class_alumnos = new alumnos($conexion);
-print_r(json_encode($class_alumnos->recibir_datos($alumnos)));
+
+try {
+    $resultado = $class_alumnos->recibir_datos($alumnos);
+    if (is_array($resultado) && isset($resultado['msg']) && $resultado['msg'] !== 'ok') {
+        echo json_encode(['success' => false, 'message' => $resultado['msg']]);
+    } else {
+        echo json_encode(['success' => true, 'message' => 'Alumno sincronizado correctamente']);
+    }
+} catch (Exception $e) {
+    echo json_encode(['success' => false, 'message' => 'Error en el servidor: ' . $e->getMessage()]);
+}
+
 class alumnos {
-    private $datos = [], $db, $respuesta=['msg'=>'ok'];
+    private $datos = [], $db, $respuesta = ['msg' => 'ok'];
 
     public function __construct($conexion) {
         $this->db = $conexion;
@@ -22,28 +35,24 @@ class alumnos {
         }
     }
     private function validar_datos(){
-        if( empty($this->datos['codigo']) ){
-            $this->respuesta['msg'] = 'El código es requerido';
-        }
-        if( empty($this->datos['nombre']) ){
+        if (empty($this->datos['codigo'])) {
+            $this->respuesta['msg'] = 'El código es requerido';
+        } else if (empty($this->datos['nombre'])) {
             $this->respuesta['msg'] = 'El nombre es requerido';
-        }
-        if( empty($this->datos['direccion']) ){
-            $this->respuesta['msg'] = 'La dirección es requerida';
-        }
-        if( empty($this->datos['telefono']) ){
-            $this->respuesta['msg'] = 'El teléfono es requerido';
-        }
-        if( empty($this->datos['email']) ){
+        } else if (empty($this->datos['direccion'])) {
+            $this->respuesta['msg'] = 'La dirección es requerida';
+        } else if (empty($this->datos['telefono'])) {
+            $this->respuesta['msg'] = 'El teléfono es requerido';
+        } else if (empty($this->datos['email'])) {
             $this->respuesta['msg'] = 'El email es requerido';
-        }
-        if( empty($this->datos['fechanacimiento']) ){
-            $this->respuesta['msg'] = 'La fecha nacimiento es requerido';
-        }
-        if( empty($this->datos['sexo']) ){
+        } else if (empty($this->datos['fechanacimiento'])) {
+            $this->respuesta['msg'] = 'La fecha de nacimiento es requerida';
+        } else if (empty($this->datos['sexo'])) {
             $this->respuesta['msg'] = 'El sexo es requerido';
+        } else {
+            return $this->administrar_alumnos();
         }
-        return $this->administrar_alumnos();
+        
     }
     private function administrar_alumnos(){
         global $accion;
@@ -74,3 +83,4 @@ class alumnos {
         }
     }
 }
+?>

@@ -1,5 +1,5 @@
     
- const alumno = {
+ /*const alumno = {
     props: ['forms'],
     data() {
         return {
@@ -153,6 +153,185 @@
 
                     </div>
                 </form>
+            </div>
+        </div>
+    `
+};*/
+
+
+const alumno = {
+    props: ['forms'],
+    data() {
+        return {
+            accion: 'nuevo',
+            alumno: {
+                codigo: '',
+                nombre: '',
+                direccion: '',
+                telefono: '',
+                email: '',
+                fechanacimiento: '',
+                sexo: '',
+                codigo_transaccion: uuidv4(),
+                sincronizado: 0 // 0 = no sincronizado, 1 = sincronizado
+            },
+        }
+    },
+    methods: {
+        buscarAlumno() {
+            this.forms.buscarAlumno.mostrar = !this.forms.buscarAlumno.mostrar;
+            this.$emit('buscar');
+        },
+        modificarAlumno(alumno) {
+            this.accion = 'modificar';
+            this.alumno = { ...alumno };
+        },
+        async guardarAlumno() {
+            let alumno = { ...this.alumno };
+
+            // Generar hash
+            alumno.hash = CryptoJS.SHA256(JSON.stringify({
+                codigo: alumno.codigo,
+                nombre: alumno.nombre,
+                direccion: alumno.direccion,
+                telefono: alumno.telefono,
+                email: alumno.email,
+                fechanacimiento: alumno.fechanacimiento,
+                sexo: alumno.sexo
+            })).toString();
+
+            try {
+                await db.alumnos.put(alumno);
+                console.log("Alumno guardado en IndexedDB:", alumno);
+                alertify.success("Alumno guardado localmente.");
+
+                if (navigator.onLine) {
+                    this.sincronizarAlumnos();
+                }
+            } catch (error) {
+                console.error("Error al guardar en IndexedDB:", error);
+                alertify.error("No se pudo guardar el alumno en IndexedDB.");
+            }
+        },
+        nuevoAlumno() {
+            this.accion = 'nuevo';
+            this.alumno = {
+                codigo: '',
+                nombre: '',
+                direccion: '',
+                telefono: '',
+                email: '',
+                fechanacimiento: '',
+                sexo: '',
+                codigo_transaccion: uuidv4(),
+                sincronizado: 0
+            };
+        },
+        async sincronizarAlumnos() {
+            try {
+                const alumnosPendientes = await db.alumnos.where('sincronizado').equals(0).toArray();
+
+                for (const alumno of alumnosPendientes) {
+                    const response = await fetch(`private/modulos/alumnos/alumno.php?accion=${alumno.accion || 'nuevo'}&alumnos=${encodeURIComponent(JSON.stringify(alumno))}`);
+                    const data = await response.json();
+
+                    if (data === true) {
+                        await db.alumnos.update(alumno.codigo_transaccion, { sincronizado: 1 });
+                    }
+                }
+
+                alertify.success("Alumnos sincronizados correctamente");
+                this.$emit('buscar');
+            } catch (error) {
+                console.error("Error al sincronizar:", error);
+                alertify.error("Error al sincronizar alumnos");
+            }
+        }
+    },
+    template: `
+        <div class="row">
+            <div class="col-12">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h5 class="text-primary fw-bold m-0">Registro de Alumnos</h5>
+                    <button class="btn btn-success btn-sm" @click="sincronizarAlumnos">
+                        <i class="bi bi-arrow-repeat"></i> Sincronizar
+                    </button>
+                </div>
+                
+                <div class="col-6">
+                <form id="frmAlumno" name="frmAlumno" @submit.prevent="guardarAlumno">
+                    <div class="card border-dark mb-3 shadow">
+                        <div class="card-header bg-dark text-white">Datos del Alumno</div>
+                        <div class="card-body">
+                        <div class="row p-1">
+                                <div class="col-3 col-md-2">CODIGO</div>
+                                <div class="col-9 col-md-4">
+                                    <input required v-model="alumno.codigo" type="text" name="txtCodigoAlumno" id="txtCodigoAlumno" class="form-control"
+                                    pattern="[A-Za-z]{4}[0-9]{6}" oninput="validarCodigoAlumno(this)"  onblur="validarCodigoAlumno(this, true)">
+                                </div>
+                            </div>
+                            <div class="row p-1">
+                                <div class="col-3 col-md-2">NOMBRE</div>
+                                <div class="col-9 col-md-6">
+                                    <input required v-model="alumno.nombre" type="text" name="txtNombreAlumno" id="txtNombreAlumno" class="form-control"
+                                    pattern="[A-Za-zñÑáéíóú ]{3,150}" oninput="validarNombreAlumno(this)" onblur="validarNombreAlumno(this, true)">
+                                </div>
+                            </div>
+
+                            <div class="row p-1">
+                                <div class="col-3 col-md-2">DIRECCION</div>
+                                <div class="col-9 col-md-8">
+                                    <input required v-model="alumno.direccion" type="text" name="txtDireccionAlumno" id="txtDireccionAlumno" class="form-control"
+                                     oninput="validarDireccionAlumno(this)" onblur="validarDireccionAlumno(this, true)">
+                                </div>
+                            </div>
+
+                            <div class="row p-1">
+                                <div class="col-3 col-md-2">TELEFONO</div>
+                                <div class="col-9 col-md-4">
+                                    <input v-model="alumno.telefono" type="text" name="txtTelefonoAlumno" id="txtTelefonoAlumno" class="form-control"
+                                    oninput="validarTelefonoAlumno(this)" onblur="validarTelefonoAlumno(this, true)"
+                                    pattern="[0-9]{4}-[0-9]{4}" placeholder="1234-5678">
+                                </div>
+                            </div>
+
+                            <div class="row p-1">
+                                <div class="col-3 col-md-2">EMAIL</div>
+                                <div class="col-9 col-md-6">
+                                    <input v-model="alumno.email" type="text" name="txtEmailAlumno" id="txtEmailAlumno" class="form-control"
+                                    oninput="validarEmailAlumno(this)" onblur="validarEmailAlumno(this, true)">
+                                </div>
+                            </div>
+
+                              <div class="mb-md-4 row">
+                                <!-- FECHA NACIMIENTO -->
+                                <div class="col-md-4">
+                                    <label class="col-form-label">FECHA NACIMIENTO</label>
+                                    <input required v-model="alumno.fechanacimiento" type="date" id="txtFechaNacimientoAlumno" 
+                                        class="form-control" oninput="validarFechaNacimientoAlumno(this)" onblur="validarFechaNacimientoAlumno(this, true)">
+                                </div>
+
+                                <!-- SEXO -->
+                                <div class="col-md-4">
+                                    <label class="col-form-label">SEXO</label>
+                                    <select required v-model="alumno.sexo" id="txtSexoAlumno" class="form-control" 
+                                        oninput="validarSexoAlumno(this)" onblur="validarSexoAlumno(this, true)">
+                                        <option value="">Seleccione una opción</option>
+                                        <option value="Femenino">Femenino</option>
+                                        <option value="Masculino">Masculino</option>
+                                    </select>
+                                </div>
+                            </div>
+                            
+                        </div>
+                        <div class="card-footer bg-dark text-center d-flex justify-content-between">
+                            <input type="reset" value="Nuevo" class="btn btn-warning" @click="nuevoAlumno" style="background-color: #f8bf23;">
+                            <input type="submit" value="Guardar" class="btn btn-primary" style="color: #000000;"> 
+                            <input type="button" @click="buscarAlumno" value="Buscar" class="btn btn-info">
+                        </div>
+                    </div>
+                </form>
+                </div>
             </div>
         </div>
     `
