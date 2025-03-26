@@ -1,6 +1,6 @@
 <?php
 include('../../Config/Config.php');
-header('Content-Type: application/json'); // Asegurar que la respuesta sea JSON
+header('Content-Type: application/json'); 
 
 extract($_REQUEST);
 
@@ -37,56 +37,68 @@ class Matricula {
     private function consultar_alumnos() {
         $this->db->consultasql('SELECT idAlumno, codigo, nombre, direccion, telefono, email, fechanacimiento, sexo FROM alumnos');
         $alumnos = $this->db->obtener_datos();
-        return $alumnos ?: []; // Siempre retornar array
+        return $alumnos ?: [];
     }
 
     private function consultar_matriculados() {
-        $this->db->consultasql('SELECT m.idAlumno, a.codigo, a.nombre, a.direccion, a.telefono, a.email, a.fechanacimiento, a.sexo, m.codigo_transaccion, m.hash 
-                               FROM matricula m 
-                               JOIN alumnos a ON m.idAlumno = a.idAlumno');
+        $this->db->consultasql('SELECT m.idMatricula, m.idAlumno, m.codigo_transaccion, m.hash, m.data, a.codigo, a.nombre 
+                               FROM matricula m JOIN alumnos a ON m.idAlumno = a.idAlumno');
         $matriculados = $this->db->obtener_datos();
-        return $matriculados ?: []; // Siempre retornar array
+        
+        return array_map(function($mat) {
+            return [
+                'idMatricula' => $mat['idMatricula'],
+                'idAlumno' => $mat['idAlumno'],
+                'codigo_transaccion' => $mat['codigo_transaccion'],
+                'hash' => $mat['hash'],
+                'data' => $mat['data'],
+                'codigo' => $mat['codigo'],
+                'nombre' => $mat['nombre']
+            ];
+        }, $matriculados ?: []);
     }
 
     private function administrar_matricula() {
         global $accion;
         
-        if ($this->respuesta['msg'] == 'ok') {
-            $this->db->consultasql('INSERT INTO bitacora(idDocumento, hash, data, fecha_hora) VALUES(?, ?, ?, ?)', 
-                $this->datos['codigo_transaccion'], $this->datos['hash'], json_encode($this->datos), date('Y-m-d H:i:s'));
-
-            if ($accion == 'matricular') {
-                // Verificar si el alumno existe
-                $this->db->consultasql('SELECT idAlumno FROM alumnos WHERE idAlumno = ?', $this->datos['idAlumno']);
-                $existe = $this->db->obtener_datos();
-                
-                if (empty($existe)) {
-                    return "El alumno no existe";
-                }
-                
-                // Verificar si ya está matriculado
-                $this->db->consultasql('SELECT idAlumno FROM matricula WHERE idAlumno = ?', $this->datos['idAlumno']);
-                $matriculado = $this->db->obtener_datos();
-                
-                if (!empty($matriculado)) {
-                    return "El alumno ya está matriculado";
-                }
-                
-                return $this->db->consultasql(
-                    'INSERT INTO matricula (idAlumno, codigo_transaccion, hash, data) VALUES (?, ?, ?, ?)',
-                    $this->datos['idAlumno'],
-                    $this->datos['codigo_transaccion'],
-                    $this->datos['hash'],
-                    json_encode($this->datos)
-                );
-            } else if ($accion == 'eliminar') {
-                return $this->db->consultasql(
-                    'DELETE FROM matricula WHERE idAlumno = ?',
-                    $this->datos['idAlumno']
-                );
-            } else if ($accion == 'ping') {
-                return true;
+        if ($accion == 'matricular') {
+         
+            $this->db->consultasql('SELECT idAlumno FROM alumnos WHERE idAlumno = ?', $this->datos['idAlumno']);
+            $existe = $this->db->obtener_datos();
+            
+            if (empty($existe)) {
+                return ['error' => 'El alumno no existe'];
             }
+            
+            $this->db->consultasql('SELECT idAlumno FROM matricula WHERE idAlumno = ?', $this->datos['idAlumno']);
+            $matriculado = $this->db->obtener_datos();
+            
+            if (!empty($matriculado)) {
+                return ['error' => 'El alumno ya está matriculado'];
+            }
+            
+            // Registrar en bitacora
+            $this->db->consultasql('INSERT INTO bitacora(idDocumento, hash, data, fecha_hora) VALUES(?, ?, ?, ?)', 
+                $this->datos['codigo_transaccion'], $this->datos['hash'], $this->datos['data'], date('Y-m-d H:i:s'));
+            
+            // Insertar matrícula
+            $result = $this->db->consultasql(
+                'INSERT INTO matricula (idAlumno, codigo_transaccion, hash, data) VALUES (?, ?, ?, ?)',
+                $this->datos['idAlumno'],$this->datos['codigo_transaccion'],$this->datos['hash'],$this->datos['data']
+            );
+            
+            return $result !== false;
+            
+        } else if ($accion == 'eliminar') {
+            $result = $this->db->consultasql(
+                'DELETE FROM matricula WHERE idAlumno = ?',
+                $this->datos['idAlumno']
+            );
+            
+            return $result !== false;
+            
+        } else if ($accion == 'ping') {
+            return true;
         }
         
         return $this->respuesta;

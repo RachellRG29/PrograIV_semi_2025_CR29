@@ -1,148 +1,187 @@
 const matricula = {
-    data() {
-        return {
-            alumnos: [],
-            matriculados: [],
-            filtroAlumnos: '',
-            filtroMatriculados: ''
-        };
-    },
+    data: () => ({
+        alumnos: [],
+        matriculados: [],
+        filtroAlumnos: '',
+        filtroMatriculados: ''
+    }),
+
     methods: {
         async listarAlumnos() {
             try {
                 if (navigator.onLine) {
                     const response = await fetch('private/modulos/matriculas/matricula.php?accion=consultar');
-                    if (!response.ok) throw new Error('Error en la respuesta del servidor');
+                    if (!response.ok) throw new Error('Error en la respuesta');
                     
                     const alumnosMySQL = await response.json();
-                    const alumnosParaIndexedDB = alumnosMySQL.map(alumno => ({
-                        ...alumno,
-                        idAlumno: alumno.idAlumno ? String(alumno.idAlumno) : uuidv4(), // Convertimos a string si es necesario
-                        sincronizado: 1 
-                    }));
-                    
-                    await db.alumnos.bulkPut(alumnosParaIndexedDB);
+                    await db.alumnos.clear();
+                    await db.alumnos.bulkPut(alumnosMySQL.map(a => ({
+                        ...a,
+                        idAlumno: String(a.idAlumno),
+                        sincronizado: 1
+                    })));
                 }
             } catch (error) {
                 console.error("Error al listar alumnos:", error);
             }
             
-            const todosLosAlumnos = await db.alumnos.toArray();
-            const alumnosMatriculados = await db.matricula.toArray();
-            this.alumnos = todosLosAlumnos.filter(alumno =>
-                !alumnosMatriculados.some(matriculado => matriculado.idAlumno === alumno.idAlumno)
-            );
+            const todosAlumnos = await db.alumnos.toArray();
+            const idsMatriculados = new Set((await db.matricula.toArray()).map(m => m.idAlumno));
+            this.alumnos = todosAlumnos.filter(a => !idsMatriculados.has(a.idAlumno));
         },
-        
+
         async listarMatriculados() {
             try {
                 if (navigator.onLine) {
                     const response = await fetch('private/modulos/matriculas/matricula.php?accion=consultarMatriculados');
-                    if (!response.ok) throw new Error('Error en la respuesta del servidor');
+                    if (!response.ok) throw new Error('Error en la respuesta');
                     
                     const matriculadosMySQL = await response.json();
-                    if (matriculadosMySQL.length > 0) {
-                        await db.matricula.clear();
-                        await db.matricula.bulkPut(matriculadosMySQL);
-                    }
+                    // Eliminar solo los sincronizados para mantener los locales
+                    await db.matricula.where('sincronizado').equals(1).delete();
+   
+                    const matriculasUnicas = this.eliminarDuplicados(matriculadosMySQL, 'idAlumno');
+                    await db.matricula.bulkPut(matriculasUnicas.map(m => ({
+                        ...m,
+                        idAlumno: String(m.idAlumno),
+                        sincronizado: 1
+                    })));
                 }
             } catch (error) {
                 console.error("Error al listar matriculados:", error);
             }
             
-            this.matriculados = await db.matricula.toArray();
+            const todosMatriculados = await db.matricula.toArray();
+            this.matriculados = this.eliminarDuplicados(todosMatriculados, 'idAlumno');
         },
-        
-        async matricularAlumno(idAlumno, materias) {
-            if (!idAlumno) {
-                console.error("Error: idAlumno es inválido", idAlumno);
+
+        eliminarDuplicados(array, key) {
+            const seen = new Set();
+            return array.filter(item => {
+                const value = item[key];
+                if (seen.has(value)) {
+                    return false;
+                }
+                seen.add(value);
+                return true;
+            });
+        },
+
+        async matricularAlumno(alumno) {
+            if (!alumno?.idAlumno) {
+                alertify.error("Alumno inválido");
                 return;
             }
-        
-            idAlumno = String(idAlumno); // Convertimos a string si es necesario
-        
-            const existe = await db.matricula.where('idAlumno').equals(idAlumno).first();
-            if (existe) {
-                console.warn("El alumno ya está matriculado:", idAlumno);
+
+            // Verificar si ya está matriculado
+            const yaMatriculado = this.matriculados.some(m => m.idAlumno === String(alumno.idAlumno));
+            if (yaMatriculado) {
+                alertify.warning("Este alumno ya está matriculado");
                 return;
             }
-        
-            await db.matricula.add({ idAlumno, materias });
-            console.log("Alumno matriculado con éxito:", idAlumno);
-        }
-        ,
-        
-        async quitarMatriculacion(matriculado) {
-            alertify.confirm('Confirmar eliminación', `¿Eliminar la matrícula de ${matriculado.nombre}?`, async () => {
-                await db.matricula.where('idAlumno').equals(matriculado.idAlumno).delete();
-                
+
+            const matriculaData = {
+                idAlumno: String(alumno.idAlumno),
+                codigo_transaccion: uuidv4(),
+                hash: uuidv4(),
+                data: JSON.stringify(alumno),
+                sincronizado: 0,
+                nombre: alumno.nombre,
+                codigo: alumno.codigo
+            };
+
+            try {
+                await db.matricula.add(matriculaData);
                 if (navigator.onLine) {
-                    try {
-                        await fetch(`private/modulos/matriculas/matricula.php?accion=eliminar&matricula=${encodeURIComponent(JSON.stringify({idAlumno: matriculado.idAlumno}))}`);
-                    } catch (error) {
-                        console.error("Error al eliminar en el servidor:", error);
+                    const success = await this.sincronizarMatricula(matriculaData);
+                    if (success) {
+                        await db.matricula.update(matriculaData.codigo_transaccion, { sincronizado: 1 });
                     }
                 }
-                
-                alertify.success(`La matrícula de ${matriculado.nombre} ha sido eliminada.`);
+
+                alertify.success(`Alumno ${alumno.nombre} matriculado`);
                 await this.actualizarLista();
-            }, () => alertify.message('Acción cancelada'));
+            } catch (error) {
+                console.error("Error al matricular:", error);
+                alertify.error("Error al matricular");
+            }
         },
-        
+        async sincronizarMatricula(matricula) {
+            try {
+                const response = await fetch(
+                    `private/modulos/matriculas/matricula.php?accion=matricular&matricula=${
+                        encodeURIComponent(JSON.stringify(matricula))
+                    }`
+                );
+                return await response.json();
+            } catch (error) {
+                console.error("Error en sincronización:", error);
+                return false;
+            }
+        },
+
+        async quitarMatriculacion({ idAlumno, codigo_transaccion, nombre, sincronizado }) {
+            alertify.confirm('Confirmar', `¿Eliminar matrícula de ${nombre}?`, async () => {
+                await db.matricula.where('codigo_transaccion').equals(codigo_transaccion).delete();
+                
+                if (navigator.onLine && sincronizado === 1) {
+                    await fetch(
+                        `private/modulos/matriculas/matricula.php?accion=eliminar&matricula=${
+                            encodeURIComponent(JSON.stringify({idAlumno}))
+                        }`
+                    );
+                }
+                
+                alertify.success(`Matrícula de ${nombre} eliminada`);
+                await this.actualizarLista();
+            }, () => alertify.message('Cancelado'));
+        },
+
         async sincronizarDatos() {
             if (!navigator.onLine) return;
             
             try {
-                const matriculasPendientes = await db.matricula.where('sincronizado').equals(0).toArray();
-                for (const matricula of matriculasPendientes) {
-                    const response = await fetch(`private/modulos/matriculas/matricula.php?accion=matricular&matricula=${encodeURIComponent(JSON.stringify(matricula))}`);
-                    const result = await response.json();
-                    
-                    if (result === true) {
-                        await db.matricula.update(matricula.codigo_transaccion, { sincronizado: 1 });
+                const pendientes = await db.matricula.where('sincronizado').equals(0).toArray();
+                for (const mat of pendientes) {
+                    if (await this.sincronizarMatricula(mat)) {
+                        await db.matricula.update(mat.codigo_transaccion, { sincronizado: 1 });
                     }
                 }
-                
-                alertify.success("Datos sincronizados correctamente");
                 await this.actualizarLista();
+                alertify.success("Datos sincronizados");
             } catch (error) {
-                console.error("Error en sincronización:", error);
-                alertify.error("Error al sincronizar datos");
+                console.error("Error sincronizando:", error);
+                alertify.error("Error al sincronizar");
             }
         },
-        
-        async actualizarLista() {
-            await this.listarAlumnos();
-            await this.listarMatriculados();
+
+        actualizarLista() {
+            return Promise.all([this.listarAlumnos(), this.listarMatriculados()]);
         }
-    },        
-    
+    },
+
     computed: {
         alumnosFiltrados() {
-            return this.alumnos.filter(alumno => 
-                alumno.nombre.toLowerCase().includes(this.filtroAlumnos.toLowerCase()) ||
-                alumno.codigo.toLowerCase().includes(this.filtroAlumnos.toLowerCase())
+            const filtro = this.filtroAlumnos.toLowerCase();
+            return this.alumnos.filter(a => 
+                a.nombre.toLowerCase().includes(filtro) || 
+                a.codigo.toLowerCase().includes(filtro)
             );
         },
         matriculadosFiltrados() {
-            return this.matriculados.filter(matriculado => 
-                matriculado.nombre.toLowerCase().includes(this.filtroMatriculados.toLowerCase()) ||
-                matriculado.codigo.toLowerCase().includes(this.filtroMatriculados.toLowerCase())
+            const filtro = this.filtroMatriculados.toLowerCase();
+            return this.matriculados.filter(m => 
+                (m.nombre || '').toLowerCase().includes(filtro) || 
+                (m.codigo || '').toLowerCase().includes(filtro)
             );
         }
     },
-    
+
     created() {
         this.actualizarLista();
-        
-        setInterval(async () => {
-            if (navigator.onLine) {
-                await this.sincronizarDatos();
-            }
-        }, 30000);
+        setInterval(this.sincronizarDatos, 30000);
     },
 
-    
     template: `
         <div class='container mt-4'>
             <div class="d-flex justify-content-between align-items-center mb-4">
@@ -155,23 +194,19 @@ const matricula = {
             <div class="row">
                 <div class="col-md-6 mb-4">
                     <h5 class="text-danger fw-bold">Alumnos Disponibles</h5>
-                    <input type='text' v-model='filtroAlumnos' class='form-control mb-3 shadow-sm' placeholder='Buscar por código o nombre'>
+                    <input v-model='filtroAlumnos' class='form-control mb-3 shadow-sm' placeholder='Buscar...'>
                     
                     <div class="table-responsive">
                         <table class='table table-hover table-bordered shadow-sm'>
                             <thead class="table-danger">
-                                <tr>
-                                    <th>Código</th>
-                                    <th>Nombre</th>
-                                    <th>Acción</th>
-                                </tr>
+                                <tr><th>Código</th><th>Nombre</th><th>Acción</th></tr>
                             </thead>
                             <tbody>
-                                <tr v-for='alumno in alumnosFiltrados' :key='alumno.idAlumno'>
-                                    <td>{{ alumno.codigo }}</td>
-                                    <td>{{ alumno.nombre }}</td>
+                                <tr v-for='a in alumnosFiltrados' :key='a.idAlumno'>
+                                    <td>{{ a.codigo }}</td>
+                                    <td>{{ a.nombre }}</td>
                                     <td>
-                                        <button class='btn btn-primary btn-sm shadow-sm' @click="matricularAlumno(alumno)">
+                                        <button class='btn btn-primary btn-sm shadow-sm' @click="matricularAlumno(a)">
                                             <i class="bi bi-person-plus"></i> Matricular
                                         </button>
                                     </td>
@@ -183,23 +218,19 @@ const matricula = {
                 
                 <div class="col-md-6">
                     <h5 class="text-primary fw-bold">Alumnos Matriculados</h5>
-                    <input type='text' v-model='filtroMatriculados' class='form-control mb-3 shadow-sm' placeholder='Buscar por código o nombre'>
+                    <input v-model='filtroMatriculados' class='form-control mb-3 shadow-sm' placeholder='Buscar...'>
                     
                     <div class="table-responsive">
                         <table class='table table-hover table-bordered shadow-sm'>
                             <thead class="table-primary">
-                                <tr>
-                                    <th>Código</th>
-                                    <th>Nombre</th>
-                                    <th>Acción</th>
-                                </tr>
+                                <tr><th>Código</th><th>Nombre</th><th>Acción</th></tr>
                             </thead>
                             <tbody>
-                                <tr v-for='matriculado in matriculadosFiltrados' :key='matriculado.idAlumno'>
-                                    <td>{{ matriculado.codigo }}</td>
-                                    <td>{{ matriculado.nombre }}</td>
+                                <tr v-for='m in matriculadosFiltrados' :key='m.codigo_transaccion'>
+                                    <td>{{ m.codigo }}</td>
+                                    <td>{{ m.nombre }}</td>
                                     <td>
-                                        <button class='btn btn-danger btn-sm shadow-sm' @click="quitarMatriculacion(matriculado)">
+                                        <button class='btn btn-danger btn-sm shadow-sm' @click="quitarMatriculacion(m)">
                                             <i class="bi bi-trash"></i> Quitar
                                         </button>
                                     </td>

@@ -54,10 +54,10 @@ const app = createApp({
     },
     created() {
         db.version(3).stores({
-            alumnos: 'codigo_transaccion, idAlumno, codigo, nombre, direccion, telefono, email, fechanacimiento, sexo, hash, sincronizado',
-            docentes: 'codigo_transaccion, codigo, nombre, direccion, telefono, email, fechanacimiento, sexo, hash, sincronizado',
-            materias: 'codigo_transaccion, codigo, nombre, uv, hash, sincronizado',
-            matricula: '++idMatricula, idAlumno, codigo_transaccion, data, hash, sincronizado'
+            alumnos: '++id, codigo_transaccion, idAlumno, codigo, nombre, direccion, telefono, email, fechanacimiento, sexo, hash, sincronizado',
+            docentes: '++id, codigo_transaccion, codigo, nombre, direccion, telefono, email, fechanacimiento, sexo, hash, sincronizado',
+            materias: '++id, codigo_transaccion, codigo, nombre, uv, hash, sincronizado',
+            matricula: '++id, idMatricula, idAlumno, codigo_transaccion, data, hash, sincronizado'
         });
         
         // Escuchar cambios en la conexión
