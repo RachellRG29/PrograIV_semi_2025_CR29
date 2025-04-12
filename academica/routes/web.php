@@ -7,6 +7,17 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::get('/bienvenida', function () {
+    return 'Bienvenidos a Programacion Computacional IV';
+});
+
+
+Route::get('/usuario/{id}/{nombre}/{apellido}', function ($id, $nombre, $apellido) {
+    return 'User #: ' . $id . ', tu nombre es: ' . $nombre . ' y tu apellido es: ' . $apellido;
+})->where('id', '[0-9]+');
+
+
+
 Route::get('/alumno', function () {
     return 'welcome progra4';
 });
