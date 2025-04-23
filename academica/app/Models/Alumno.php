@@ -9,16 +9,13 @@ class Alumno extends Model
 {
     use HasFactory;
 
-    protected  $fillable = [
+    protected $fillable = [
         'codigo',
         'nombre',
         'direccion',
         'telefono',
         'email',
-        'fechanacimiento',
-        'sexo',
         'codigo_transaccion',
         'hash'
     ];
-
 }
