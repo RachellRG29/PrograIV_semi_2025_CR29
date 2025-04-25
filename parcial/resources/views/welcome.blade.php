@@ -53,62 +53,67 @@
         <div class="separator mx-auto mb-4"></div>
 
         <!--  Nombre completo -->
-        <form>
-        <div class="mb-3">
-            <label for="fullname" class="form-label">Nombre completo:</label>
-            <input type="text" id="fullname" class="form-control input-border" placeholder="Ingrese su nombre completo" />
-        </div>
+        <form method="POST" action="{{ route('register.store') }}">
+    @csrf
+    <div class="mb-3">
+        <label for="fullname" class="form-label">Nombre completo:</label>
+        <input type="text" name="fullname" id="fullname" class="form-control input-border" placeholder="Ingrese su nombre completo" />
+    </div>
 
-        <!-- Fecha de nacimiento -->
-        <div class="d-flex justify-content-center gap-3">
-            <div class="mb-3 flex-fill">
+    <div class="d-flex justify-content-center gap-3">
+        <div class="mb-3 flex-fill">
             <label for="birthdate" class="form-label">Fecha de nacimiento:</label>
-            <input type="date" id="birthdate" class="form-control input-border" />
-            </div>
-            
-            <!-- Género -->
-            <div class="mb-3 flex-fill">
-            <label for="gender" class="form-label">Género:</label>
-            <select id="gender" class="form-control input-border custom-select">
-                <option value="femenino">Femenino</option>
-                <option value="masculino">Masculino</option>
-            </select>
-            </div>
-            
-            </div>
-        
-            <!-- Correo -->
-        <div class="mb-3">
-            <label for="email" class="form-label">Correo:</label>
-            <input type="email" id="email" class="form-control input-border" placeholder="Ingrese su correo" />
+            <input type="date" name="birthdate" id="birthdate" class="form-control input-border" />
         </div>
 
-        <!-- Contraseña -->
-        <div class="mb-4 position-relative input-group-container">
-            <label for="password" class="form-label">Contraseña:</label>
-            <div class="position-relative">
-            <input type="password" id="password" class="form-control input-border" placeholder="Ingrese su contraseña" />
+        <div class="mb-3 flex-fill">
+            <label for="gender" class="form-label">Género:</label>
+            <select name="gender" id="gender" class="form-control input-border custom-select">
+                <option value="Femenino">Femenino</option>
+                <option value="Masculino">Masculino</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="mb-3">
+        <label for="email" class="form-label">Correo:</label>
+        <input type="email" name="email" id="email" class="form-control input-border" placeholder="Ingrese su correo" />
+    </div>
+
+    <div class="mb-4 position-relative input-group-container">
+        <label for="password" class="form-label">Contraseña:</label>
+        <div class="position-relative">
+            <input type="password" name="password" id="password" class="form-control input-border" placeholder="Ingrese su contraseña" />
             <span class="password-toggle-inside" onclick="toggleVisibility('password', this)">
                 <i class="fas fa-eye"></i>
             </span>
-            </div>
         </div>
+    </div>
 
-        <!-- Confirmar contraseña -->
-        <div class="mb-4 position-relative input-group-container">
-            <label for="confirm-password" class="form-label">Confirmar contraseña:</label>
-            <div class="position-relative">
+    <!-- Confirmar contraseña (no lo guardas, solo úsalo para validación JS si quieres) -->
+    <div class="mb-4 position-relative input-group-container">
+        <label for="confirm-password" class="form-label">Confirmar contraseña:</label>
+        <div class="position-relative">
             <input type="password" id="confirm-password" class="form-control input-border" placeholder="Confirme su contraseña" />
             <span class="password-toggle-inside" onclick="toggleVisibility('confirm-password', this)">
                 <i class="fas fa-eye"></i>
             </span>
-            </div>
         </div>
+    </div>
 
-        <div class="text-center">
-            <button>Registrar</button>
-        </div>
-        </form>
+    <div class="text-center">
+        <button id="register-button" type="submit">Registrar</button>
+    </div>
+    
+    @if(session('success'))
+    <div class="alert alert-success alert-dismissible fade show mt-2" role="alert">
+        {{ session('success') }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+@endif
+
+</form>
+
 
         <div class="text-center mt-3">
         <a href="#" class="text-muted small text-decoration-none">¿Tienes cuenta? Inicia sesión</a>

@@ -12,8 +12,13 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('register', function (Blueprint $table) {
-            $table->id();
-            $table->timestamps();
+            $table->bigIncrements('id_register');
+            $table->string('fullname');
+            $table->date('birthdate');
+            $table->enum('gender', ['Femenino', 'Masculino']);
+            $table->string('email')->unique();
+            $table->string('password');
+            $table->timestamps(); // created_at y updated_at automáticos
         });
     }
 
@@ -25,3 +30,9 @@ return new class extends Migration
         Schema::dropIfExists('register');
     }
 };
+
+
+
+
+
+
