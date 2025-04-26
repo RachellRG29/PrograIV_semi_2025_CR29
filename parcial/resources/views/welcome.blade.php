@@ -4,7 +4,7 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <title>Veganimo parcial2</title>
+        <title>Vegánimo parcial2</title>
 
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.bunny.net">
@@ -52,67 +52,69 @@
         <h2 class="form-title text-center mb-2">Crea tu cuenta</h2>
         <div class="separator mx-auto mb-4"></div>
 
+        
+    <form method="POST" action="{{ route('register.store') }}">
+        @csrf
         <!--  Nombre completo -->
-        <form method="POST" action="{{ route('register.store') }}">
-    @csrf
-    <div class="mb-3">
-        <label for="fullname" class="form-label">Nombre completo:</label>
-        <input type="text" name="fullname" id="fullname" class="form-control input-border" placeholder="Ingrese su nombre completo" />
-    </div>
-
-    <div class="d-flex justify-content-center gap-3">
-        <div class="mb-3 flex-fill">
-            <label for="birthdate" class="form-label">Fecha de nacimiento:</label>
-            <input type="date" name="birthdate" id="birthdate" class="form-control input-border" />
+        <div class="mb-3">
+            <label for="fullname" class="form-label">Nombre completo:</label>
+            <input type="text" name="fullname" id="fullname" class="form-control input-border" placeholder="Ingrese su nombre completo" />
         </div>
 
-        <div class="mb-3 flex-fill">
-            <label for="gender" class="form-label">Género:</label>
-            <select name="gender" id="gender" class="form-control input-border custom-select">
-                <option value="Femenino">Femenino</option>
-                <option value="Masculino">Masculino</option>
-            </select>
+        <div class="d-flex justify-content-center gap-3">
+            <div class="mb-3 flex-fill">
+                <label for="birthdate" class="form-label">Fecha de nacimiento:</label>
+                <input type="date" name="birthdate" id="birthdate" class="form-control input-border" />
+            </div>
+
+            <div class="mb-3 flex-fill">
+                <label for="gender" class="form-label">Género:</label>
+                <select name="gender" id="gender" class="form-control input-border custom-select">
+                    <option value="" disabled selected>Seleccionar</option>
+                    <option value="Femenino">Femenino</option>
+                    <option value="Masculino">Masculino</option>
+                </select>
+            </div>
         </div>
-    </div>
 
-    <div class="mb-3">
-        <label for="email" class="form-label">Correo:</label>
-        <input type="email" name="email" id="email" class="form-control input-border" placeholder="Ingrese su correo" />
-    </div>
-
-    <div class="mb-4 position-relative input-group-container">
-        <label for="password" class="form-label">Contraseña:</label>
-        <div class="position-relative">
-            <input type="password" name="password" id="password" class="form-control input-border" placeholder="Ingrese su contraseña" />
-            <span class="password-toggle-inside" onclick="toggleVisibility('password', this)">
-                <i class="fas fa-eye"></i>
-            </span>
+        <div class="mb-3">
+            <label for="email" class="form-label">Correo:</label>
+            <input type="email" name="email" id="email" class="form-control input-border" placeholder="Ingrese su correo" />
         </div>
-    </div>
 
-    <!-- Confirmar contraseña (no lo guardas, solo úsalo para validación JS si quieres) -->
-    <div class="mb-4 position-relative input-group-container">
-        <label for="confirm-password" class="form-label">Confirmar contraseña:</label>
-        <div class="position-relative">
-            <input type="password" id="confirm-password" class="form-control input-border" placeholder="Confirme su contraseña" />
-            <span class="password-toggle-inside" onclick="toggleVisibility('confirm-password', this)">
-                <i class="fas fa-eye"></i>
-            </span>
+        <div class="mb-4 position-relative input-group-container">
+            <label for="password" class="form-label">Contraseña:</label>
+            <div class="position-relative">
+                <input type="password" name="password" id="password" class="form-control input-border" placeholder="Ingrese su contraseña" />
+                <span class="password-toggle-inside" onclick="toggleVisibility('password', this)">
+                    <i class="fas fa-eye"></i>
+                </span>
+            </div>
         </div>
-    </div>
 
-    <div class="text-center">
-        <button id="register-button" type="submit">Registrar</button>
-    </div>
-    
-    @if(session('success'))
-    <div class="alert alert-success alert-dismissible fade show mt-2" role="alert">
-        {{ session('success') }}
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-    </div>
-@endif
+        <!-- Confirmar contraseña (validar con js o php) -->
+        <div class="mb-4 position-relative input-group-container">
+            <label for="confirm-password" class="form-label">Confirmar contraseña:</label>
+            <div class="position-relative">
+                <input type="password" id="confirm-password" class="form-control input-border" placeholder="Confirme su contraseña" />
+                <span class="password-toggle-inside" onclick="toggleVisibility('confirm-password', this)">
+                    <i class="fas fa-eye"></i>
+                </span>
+            </div>
+        </div>
 
-</form>
+        <div class="text-center">
+            <button id="register-button" type="submit">Registrar</button>
+        </div>
+        
+        @if(session('success'))
+        <div class="alert alert-success alert-dismissible fade show mt-2" role="alert">
+            {{ session('success') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    @endif
+
+    </form>
 
 
         <div class="text-center mt-3">
