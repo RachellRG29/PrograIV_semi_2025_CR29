@@ -4,7 +4,14 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
+        <!-- Gloock y Comfortaa fonts -->
+        <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@300..700&family=Gloock&display=swap" rel="stylesheet">
+
+        <!-- Iconos de Phosphor -->
+        <link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.0.3/src/phosphor.css">
+
         <title>Vegánimo parcial2</title>
+        <link rel="website icon" href="/Images/Icono_veganimo.svg">
 
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.bunny.net">
@@ -12,6 +19,10 @@
         
         <!-- Bootstrap CSS -->
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+
+        <!-- AlertifyJS CSS -->
+        <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/alertify.min.css"/>
+        <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/themes/default.min.css"/>
 
         <!-- Iconos -->
         <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet" />
@@ -122,12 +133,15 @@
         </div>
     </div>
 
-    <!-- Imagen derecha -->
-    <img src="https://images.pexels.com/photos/31199411/pexels-photo-31199411/free-photo-of-ensalada-de-aguacate-fresco-y-rucula-en-una-mesa-rustica.jpeg?auto=compress&cs=tinysrgb&w=600&lazy=load" 
-        alt="Imagen" 
-        class="img-fluid login-image d-none d-md-block" />
-
+    <div class="ladoderecho">
+        <div class="contenedor-imagen">
+            <img src="https://images.pexels.com/photos/31199411/pexels-photo-31199411/free-photo-of-ensalada-de-aguacate-fresco-y-rucula-en-una-mesa-rustica.jpeg?auto=compress&cs=tinysrgb&w=600&lazy=load" 
+                alt="Imagen" 
+                class="img-fluid login-image d-none d-md-block" />
+            <a href="/recetas" id="btn-de-recetas" class="boton-ir-recetas">Recetas</a>
+        </div>
     </div>
+
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
@@ -145,6 +159,24 @@
         icon.classList.toggle('fa-eye', !isPassword);
     }
     </script>
+
+<!-- Cargar AlertifyJS primero -->
+<script src="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/alertify.min.js"></script>
+
+<!-- Después correr alertify.success o alertify.error -->
+<script>
+  @if (session('success'))
+      alertify.success("{{ session('success') }}");
+  @endif
+
+  @if (session('error'))
+      alertify.error("{{ session('error') }}");
+  @endif
+</script>
+
+<!-- Luego tus propios scripts -->
+<script src="https://unpkg.com/phosphor-icons"></script>
+<script src="js/scripts_crear_receta.js"></script>
 
 </body>
 

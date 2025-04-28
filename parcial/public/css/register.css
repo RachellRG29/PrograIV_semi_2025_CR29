@@ -1,6 +1,10 @@
 body {
     font-family: 'Comfortaa','Verdana';
   }
+
+  /**{
+    outline: 1px solid darkgoldenrod;
+  }*/
   
   /*  Fondo degradado  */
   .custom-bg {
@@ -10,10 +14,10 @@ body {
   /* Contenedor principal */
   .container {
     position: relative;
-    display: flex;
     align-items: center;
-    padding: 35px;
+    padding: 1rem;
     min-height: calc(100vh - 70px);
+    gap: 2rem;
   }
   
   /* Tarjeta del formulario */
@@ -24,7 +28,7 @@ body {
     padding: 50px;
     height: auto;
     z-index: 2;
-    left: -100px;
+ 
   }
   
   /* Texto de Crea tu cuenta */
@@ -108,19 +112,58 @@ body {
     transform: scale(0.98);
   }
   
-  /* Imagen de la derecha */
-  .login-image {
-    position: absolute;
-    right: -53px;
-    top: 50%;
-    transform: translateY(-50%);
+  .contenedor-imagen {
+    position: relative; 
+}
+
+.login-image {
+    position: relative; 
     width: 387px;
     height: 815px;
     border-radius: 15px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
     object-fit: cover;
-  }
-  
+}
+
+#btn-de-recetas {
+    position: absolute;
+    bottom: 20px; /* Lo deja 20px arriba del borde inferior */
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #007bff;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    z-index: 2; 
+}
+
+/* Opcional: corrige también si quieres el estilo bonito */
+.btn-de-recetas {
+    position: absolute;
+    color: #1A1C1C;
+    font-weight: 500;
+    background-image: linear-gradient(
+        325deg,
+        #E99A3C 0%,
+        #F8C78C 55%,
+        #E99A3C 90%
+    ), linear-gradient(45deg, #E99A3C, #ffffff);
+    padding: 10px 20px;
+    border: 2px solid transparent;
+    border-radius: 14px;
+    box-shadow:
+      0px 0px 20px #e99a3c80,
+      0px 5px 5px -1px #c8782840,
+      inset 4px 4px 8px #ffd2aa80,
+      inset -4px -4px 8px #b4641459;
+    font-size: 1rem;
+    cursor: pointer;
+    font-family: 'Comfortaa', Verdana;
+}
+
+
   /* Estilos de texto ¿Tienes cuenta? Inicia sesión  */
   .text-muted {
     color: #000000 !important;
@@ -171,4 +214,25 @@ body {
     box-shadow: 0 0 0 0.2rem rgba(0, 120, 72, 0.25);
   }
   
-  
+  .btn-de-recetas{
+    position: absolute;
+    color: #1A1C1C;
+    font-weight: 500;
+    background-image: linear-gradient(
+    325deg,
+    #E99A3C 0%,
+    #F8C78C 55%,
+    #E99A3C 90%
+  ), linear-gradient(45deg, #E99A3C, #ffffff);
+    padding: 10px 20px;
+    border: 2px solid transparent;
+    border-radius: 14px;
+    box-shadow:
+      0px 0px 20px #e99a3c80,
+      0px 5px 5px -1px #c8782840,
+      inset 4px 4px 8px #ffd2aa80,
+      inset -4px -4px 8px #b4641459;
+    font-size: 1rem;
+    cursor: pointer;
+    font-family: 'Comfortaa', Verdana;
+  }
