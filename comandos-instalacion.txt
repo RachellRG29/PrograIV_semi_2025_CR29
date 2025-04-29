@@ -1,0 +1,14 @@
+//para instalar vue.js
+npm install vue@3
+
+//para instalar vite para lo de assets
+npm install
+
+//para compilar 
+npm run dev
+
+
+//Ejecutar comandos del servidor y vite <-- importante
+//ENTRAR A: cd .\academica y ejecutar:
+npm run dev
+php artisan serve
