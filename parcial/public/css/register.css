@@ -236,3 +236,63 @@ body {
     cursor: pointer;
     font-family: 'Comfortaa', Verdana;
   }
+
+  /* Bordes para validación */
+.input-border.invalid {
+  border-color: #dc3545 !important; /* rojo Bootstrap */
+  box-shadow: 0 0 0 0.25rem rgba(220, 53, 69, 0.25);
+}
+
+.input-border.valid {
+  border-color: #28a745 !important; /* verde Bootstrap */
+  box-shadow: 0 0 0 0.25rem rgba(40, 167, 69, 0.25);
+}
+
+
+/* --- Responsivo para tablets y pantallas medianas (<=900px) --- */
+@media (max-width: 900px) {
+  .custom-form-card {
+    width: 90%;
+    padding: 30px 20px;
+  }
+
+  /* Ajustar inputs para que ocupen más ancho */
+  .input-border {
+    width: 90% !important;
+    margin: 10px auto;
+  }
+
+  /* Centrar y ajustar botones */
+  button {
+    width: 90%;
+    max-width: none;
+    margin: 15px auto;
+    display: block;
+  }
+}
+
+/* --- Responsivo para móviles pequeños (<=600px) --- */
+@media (max-width: 600px) {
+  .custom-form-card {
+    width: 100%;
+    padding: 20px 12px;
+    border-radius: 0;
+    box-shadow: none;
+  }
+
+  .input-border {
+    width: 100% !important;
+    margin: 8px auto;
+    font-size: 0.95rem;
+  }
+
+  button {
+    width: 100%;
+    font-size: 1rem;
+  }
+
+  .form-label {
+    padding-left: 5% !important;
+    font-size: 0.9rem;
+  }
+}

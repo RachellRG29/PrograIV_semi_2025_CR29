@@ -316,6 +316,140 @@
   
   }
   
+
+   /* Bordes para validación */
+.input-border.invalid {
+  border-color: #dc3545 !important; /* rojo Bootstrap */
+  box-shadow: 0 0 0 0.25rem rgba(220, 53, 69, 0.25);
+}
+
+.input-border.valid {
+  border-color: #28a745 !important; /* verde Bootstrap */
+  box-shadow: 0 0 0 0.25rem rgba(40, 167, 69, 0.25);
+}
   
   
-  
+
+/* --- RESPONSIVO: Tablets (≤ 900px) --- */
+@media (max-width: 900px) {
+  .contenedor-crear-recetas {
+    width: 98%;
+    padding-bottom: 1rem;
+    border-radius: 30px;
+    margin-top: 40px;
+  }
+
+  .zona-principal {
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .zona-izquierda,
+  .zona-derecha {
+    margin-left: 0 !important;
+    width: 100% !important;
+    max-width: 100%;
+  }
+
+  .zona-derecha {
+    margin-top: 1rem;
+    padding: 0.5rem;
+    min-width: 0;
+  }
+
+  .input-border,
+  .form-control,
+  .textarea-fija {
+    width: 98% !important;
+    font-size: 1rem;
+    margin: 8px auto;
+  }
+
+  .tiempo-dificultad {
+    flex-direction: column;
+    gap: 0.5rem;
+    width: 98%;
+    margin-left: 0;
+  }
+
+  .zona-ingredientes,
+  .zona-pasos {
+    width: 98%;
+    margin-left: 0;
+    margin-right: 0;
+  }
+}
+
+/* --- RESPONSIVO: Móviles (≤ 600px) --- */
+@media (max-width: 600px) {
+  .contenedor-crear-recetas {
+    width: 100%;
+    padding-bottom: 0.5rem;
+    border-radius: 0;
+    margin-top: 10px;
+    box-shadow: none;
+  }
+
+  .custom-form-card,
+  .zona-principal,
+  .zona-izquierda,
+  .zona-derecha,
+  .zona-ingredientes,
+  .zona-pasos {
+    width: 100% !important;
+    max-width: 100% !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+
+  .cont-cc,
+  .cont-ingred,
+  .cont-pasos {
+    width: 95vw !important;
+    min-width: 0;
+    left: 0;
+    margin-top: 18px;
+    border-radius: 4px 10px 10px 0;
+  }
+
+  .input-border,
+  .form-control,
+  .textarea-fija {
+    width: 100% !important;
+    font-size: 0.98rem;
+    margin: 6px 0;
+    padding: 7px;
+  }
+
+  .form-label {
+    font-size: 0.97rem;
+    margin-left: 0;
+    padding-left: 2vw;
+  }
+
+  .btn-agregar,
+  .btn-guardar {
+    width: 100% !important;
+    max-width: 100% !important;
+    font-size: 1rem;
+    margin: 10px 0;
+  }
+
+  .img-container {
+    min-width: 140px;
+    min-height: 140px;
+    max-width: 95vw;
+    max-height: 200px;
+    height: 38vw;
+  }
+
+  .paso-imagen-small {
+    width: 80px;
+    height: 60px;
+  }
+
+  .estrellas {
+    gap: 10px;
+  }
+}
+

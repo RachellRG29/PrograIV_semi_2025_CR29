@@ -19,3 +19,6 @@ class Receta extends Model
         'imagen',
     ];
 }
+
+
+

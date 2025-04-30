@@ -1,183 +1,292 @@
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-        <!-- Gloock y Comfortaa fonts -->
-        <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@300..700&family=Gloock&display=swap" rel="stylesheet">
+    <!-- Gloock y Comfortaa fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@300..700&family=Gloock&display=swap" rel="stylesheet" />
 
-        <!-- Iconos de Phosphor -->
-        <link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.0.3/src/phosphor.css">
+    <!-- Iconos de Phosphor -->
+    <link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.0.3/src/phosphor.css" />
 
-        <title>Vegánimo parcial2</title>
-        <link rel="website icon" href="/Images/Icono_veganimo.svg">
+    <title>Vegánimo parcial2</title>
+    <link rel="website icon" href="/Images/Icono_veganimo.svg" />
+ 
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.bunny.net" />
+    <link href="https://fonts.bunny.net/css?family=instrument-sans:400,500,600" rel="stylesheet" />
 
-        <!-- Fonts -->
-        <link rel="preconnect" href="https://fonts.bunny.net">
-        <link href="https://fonts.bunny.net/css?family=instrument-sans:400,500,600" rel="stylesheet" />´
-        
-        <!-- Bootstrap CSS -->
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
 
-        <!-- AlertifyJS CSS -->
-        <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/alertify.min.css"/>
-        <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/themes/default.min.css"/>
+    <!-- AlertifyJS CSS -->
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/alertify.min.css" />
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/themes/default.min.css" />
 
-        <!-- Iconos -->
-        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet" />
+    <!-- Iconos -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet" />
 
-        <!-- Fonts -->
-        <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@300..700&family=Gloock&display=swap" rel="stylesheet" />
+    <!-- CSS personalizado -->
+    <link rel="stylesheet" href="css/register.css" />
 
-        <!-- CSS personalizado -->
-        <link rel="stylesheet" href="css/register.css" />
+    <link rel="website icon" href="Images/Icono_veganimo.svg" />
+</head>
 
-        <link rel="website icon" href="Images/Icono_veganimo.svg">
-
-    </head>
-    
 <body class="custom-bg d-flex min-vh-100 px-3">
-
     <!-- Contenedor general -->
     <div class="container position-relative d-flex align-items-center">
-
-    <!-- Card del formulario -->
-    <div class="card shadow-lg rounded-4 overflow-hidden custom-form-card p-4">
-        <div class="text-center mb-4">
-        <div class="logo-container">
-            <div class="img-fluid logo" alt="isotipo">
-                <svg id="Capa_2" data-name="Capa 2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 168.68 199.52">
-                <g id="Veganimo">
-                    <g>
-                    <path class="cls-1" d="M86.29,80.26c-.7-.61-1.28-1.32-1.77-2.05,3.86,9,7.35,17.37,8.89,21.71l8.39-17.96c-5.41,2.01-11.23,2.03-15.51-1.7Z"/>
-                    <path class="cls-1" d="M136.3,0H32.38C14.5,0,0,14.49,0,32.38V167.13c0,17.89,14.5,32.39,32.38,32.39h103.92c17.88,0,32.38-14.5,32.38-32.39V32.38c0-17.89-14.5-32.38-32.38-32.38Zm6.77,33.9c-6.17-.63-10.49,1.22-14.22,4.34-3.91,3.28-5.37,7.22-6.64,10.77-2.46,6.91-3.56,14.68-6.72,21.31-1.54,3.22-4.54,6.39-8.17,8.8l-20.9,44.76h15.89c-1.85-10.13,1.45-20.96,9.71-28.35,7.33-6.55,16.95-8.94,25.92-7.28,1.27,1.45-6.95,10.87-10.25,13.82,3.3-2.95,13.58-10.07,14.89-8.63,.63,9.1-2.8,18.38-10.14,24.94-2.66,2.39-5.63,4.21-8.76,5.5h14.16c3.04,0,5.45,2.6,5.17,5.62-1.57,16.65-10.06,31.28-22.55,41.01-4.3,3.34-9.6,5.13-15.04,5.13-.31,0-.55,.25-.55,.55v2.33c0,1.71-1.39,3.1-3.1,3.1h-34.82c-1.71,0-3.1-1.39-3.1-3.1v-2.33c0-.31-.25-.55-.55-.55h-.25c-5.44,0-10.75-1.79-15.05-5.13-12.49-9.73-20.98-24.36-22.54-41.01-.29-3.02,2.13-5.62,5.16-5.62h23.36c-2.31-.91-4.47-2.3-6.33-4.18-4.77-4.83-6.3-11.64-4.62-17.74,6.13-1.59,12.9,.03,17.67,4.86,4.6,4.66,6.18,11.14,4.8,17.06h14.23L42.97,44.17c-4.22-9.35-8.99-14.02-14.29-14.02h-.45v-1.29h49.92v1.29h-.61c-4.52,0-7.51,1.17-8.98,3.53-1.48,2.36-1.23,5.64,.74,9.84,0,0,6.93,15.5,13.49,30.68,1.45,.76,5.37,.96,6.1,.91,1.77-.12,3.93-.58,5.38-1.45,3.79-2.3,6.64-7.11,7.97-10.94,1.54-4.33,2.59-9.32,4.44-13.83,2.15-5.32,5.27-10.6,10.29-14.42,5.17-4.09,13.11-6.26,20.38-4.16,2.31,.68,4.43,1.79,5.92,3.27l-.2,.32Z"/>
-                    </g>
-                </g>
-                </svg>
-            </div>
-        </div>
-        </div>
-        
-        
-        <h2 class="form-title text-center mb-2">Crea tu cuenta</h2>
-        <div class="separator mx-auto mb-4"></div>
-
-        
-    <form method="POST" action="{{ route('register.store') }}">
-        @csrf
-        <!--  Nombre completo -->
-        <div class="mb-3">
-            <label for="fullname" class="form-label">Nombre completo:</label>
-            <input type="text" name="fullname" id="fullname" class="form-control input-border" placeholder="Ingrese su nombre completo" />
-        </div>
-
-        <div class="d-flex justify-content-center gap-3">
-            <div class="mb-3 flex-fill">
-                <label for="birthdate" class="form-label">Fecha de nacimiento:</label>
-                <input type="date" name="birthdate" id="birthdate" class="form-control input-border" />
+        <!-- Card del formulario -->
+        <div class="card shadow-lg rounded-4 overflow-hidden custom-form-card p-4">
+            <div class="text-center mb-4">
+                <div class="logo-container">
+                    <div class="img-fluid logo" alt="isotipo">
+                        <svg id="Capa_2" data-name="Capa 2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 168.68 199.52">
+                            <g id="Veganimo">
+                                <g>
+                                    <!-- SVG paths aquí -->
+                                </g>
+                            </g>
+                        </svg>
+                    </div>
+                </div>
             </div>
 
-            <div class="mb-3 flex-fill">
-                <label for="gender" class="form-label">Género:</label>
-                <select name="gender" id="gender" class="form-control input-border custom-select">
-                    <option value="" disabled selected>Seleccionar</option>
-                    <option value="Femenino">Femenino</option>
-                    <option value="Masculino">Masculino</option>
-                </select>
+            <h2 class="form-title text-center mb-2">Crea tu cuenta</h2>
+            <div class="separator mx-auto mb-4"></div>
+
+            <!-- FORMULARIO con id corregido -->
+            <form id="registerForm" method="POST" action="{{ route('register.store') }}">
+                @csrf
+                <!-- Nombre completo -->
+                <div class="mb-3">
+                    <label for="fullname" class="form-label">Nombre completo:</label>
+                    <input type="text" name="fullname" id="fullname" class="form-control input-border" placeholder="Ingrese su nombre completo" />
+                </div>
+
+                <div class="d-flex justify-content-center gap-3">
+                    <div class="mb-3 flex-fill">
+                        <label for="birthdate" class="form-label">Fecha de nacimiento:</label>
+                        <input type="date" name="birthdate" id="birthdate" class="form-control input-border" />
+                    </div>
+
+                    <div class="mb-3 flex-fill">
+                        <label for="gender" class="form-label">Género:</label>
+                        <select name="gender" id="gender" class="form-control input-border custom-select">
+                            <option value="" disabled selected>Seleccionar</option>
+                            <option value="Femenino">Femenino</option>
+                            <option value="Masculino">Masculino</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label for="email" class="form-label">Correo:</label>
+                    <input type="email" name="email" id="email" class="form-control input-border" placeholder="Ingrese su correo" />
+                </div>
+
+                <div class="mb-4 position-relative input-group-container">
+                    <label for="password" class="form-label">Contraseña:</label>
+                    <div class="position-relative">
+                        <input type="password" name="password" id="password" class="form-control input-border" placeholder="Ingrese su contraseña" />
+                        <span class="password-toggle-inside" onclick="toggleVisibility('password', this)">
+                            <i class="fas fa-eye"></i>
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Confirmar contraseña -->
+                <div class="mb-4 position-relative input-group-container">
+                    <label for="confirm-password" class="form-label">Confirmar contraseña:</label>
+                    <div class="position-relative">
+                        <input type="password" id="confirm-password" class="form-control input-border" placeholder="Confirme su contraseña" />
+                        <span class="password-toggle-inside" onclick="toggleVisibility('confirm-password', this)">
+                            <i class="fas fa-eye"></i>
+                        </span>
+                    </div>
+                </div>
+
+                <div class="text-center">
+                    <button id="register-button" type="submit">Registrar</button>
+                </div>
+
+                @if(session('success'))
+                <div class="alert alert-success alert-dismissible fade show mt-2" role="alert">
+                    {{ session('success') }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+                @endif
+            </form>
+
+            <div class="text-center mt-3">
+                <a href="#" class="text-muted small text-decoration-none">¿Tienes cuenta? Inicia sesión</a>
             </div>
         </div>
 
-        <div class="mb-3">
-            <label for="email" class="form-label">Correo:</label>
-            <input type="email" name="email" id="email" class="form-control input-border" placeholder="Ingrese su correo" />
-        </div>
-
-        <div class="mb-4 position-relative input-group-container">
-            <label for="password" class="form-label">Contraseña:</label>
-            <div class="position-relative">
-                <input type="password" name="password" id="password" class="form-control input-border" placeholder="Ingrese su contraseña" />
-                <span class="password-toggle-inside" onclick="toggleVisibility('password', this)">
-                    <i class="fas fa-eye"></i>
-                </span>
+        <div class="ladoderecho">
+            <div class="contenedor-imagen">
+                <img src="https://images.pexels.com/photos/31199411/pexels-photo-31199411/free-photo-of-ensalada-de-aguacate-fresco-y-rucula-en-una-mesa-rustica.jpeg?auto=compress&cs=tinysrgb&w=600&lazy=load"
+                    alt="Imagen" class="img-fluid login-image d-none d-md-block" />
+                <a href="/recetas" id="btn-de-recetas" class="boton-ir-recetas">Recetas</a>
             </div>
-        </div>
-
-        <!-- Confirmar contraseña (validar con js o php) -->
-        <div class="mb-4 position-relative input-group-container">
-            <label for="confirm-password" class="form-label">Confirmar contraseña:</label>
-            <div class="position-relative">
-                <input type="password" id="confirm-password" class="form-control input-border" placeholder="Confirme su contraseña" />
-                <span class="password-toggle-inside" onclick="toggleVisibility('confirm-password', this)">
-                    <i class="fas fa-eye"></i>
-                </span>
-            </div>
-        </div>
-
-        <div class="text-center">
-            <button id="register-button" type="submit">Registrar</button>
-        </div>
-        
-        @if(session('success'))
-        <div class="alert alert-success alert-dismissible fade show mt-2" role="alert">
-            {{ session('success') }}
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
-    @endif
-
-    </form>
-
-
-        <div class="text-center mt-3">
-        <a href="#" class="text-muted small text-decoration-none">¿Tienes cuenta? Inicia sesión</a>
         </div>
     </div>
-
-    <div class="ladoderecho">
-        <div class="contenedor-imagen">
-            <img src="https://images.pexels.com/photos/31199411/pexels-photo-31199411/free-photo-of-ensalada-de-aguacate-fresco-y-rucula-en-una-mesa-rustica.jpeg?auto=compress&cs=tinysrgb&w=600&lazy=load" 
-                alt="Imagen" 
-                class="img-fluid login-image d-none d-md-block" />
-            <a href="/recetas" id="btn-de-recetas" class="boton-ir-recetas">Recetas</a>
-        </div>
-    </div>
-
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-
+    <!-- Alertify JS -->
+    <script src="https://cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/alertify.min.js"></script>
 
     <!-- Script para mostrar/ocultar contraseñas -->
     <script>
-    function toggleVisibility(inputId, iconElement) {
-        const input = document.getElementById(inputId);
-        const icon = iconElement.querySelector('i');
-        const isPassword = input.type === 'password';
+        function toggleVisibility(inputId, iconElement) {
+            const input = document.getElementById(inputId);
+            const icon = iconElement.querySelector('i');
+            const isPassword = input.type === 'password';
 
-        input.type = isPassword ? 'text' : 'password';
-        icon.classList.toggle('fa-eye-slash', isPassword);
-        icon.classList.toggle('fa-eye', !isPassword);
-    }
+            input.type = isPassword ? 'text' : 'password';
+            icon.classList.toggle('fa-eye-slash', isPassword);
+            icon.classList.toggle('fa-eye', !isPassword);
+        }
     </script>
 
-<!-- Cargar AlertifyJS primero -->
-<script src="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/alertify.min.js"></script>
+    <!-- Alertify mensajes desde backend -->
+    <script>
+        @if (session('success'))
+            alertify.success("{{ session('success') }}");
+        @endif
 
-<!-- Después correr alertify.success o alertify.error -->
-<script>
-  @if (session('success'))
-      alertify.success("{{ session('success') }}");
-  @endif
+        @if (session('error'))
+            alertify.error("{{ session('error') }}");
+        @endif
+    </script>
 
-  @if (session('error'))
-      alertify.error("{{ session('error') }}");
-  @endif
-</script>
+    <!-- Tus scripts -->
+    <script src="https://unpkg.com/phosphor-icons"></script>
+    <script src="js/scripts_crear_receta.js"></script>
 
-<!-- Luego tus propios scripts -->
-<script src="https://unpkg.com/phosphor-icons"></script>
-<script src="js/scripts_crear_receta.js"></script>
+    <!-- Validación y Alertify -->
+    <script>
+        // Funciones para cambiar clases
+        function setInvalid(element) {
+            element.classList.add('invalid');
+            element.classList.remove('valid');
+        }
 
+        function setValid(element) {
+            element.classList.add('valid');
+            element.classList.remove('invalid');
+        }
+
+        // Validaciones individuales
+        function validateFullname() {
+            const input = document.getElementById('fullname');
+            const value = input.value.trim();
+            const nameRegex = /^[A-Za-zÁÉÍÓÚáéíóúÑñÜü.\s]+$/;
+            if (!value || !nameRegex.test(value)) {
+                setInvalid(input);
+                return false;
+            }
+            setValid(input);
+            return true;
+        }
+
+        function validateBirthdate() {
+            const input = document.getElementById('birthdate');
+            if (!input.value) {
+                setInvalid(input);
+                return false;
+            }
+            setValid(input);
+            return true;
+        }
+
+        function validateGender() {
+            const input = document.getElementById('gender');
+            if (!input.value) {
+                setInvalid(input);
+                return false;
+            }
+            setValid(input);
+            return true;
+        }
+
+        function validateEmail() {
+            const input = document.getElementById('email');
+            const value = input.value.trim();
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!value || !emailRegex.test(value)) {
+                setInvalid(input);
+                return false;
+            }
+            setValid(input);
+            return true;
+        }
+
+        function validatePassword() {
+            const input = document.getElementById('password');
+            if (!input.value || input.value.length < 8) {
+                setInvalid(input);
+                return false;
+            }
+            setValid(input);
+            return true;
+        }
+
+        function validateConfirmPassword() {
+            const input = document.getElementById('confirm-password');
+            const password = document.getElementById('password').value;
+            if (!input.value || input.value.length < 8 || input.value !== password) {
+                setInvalid(input);
+                return false;
+            }
+            setValid(input);
+            return true;
+        }
+
+        // Eventos para validar 
+        document.getElementById('fullname').addEventListener('blur', validateFullname);
+        document.getElementById('birthdate').addEventListener('blur', validateBirthdate);
+        document.getElementById('gender').addEventListener('change', validateGender);
+        document.getElementById('email').addEventListener('blur', validateEmail);
+        document.getElementById('password').addEventListener('blur', validatePassword);
+        document.getElementById('confirm-password').addEventListener('blur', validateConfirmPassword);
+
+        // Validación al enviar el formulario
+        document.getElementById('registerForm').addEventListener('submit', function (e) {
+            e.preventDefault();
+
+            if (!validateFullname()) {
+                alertify.error('El nombre completo solo debe contener letras.');
+                return;
+            }
+            if (!validateBirthdate()) {
+                alertify.error('Seleccione una fecha de nacimiento para continuar.');
+                return;
+            }
+            if (!validateGender()) {
+                alertify.error('Seleccione un género para continuar.');
+                return;
+            }
+            if (!validateEmail()) {
+                alertify.error('Ingrese un correo electrónico válido.');
+                return;
+            }
+            if (!validatePassword()) {
+                alertify.error('La contraseña debe tener al menos 8 caracteres.');
+                return;
+            }
+            if (!validateConfirmPassword()) {
+                alertify.error('Las contraseñas no coinciden o son menores a 8 caracteres.');
+                return;
+            }
+
+            // Si pasa todas las validaciones, envía el formulario
+            this.submit();
+            
+        });
+    </script>
 </body>
-
 </html>
+
+
