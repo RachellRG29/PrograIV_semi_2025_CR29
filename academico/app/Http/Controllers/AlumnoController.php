@@ -1,57 +1,80 @@
 <?php
 
-namespace App\Http\Controllers; // <-- también debe estar este namespace arriba
+namespace App\Http\Controllers;
 
 use App\Models\Alumno;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller; // <-- ESTA LÍNEA
 
 class AlumnoController extends Controller
 {
+    // Mostrar todos los alumnos
     public function index()
     {
-        return view('alumnos');
+        $alumnos = Alumno::all();
+        return view('alumnos.index', compact('alumnos'));
     }
 
+    // Mostrar formulario de creación
+    public function create()
+    {
+        return view('alumnos.create');
+    }
+
+    // Guardar un nuevo alumno
     public function store(Request $request)
     {
         $request->validate([
-            'codigo' => 'required|regex:/^[A-Za-z]{4}[0-9]{6}$/|unique:alumnos',
-            'nombre' => 'required|string|max:150',
-            'email' => 'required|email|unique:alumnos',
-            'direccion' => 'required|string',
-            'departamento' => 'required|string',
-            'municipio' => 'required|string',
-            'distrito' => 'required|string',
-            'telefono' => 'required|regex:/^[0-9]{4}-[0-9]{4}$/',
+            'codigo' => 'required|unique:alumnos',
+            'nombre' => 'required',
+            'email' => 'required|email',
+            'direccion' => 'required',
+            'distrito' => 'required',
+            'municipio' => 'required',
+            'telefono' => 'required',
             'fechanacimiento' => 'required|date',
-            'sexo' => 'required|in:Masculino,Femenino',
+            'sexo' => 'required',
         ]);
 
         Alumno::create($request->all());
 
-        return response()->json(['mensaje' => 'Alumno guardado correctamente']);
+        return redirect()->route('alumnos.index')->with('success', 'Alumno registrado correctamente.');
     }
 
-    public function buscar(Request $request)
+    // Mostrar formulario de edición
+    public function edit($id)
     {
-        return Alumno::where('codigo', $request->codigo)->first();
+        $alumno = Alumno::findOrFail($id);
+        return view('alumnos.edit', compact('alumno'));
     }
 
-    public function listar(Request $request)
+    // Actualizar alumno
+    public function update(Request $request, $id)
     {
-        $tipo = $request->tipo;
-        $buscar = $request->buscar;
-    
-        $query = Alumno::query();
-    
-        if ($buscar) {
-            $query->where($tipo, 'LIKE', "%$buscar%");
-        }
-    
-        $alumnos = $query->get();
-    
-        return response()->json($alumnos);
+        $alumno = Alumno::findOrFail($id);
+
+        $request->validate([
+            'codigo' => 'required|unique:alumnos,codigo,' . $id,
+            'nombre' => 'required',
+            'email' => 'required|email',
+            'direccion' => 'required',
+            'distrito' => 'required',
+            'municipio' => 'required',
+            'telefono' => 'required',
+            'fechanacimiento' => 'required|date',
+            'sexo' => 'required',
+        ]);
+
+        $alumno->update($request->all());
+
+        return redirect()->route('alumnos.index')->with('success', 'Alumno modificado correctamente.');
     }
 
+    // Eliminar alumno
+    public function destroy($id)
+    {
+        $alumno = Alumno::findOrFail($id);
+        $alumno->delete();
+
+        return redirect()->route('alumnos.index')->with('success', 'Alumno eliminado correctamente.');
+    }
 }
