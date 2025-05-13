@@ -13,6 +13,9 @@ if (empty($fullname) || empty($birthdate) || empty($gender) || empty($email) || 
         "success" => false,
         "message" => "⚠️ Faltan datos del formulario"
     ]);
+
+     // Redirige a login.html después del registro
+    header("Location: login.html");    
     exit;
 }
 

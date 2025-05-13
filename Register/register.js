@@ -1,5 +1,5 @@
 document.getElementById("formRegistro").addEventListener("submit", function(event) {
-  event.preventDefault(); // Evita la recarga
+  event.preventDefault();
 
   const formData = new FormData(this);
 
@@ -20,7 +20,11 @@ document.getElementById("formRegistro").addEventListener("submit", function(even
     });
 
     if (data.success) {
-      this.reset(); // Limpia el formulario si se guardó correctamente
+      this.reset();
+      // Redirigir después de 3 segundos (coincide con el timer del Swal)
+      setTimeout(() => {
+        window.location.href = "/Login/login.html";
+      }, 3000);
     }
   })
   .catch(error => {

@@ -22,8 +22,9 @@
   <!-- SweetAlert -->
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-  <!-- JS personalizado -->
+  <!-- PHP personalizado -->
   <script src="/Register/registro.php" defer></script>
+
 
 </head>
 <body class="custom-bg d-flex min-vh-100 px-3">
@@ -99,9 +100,6 @@
 
 
 
-
-
-
         <!-- Contraseña -->
         <div class="mb-3">
           <label for="password" class="form-label">Contraseña:</label>
@@ -140,13 +138,13 @@
 
 
           <div class="text-center">
-            <button type="submit">Registrar</button>
+            <button type="submit" class="registerBtn">Registrar</button>
           </div>
           
       </form>
 
       <div class="text-center mt-3">
-        <a href="Login/login.html" class="text-muted small text-decoration-none">¿Tienes cuenta? Inicia sesión</a>
+        <a href="/Login/login.html" class="text-muted small text-decoration-none">¿Tienes cuenta? Inicia sesión</a>
       </div>
       </div>
     </div>
@@ -158,9 +156,9 @@
 
   </div>
 
-  <!-- Bootstrap JS -->
+  
+<!-- Bootstrap JS -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-
 
   <!-- Script para mostrar/ocultar contraseñas -->
   <script>
@@ -173,14 +171,12 @@
       icon.classList.toggle('fa-eye-slash', isPassword);
       icon.classList.toggle('fa-eye', !isPassword);
     }
-     
-    
-    
     
   </script>
+
+  <script src="/Register/register_validacion.js"></script>
+  <script src="/Register/register.js"></script>
   
-  <script src="register_validacion.js"></script>
-  <script src="register.js"></script>
 
 </body>
 </html>
