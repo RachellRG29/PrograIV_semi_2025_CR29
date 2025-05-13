@@ -132,6 +132,59 @@
         </div>
     </div>
 
+    <div class="card">
+        <div class="card-header bg-dark text-white">
+            <h5 class="mb-0">Listado de Usuarios</h5>
+        </div>
+        <div class="card-body">
+        <div class="row justify-content-center mb-3">
+                <div class="col-md-6 position-relative">
+                    <i class="ph-fill ph-magnifying-glass position-absolute" style="top: 50%; left: 10px; transform: translateY(-50%); font-size: 1.2rem; color: #888;"></i>
+                    <input type="text" id="busquedaDocentes" class="form-control ps-5 text-center" placeholder="Buscar docente por nombre, código, email...">
+                </div>
+            </div>
+
+            <table id="tablaDocentes" class="table table-bordered table-striped table-hover">
+                <thead class="table-dark text-center">
+                    <tr>
+                        <th>Nombre</th>
+                        <th>Email</th>
+                        <th>Teléfono</th>
+                        <th>Acción</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach ($docentes as $docente)
+                        <tr>
+                            <td>{{ $docente->nombre }}</td>
+                            <td>{{ $docente->email }}</td>
+                            <td>{{ $docente->telefono }}</td>
+                            <td class="text-center d-flex gap-2 justify-content-center">
+    <a href="{{ route('docentes.edit', $docente->id) }}" class="btn btn-warning btn-sm">
+    <i class="ph ph-pencil-simple"></i>
+    </a>
+
+    <form action="{{ route('docentes.destroy', $docente->id) }}" method="POST" class="form-eliminar-docente">
+
+        @method('DELETE')
+        <button type="submit" class="btn btn-danger btn-sm">
+        <i class="ph ph-trash">
+        </button>
+    </form>
+</td>
+
+                        </tr>
+                    @endforeach
+                    @if($docentes->isEmpty())
+                        <tr>
+                            <td colspan="4" class="text-center">No hay docentes registrados.</td>
+                        </tr>
+                    @endif
+                </tbody>
+            </table>
+        </div>
+    </div>
+
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <!-- Alertify JS -->
