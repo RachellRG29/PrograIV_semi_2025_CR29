@@ -9,22 +9,36 @@ document.getElementById("formRegistro").addEventListener("submit", function(even
   })
   .then(response => response.json())
   .then(data => {
-    Swal.fire({
-      toast: true,
-      position: 'bottom-end',
-      icon: data.success ? 'success' : 'error',
-      title: data.message,
-      showConfirmButton: false,
-      timer: 3000,
-      timerProgressBar: true
-    });
-
     if (data.success) {
-      this.reset();
-      // Redirigir después de 3 segundos (coincide con el timer del Swal)
-      setTimeout(() => {
-        window.location.href = "/Login/login.html";
-      }, 3000);
+      if (data.redirect) {
+        // Redirigir a la página de verificación
+        window.location.href = data.redirect;
+      } else {
+        // Mostrar mensaje de éxito
+        Swal.fire({
+          toast: true,
+          position: 'bottom-end',
+          icon: 'success',
+          title: data.message,
+          showConfirmButton: false,
+          timer: 3000
+        });
+        
+        // Redirigir a login después de 3 segundos
+        setTimeout(() => {
+          window.location.href = "/Login/login.html";
+        }, 3000);
+      }
+    } else {
+      // Mostrar error
+      Swal.fire({
+        toast: true,
+        position: 'bottom-end',
+        icon: 'error',
+        title: data.message,
+        showConfirmButton: false,
+        timer: 3000
+      });
     }
   })
   .catch(error => {

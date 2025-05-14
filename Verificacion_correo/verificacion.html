@@ -104,6 +104,95 @@
       });
     });
   </script>
+
+  <!-- Añadir esto antes del cierre del body -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const form = document.querySelector('form');
+  const inputs = document.querySelectorAll('.input');
+  
+  // Manejar el avance automático entre inputs
+  inputs.forEach((input, index) => {
+    input.addEventListener('input', () => {
+      if (input.value.length === 1 && index < inputs.length - 1) {
+        inputs[index + 1].focus();
+      }
+    });
+
+    input.addEventListener('keydown', (e) => {
+      if (e.key === "Backspace" && input.value === '' && index > 0) {
+        inputs[index - 1].focus();
+      }
+    });
+  });
+
+  // Manejar el envío del formulario
+  form.addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    const codigo = Array.from(inputs).map(input => input.value).join('');
+    
+    fetch('/Register/registro.php', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      body: `verification_code=${codigo}`
+    })
+    .then(response => response.json())
+    .then(data => {
+      if (data.success) {
+        Swal.fire({
+          icon: 'success',
+          title: data.message,
+          showConfirmButton: false,
+          timer: 1500
+        }).then(() => {
+          window.location.href = "/Login/login.html";
+        });
+      } else {
+        Swal.fire({
+          icon: 'error',
+          title: data.message,
+          showConfirmButton: true
+        });
+      }
+    })
+    .catch(error => {
+      Swal.fire({
+        icon: 'error',
+        title: '❌ Error de conexión',
+        text: 'No se pudo verificar el código'
+      });
+    });
+  });
+
+  // Manejar reenvío de código
+  document.querySelector('a[href="#"]').addEventListener('click', function(e) {
+    e.preventDefault();
+    
+    fetch('/Verificacion_correo/reenviar_codigo.php')
+    .then(response => response.text())
+    .then(result => {
+      if (result === '1') {
+        Swal.fire({
+          icon: 'success',
+          title: '📧 Código reenviado',
+          text: 'Se ha enviado un nuevo código a tu correo',
+          timer: 2000
+        });
+      } else {
+        Swal.fire({
+          icon: 'error',
+          title: '❌ Error',
+          text: result
+        });
+      }
+    });
+  });
+});
+</script>
   
 </body>
 </html>
