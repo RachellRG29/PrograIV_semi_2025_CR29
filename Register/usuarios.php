@@ -9,12 +9,14 @@ try {
     if ($method === 'GET') {
         $query = new MongoDB\Driver\Query([]);
         $cursor = $cliente->executeQuery('Veganimo.Usuarios', $query);
-        
+
         $usuarios = [];
         foreach ($cursor as $documento) {
             $usuario = (array)$documento;
             $usuario['_id'] = (string)$usuario['_id'];
             $usuario['created_at'] = $usuario['created_at']->toDateTime()->format('c');
+            // Asegurar que el campo verified exista (por si hay usuarios antiguos)
+            $usuario['verified'] = isset($usuario['verified']) ? (bool)$usuario['verified'] : false;
             $usuarios[] = $usuario;
         }
         

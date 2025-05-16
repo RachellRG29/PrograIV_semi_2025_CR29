@@ -10,7 +10,8 @@ document.addEventListener('DOMContentLoaded', function() {
   const registerBtn = document.querySelector('.registerBtn');
 
   // Expresiones regulares para validación
-  const nameRegex = /^([a-zA-ZáéíóúÁÉÍÓÚñÑ]{3,})(\s[a-zA-ZáéíóúÁÉÍÓÚñÑ]{3,})+$/;
+const nameRegex = /^([A-ZÁÉÍÓÚÑ][a-záéíóúñ]+)(\s[A-ZÁÉÍÓÚÑ][a-záéíóúñ]+)*\s([A-ZÁÉÍÓÚÑ][a-záéíóúñ]+)(\s(de|De))?\s([A-ZÁÉÍÓÚÑ][a-záéíóúñ]+)$/;
+
   const emailRegex = /^[a-zA-Z0-9._%+-]+@(gmail\.com|yahoo\.com|hotmail\.com|outlook\.com|ugb\.edu\.sv|co\.sv|co\.uk|co\.nz|tv|me|int|io|info|us|sg|ca|au)\b$/;
 
   // Estado de validación
@@ -23,24 +24,37 @@ document.addEventListener('DOMContentLoaded', function() {
     confirmPassword: false
   };
 
-  /* ---------------------- FUNCIONES DE VALIDACIÓN ---------------------- */
+  /* ------------------------------- FUNCIONES DE VALIDACIÓN --------------------------------------------------- */
 
-  function validateFullname() {
-    const value = fullnameInput.value.trim().replace(/\s{2,}/g, ' ');
-    fullnameInput.value = value;
-    const isValid = nameRegex.test(value);
-    validationState.fullname = isValid;
-    
-    if (value === "") {
-      showFieldError(fullnameInput, 'Este campo es obligatorio');
-    } else if (!isValid) {
-      showFieldError(fullnameInput, 'Nombre y apellido (mínimo 3 letras cada uno)');
+// ---------------------- NOMBRE COMPLETO ----------------------
+function validateFullname() {
+  const value = fullnameInput.value.trim();
+  const isValid = nameRegex.test(value);
+  validationState.fullname = isValid;
+
+  if (value === "") {
+    showFieldError(fullnameInput, 'Este campo es obligatorio');
+  } else if (!isValid) {
+    showFieldError(fullnameInput, 'Nombre inválido. Debe tener entre 3 y 5 palabras, cada una iniciando con mayúscula. ' +
+      'Si usas "de" o "De", debe ir solo entre el primer y segundo apellido, para indicar unión matrimonial.');
+  } else {
+    showFieldSuccess(fullnameInput);
+
+    // Comentario aparte si escribió "de" o "De" en el lugar correcto
+    const hasDe = /\s(de|De)\s/.test(value);
+    if (hasDe) {
+      // Aquí puedes mostrar el comentario donde prefieras, por ejemplo:
+      console.log('Nota: "de" o "De" se usa para indicar unión matrimonial entre apellidos.');
+      
     } else {
-      showFieldSuccess(fullnameInput);
+      // Limpiar mensaje si no tiene "de" o "De"
+      // document.getElementById('commentFullname').textContent = '';
     }
-    return isValid;
   }
+  return isValid;
+}
 
+  /* ----------------------   CUMPLEAÑOS ---------------------- */
   function validateBirthdate() {
     const value = birthdateInput.value;
     if (!value) {
@@ -84,6 +98,7 @@ document.addEventListener('DOMContentLoaded', function() {
     return isValid;
   }
 
+  /* ----------------------   GENERO ---------------------- */
   function validateGender() {
     const isValid = genderSelect.value !== "";
     validationState.gender = isValid;
@@ -96,6 +111,7 @@ document.addEventListener('DOMContentLoaded', function() {
     return isValid;
   }
 
+  /* ----------------------   CORREO ---------------------- */
   function validateEmail() {
     const value = emailInput.value.trim();
     const isValid = emailRegex.test(value);
@@ -111,6 +127,7 @@ document.addEventListener('DOMContentLoaded', function() {
     return isValid;
   }
 
+  /* ----------------------   CONTRASEÑA ---------------------- */
   function validatePassword() {
     const value = passwordInput.value;
     const hasLength = value.length >= 6;
@@ -130,21 +147,35 @@ document.addEventListener('DOMContentLoaded', function() {
     return isValid;
   }
 
-  function validateConfirmPassword() {
-    const password = passwordInput.value;
-    const confirm = confirmPasswordInput.value;
-    const isValid = password === confirm && password !== "";
-    validationState.confirmPassword = isValid;
-    
-    if (confirm === "") {
-      clearFieldValidation(confirmPasswordInput);
-    } else if (!isValid) {
-      showFieldError(confirmPasswordInput, 'Las contraseñas no coinciden');
-    } else {
-      showFieldSuccess(confirmPasswordInput);
+  /* ----------------------   VALIDAR CONTRASEÑA ---------------------- */  
+function validateConfirmPassword() {
+  const password = passwordInput.value;
+  const confirm = confirmPasswordInput.value;
+  const messageElement = document.getElementById('match-message');
+  const isValid = password === confirm && password !== "";
+  validationState.confirmPassword = isValid;
+
+  if (confirm === "") {
+    clearFieldValidation(confirmPasswordInput);
+    if (messageElement) messageElement.textContent = '';
+  } else if (!isValid) {
+    showFieldError(confirmPasswordInput, ''); // limpiamos el mensaje asociado al input
+    if (messageElement) {
+      messageElement.textContent = 'Las contraseñas no coinciden';
+      messageElement.classList.add('text-danger');
+      messageElement.classList.remove('text-success');
     }
-    return isValid;
+  } else {
+    showFieldSuccess(confirmPasswordInput);
+    if (messageElement) {
+      messageElement.textContent = 'Las contraseñas coinciden ✅';
+      messageElement.classList.add('text-success');
+      messageElement.classList.remove('text-danger');
+    }
   }
+  return isValid;
+}
+
 
   /* ---------------------- FUNCIONES AUXILIARES ---------------------- */
 

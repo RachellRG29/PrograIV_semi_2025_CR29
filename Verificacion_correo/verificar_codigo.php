@@ -14,8 +14,12 @@ if (!isset($_SESSION['verification_code'], $_SESSION['user_data'])) {
 }
 
 if ($codigoIngresado == $_SESSION['verification_code']) {
+    // Modificar los datos del usuario para incluir verified=true
+    $userData = $_SESSION['user_data'];
+    $userData['verified'] = true; // Añadir esta línea para marcar como verificado
+    
     $bulk = new MongoDB\Driver\BulkWrite;
-    $bulk->insert($_SESSION['user_data']);
+    $bulk->insert($userData); // Insertar los datos modificados
 
     try {
         $cliente->executeBulkWrite('Veganimo.Usuarios', $bulk);

@@ -21,7 +21,7 @@ body, html {
 
 /*Perfil usuario esquina superior derecha*/
 .perfil_user{
-  position: absolute;
+  position: fixed; /*para q no se mueva*/
   right: 2.5rem;
   top: 1rem;
   padding: 2px 20px;
