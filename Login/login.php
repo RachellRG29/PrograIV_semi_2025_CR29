@@ -42,15 +42,22 @@ try {
         exit;
     }
 
-    // Iniciar sesión (aquí puedes agregar más lógica de sesión)
-    session_start();
-    $_SESSION['user_id'] = (string)$usuario->_id;
-    $_SESSION['email'] = $usuario->email;
-    $_SESSION['fullname'] = $usuario->fullname;
+    // Iniciar sesión
+    // Extraer primer nombre y primer apellido correctamente
+    $nombreParts = preg_split('/\s+/', trim($usuario->fullname));
+    $nombreMostrar = $nombreParts[0]; // Primer nombre
+    if (count($nombreParts) > 1) {
+        $nombreMostrar .= ' ' . $nombreParts[1]; // Primer apellido
+    }
+
+    // Guardar en sesión y también enviar al frontend
+    $_SESSION['display_name'] = $nombreMostrar;
 
     echo json_encode([
         "success" => true,
-        "message" => "✅ Sesión iniciada correctamente. Redirigiendo..."
+        "message" => "✅ Sesión iniciada correctamente. Redirigiendo...",
+        "display_name" => $nombreMostrar,
+        "full_name" => $usuario->fullname // Para depuración
     ]);
     
 } catch (MongoDB\Driver\Exception\Exception $e) {
