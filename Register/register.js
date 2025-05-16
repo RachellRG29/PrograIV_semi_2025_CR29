@@ -1,6 +1,6 @@
 document.getElementById("formRegistro").addEventListener("submit", function(event) {
   event.preventDefault();
-
+  
   const formData = new FormData(this);
 
   fetch("registro.php", {
@@ -9,36 +9,28 @@ document.getElementById("formRegistro").addEventListener("submit", function(even
   })
   .then(response => response.json())
   .then(data => {
-    if (data.success) {
-      if (data.redirect) {
-        // Redirigir a la página de verificación
-        window.location.href = data.redirect;
-      } else {
-        // Mostrar mensaje de éxito
-        Swal.fire({
-          toast: true,
-          position: 'bottom-end',
-          icon: 'success',
-          title: data.message,
-          showConfirmButton: false,
-          timer: 3000
-        });
-        
-        // Redirigir a login después de 3 segundos
-        setTimeout(() => {
-          window.location.href = "/Login/login.html";
-        }, 3000);
+    // Configuración de Toast para todos los mensajes
+    const Toast = Swal.mixin({
+      toast: true,
+      position: 'bottom-end',
+      showConfirmButton: false,
+      timer: 3000,
+      timerProgressBar: true,
+      didOpen: (toast) => {
+        toast.addEventListener('mouseenter', Swal.stopTimer)
+        toast.addEventListener('mouseleave', Swal.resumeTimer)
       }
-    } else {
-      // Mostrar error
-      Swal.fire({
-        toast: true,
-        position: 'bottom-end',
-        icon: 'error',
-        title: data.message,
-        showConfirmButton: false,
-        timer: 3000
-      });
+    });
+
+    Toast.fire({
+      icon: data.icon || (data.success ? 'success' : 'error'),
+      title: data.message
+    });
+
+    if (data.success && data.redirect) {
+      setTimeout(() => {
+        window.location.href = data.redirect;
+      }, 3000); // Redirigir después de 3 segundos
     }
   })
   .catch(error => {
@@ -46,9 +38,10 @@ document.getElementById("formRegistro").addEventListener("submit", function(even
       toast: true,
       position: 'bottom-end',
       icon: 'error',
-      title: '❌ Error en la conexión con el servidor',
+      title: 'Error en la conexión con el servidor',
       showConfirmButton: false,
-      timer: 3000
+      timer: 3000,
+      timerProgressBar: true
     });
   });
 });

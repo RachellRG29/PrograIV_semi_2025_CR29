@@ -1,69 +1,64 @@
 <?php
 require_once __DIR__ . '/../misc/db_config.php';
 header('Content-Type: application/json');
-
-// Obtener datos del POST
-$email = $_POST['email'] ?? '';
-$password = $_POST['password'] ?? '';
+session_start();
 
 // Validación básica
-if (empty($email) || empty($password)) {
+if (empty($_POST['email']) || empty($_POST['password'])) {
     echo json_encode([
         "success" => false,
-        "message" => "⚠️ Debes ingresar el correo y la contraseña"
+        "message" => "Debes ingresar el correo y la contraseña",
+        "icon" => "warning"
     ]);
     exit;
 }
 
-$baseDatos = 'Veganimo';
-$coleccion = 'Usuarios';
-
 try {
-    // Buscar usuario por email
-    $filtro = ['email' => $email];
-    $query = new MongoDB\Driver\Query($filtro, ['limit' => 1]);
-    $cursor = $cliente->executeQuery("$baseDatos.$coleccion", $query);
+    // Buscar usuario
+    $query = new MongoDB\Driver\Query(['email' => $_POST['email']], ['limit' => 1]);
+    $cursor = $cliente->executeQuery('Veganimo.Usuarios', $query);
     $usuario = current($cursor->toArray());
 
     if (!$usuario) {
         echo json_encode([
             "success" => false,
-            "message" => "❌ Correo no registrado"
+            "message" => "Correo no registrado",
+            "icon" => "error"
         ]);
         exit;
     }
 
     // Verificar contraseña
-    if (!password_verify($password, $usuario->password)) {
+    if (!password_verify($_POST['password'], $usuario->password)) {
         echo json_encode([
             "success" => false,
-            "message" => "❌ Contraseña incorrecta"
+            "message" => "Contraseña incorrecta",
+            "icon" => "error"
         ]);
         exit;
     }
 
-    // Iniciar sesión
-    // Extraer primer nombre y primer apellido correctamente
+    // Configurar sesión
     $nombreParts = preg_split('/\s+/', trim($usuario->fullname));
-    $nombreMostrar = $nombreParts[0]; // Primer nombre
-    if (count($nombreParts) > 1) {
-        $nombreMostrar .= ' ' . $nombreParts[1]; // Primer apellido
-    }
-
-    // Guardar en sesión y también enviar al frontend
+    $nombreMostrar = $nombreParts[0] . (isset($nombreParts[1]) ? ' ' . $nombreParts[1] : '');
+    
+    $_SESSION['user_id'] = (string)$usuario->_id;
+    $_SESSION['email'] = $usuario->email;
     $_SESSION['display_name'] = $nombreMostrar;
 
     echo json_encode([
         "success" => true,
-        "message" => "✅ Sesión iniciada correctamente. Redirigiendo...",
-        "display_name" => $nombreMostrar,
-        "full_name" => $usuario->fullname // Para depuración
+        "message" => "Sesión iniciada correctamente",
+        "icon" => "success",
+        "redirect" => "/Pantalla_principal/index_pantalla_principal.html",
+        "display_name" => $nombreMostrar
     ]);
     
 } catch (MongoDB\Driver\Exception\Exception $e) {
     echo json_encode([
         "success" => false,
-        "message" => "❌ Error en el servidor: " . $e->getMessage()
+        "message" => "Error en el servidor",
+        "icon" => "error"
     ]);
 }
 ?>
