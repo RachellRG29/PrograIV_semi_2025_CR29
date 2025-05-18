@@ -15,8 +15,6 @@ try {
             $usuario = (array)$documento;
             $usuario['_id'] = (string)$usuario['_id'];
             $usuario['created_at'] = $usuario['created_at']->toDateTime()->format('c');
-            // Asegurar que el campo verified exista (por si hay usuarios antiguos)
-            $usuario['verified'] = isset($usuario['verified']) ? (bool)$usuario['verified'] : false;
             $usuarios[] = $usuario;
         }
         
@@ -34,8 +32,7 @@ try {
                 'fullname' => $data['fullname'],
                 'email' => $data['email'],
                 'birthdate' => $data['birthdate'],
-                'gender' => $data['gender'],
-                'verified' => $data['verified']
+                'gender' => $data['gender']
             ]
         ];
         

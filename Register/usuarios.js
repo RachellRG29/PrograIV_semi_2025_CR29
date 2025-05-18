@@ -7,7 +7,6 @@ document.addEventListener('DOMContentLoaded', function() {
     // Cargar usuarios al iniciar
     cargarUsuarios();
 
-    // Función para cargar usuarios desde la API
     function cargarUsuarios() {
         fetch('usuarios.php')
             .then(response => response.json())
@@ -24,7 +23,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Función para renderizar la tabla
     function renderizarTabla(usuarios) {
         if (usuarios.length === 0) {
-            tablaUsuarios.innerHTML = `<tr><td colspan="7" class="text-center">No hay usuarios registrados</td></tr>`;
+            tablaUsuarios.innerHTML = `<tr><td colspan="6" class="text-center">No hay usuarios registrados</td></tr>`;
             return;
         }
 
@@ -35,11 +34,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 <td>${new Date(usuario.birthdate).toLocaleDateString()}</td>
                 <td>${usuario.gender}</td>
                 <td>${new Date(usuario.created_at).toLocaleString()}</td>
-                <td class="text-center">
-                    <span class="badge ${usuario.verified ? 'bg-success' : 'bg-warning'}">
-                        ${usuario.verified ? 'Verificado' : 'Pendiente'}
-                    </span>
-                </td>
                 <td class="text-center">
                     <button class="btn btn-sm btn-primary btn-editar" data-id="${usuario._id}">
                         <i class="fas fa-edit"></i>
@@ -98,13 +92,6 @@ document.addEventListener('DOMContentLoaded', function() {
                         <select name="gender" class="form-control" required>
                             <option value="Femenino" ${usuario.gender === 'Femenino' ? 'selected' : ''}>Femenino</option>
                             <option value="Masculino" ${usuario.gender === 'Masculino' ? 'selected' : ''}>Masculino</option>
-                        </select>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Estado</label>
-                        <select name="verified" class="form-control" required>
-                            <option value="true" ${usuario.verified ? 'selected' : ''}>Verificado</option>
-                            <option value="false" ${!usuario.verified ? 'selected' : ''}>Pendiente</option>
                         </select>
                     </div>
                     <div class="mb-3">

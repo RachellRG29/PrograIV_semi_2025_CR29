@@ -47,7 +47,7 @@ if (isset($_POST['verification_code'])) {
 }
 
 // Validación de campos
-$requiredFields = ['fullname', 'birthdate', 'gender', 'email', 'password'];
+$requiredFields = ['fullname', 'birthdate', 'gender', 'email', 'password', 'confirm-password'];
 foreach ($requiredFields as $field) {
     if (empty($_POST[$field])) {
         echo json_encode([
@@ -57,6 +57,16 @@ foreach ($requiredFields as $field) {
         ]);
         exit;
     }
+}
+
+// Validar que las contraseñas coincidan
+if ($_POST['password'] !== $_POST['confirm-password']) {
+    echo json_encode([
+        "success" => false,
+        "message" => "Las contraseñas no coinciden",
+        "icon" => "error"
+    ]);
+    exit;
 }
 
 // Validación de email existente
@@ -88,17 +98,23 @@ $_SESSION['user_data'] = [
 $_SESSION['verification_code'] = $verificationCode;
 
 // Enviar correo
-if (enviarCodigoVerificacion($email, $verificationCode) === true) {
-    echo json_encode([
-        "success" => true,
-        "message" => "Código de verificación enviado a tu correo. Serás redirigido para validarlo",
-        "icon" => "info",
-        "redirect" => "/Verificacion_correo/verificacion.html"
-    ]);
-} else {
+try {
+    $mailResult = enviarCodigoVerificacion($email, $verificationCode);
+    
+    if ($mailResult === true) {
+        echo json_encode([
+            "success" => true,
+            "message" => "Código de verificación enviado a tu correo. Serás redirigido para validarlo",
+            "icon" => "success",
+            "redirect" => "/Verificacion_correo/verificacion.html"
+        ]);
+    } else {
+        throw new Exception("Error al enviar el correo: " . $mailResult);
+    }
+} catch (Exception $e) {
     echo json_encode([
         "success" => false,
-        "message" => "Error al enviar el código de verificación",
+        "message" => "Error al enviar el código de verificación: " . $e->getMessage(),
         "icon" => "error"
     ]);
 }
