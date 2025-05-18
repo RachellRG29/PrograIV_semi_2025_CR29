@@ -241,3 +241,37 @@ body {
     margin-left: 155px;
   }
 
+
+  .row.mb-3 {
+  margin-top: 12px;
+}
+
+
+#formEditarUsuario .form-control {
+  max-width: 340px; 
+  margin: 0 auto;   
+}
+
+
+#formEditarUsuario .form-label {
+    display: block;
+    text-align: left;
+    margin-left: 60px;
+    padding-left: 0;
+    font-size: 16px;
+    font-weight: bold
+}
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+

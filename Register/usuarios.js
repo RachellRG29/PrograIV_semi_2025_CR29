@@ -71,35 +71,35 @@ document.addEventListener('DOMContentLoaded', function() {
         const usuario = usuariosData.find(u => u._id === idUsuario);
         
         Swal.fire({
-            title: 'Editar Usuario',
+            title: 'Editar usuario',
             html: `
                 <form id="formEditarUsuario">
                     <input type="hidden" name="_id" value="${usuario._id}">
-                    <div class="mb-3">
-                        <label class="form-label">Nombre completo</label>
+                    <div class="mb-4">
+                        <label class="form-label">Nombre completo:</label>
                         <input type="text" name="fullname" class="form-control" value="${usuario.fullname}" required>
                     </div>
-                    <div class="mb-3">
-                        <label class="form-label">Email</label>
+                    <div class="mb-4">
+                        <label class="form-label">Email:</label>
                         <input type="email" name="email" class="form-control" value="${usuario.email}" required>
                     </div>
-                    <div class="mb-3">
-                        <label class="form-label">Fecha de nacimiento</label>
+                    <div class="mb-4">
+                        <label class="form-label">Fecha de nacimiento:</label>
                         <input type="date" name="birthdate" class="form-control" value="${usuario.birthdate}" required>
                     </div>
-                    <div class="mb-3">
-                        <label class="form-label">Género</label>
+                    <div class="mb-4">
+                        <label class="form-label">Género:</label>
                         <select name="gender" class="form-control" required>
                             <option value="Femenino" ${usuario.gender === 'Femenino' ? 'selected' : ''}>Femenino</option>
                             <option value="Masculino" ${usuario.gender === 'Masculino' ? 'selected' : ''}>Masculino</option>
                         </select>
                     </div>
-                    <div class="mb-3">
-                        <label class="form-label">Nueva contraseña (opcional)</label>
+                    <div class="mb-4">
+                        <label class="form-label">Nueva contraseña: (opcional)</label>
                         <input type="password" name="password" class="form-control" placeholder="Dejar vacío para no cambiar">
                     </div>
-                    <div class="mb-3">
-                        <label class="form-label">Confirmar contraseña</label>
+                    <div class="mb-4">
+                        <label class="form-label">Confirmar contraseña:</label>
                         <input type="password" name="confirmPassword" class="form-control" placeholder="Confirmar nueva contraseña">
                     </div>
                 </form>
