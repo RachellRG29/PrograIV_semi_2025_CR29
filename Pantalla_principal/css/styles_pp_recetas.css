@@ -106,11 +106,11 @@
 
   
  /* Grid container */
- .grid-container-recetas {
+ /*.grid-container-recetas {
     display: grid; justify-items: center;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); /*Ancho minimo de la tarjeta*/
-    margin: 4rem 5px 4rem 5px; /*top-right-bottom-left*/
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); /*Ancho minimo de la tarjeta
+    margin: 4rem 5px 4rem 5px; /*top-right-bottom-left
     gap: 1rem;
     box-sizing: border-box;
   }
-
+*/

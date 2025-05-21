@@ -304,3 +304,15 @@ body , html{
 #footer-pp .copyFooter {
   font-size: 0.8rem;
 }
+
+
+.tabla-recetas, 
+.tabla-recetas th, 
+.tabla-recetas td {
+    border: none !important;
+    background-color: transparent !important;
+}
+
+.tabla-recetas {
+    margin-bottom: 0 !important;
+}

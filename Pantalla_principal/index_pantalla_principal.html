@@ -10,6 +10,7 @@
     <!-- Iconos de Phosphor -->
     <link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.0.3/src/phosphor.css">
 
+
     <!-- Estilos de las pantallas -->
     <link rel="stylesheet" href="/Pantalla_principal/css/styles_index_pp.css">
     <link rel="stylesheet" href="/Pantalla_principal/css/styles_pp_inicio.css">
@@ -106,7 +107,9 @@
       <!-- Aquí se cargará el contenido desde pp_inicio.html, etc -->
 
     </main>
-    
+
+      <div id="app-search"></div>
+
   </div>
 
   <!-- FOOTER -->
@@ -144,23 +147,34 @@
   <!-- SweetAlert2 -->
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
 
   <script src="https://unpkg.com/phosphor-icons"></script>
   <script src="../Pantalla_principal/js/scripts_index_pp.js"></script>   <!-- No quitar -->
   <script src="../Pantalla_principal/js/validacion_receta.js"></script>
-  
-  <!-- <script src="../Pantalla_principal/js/crear_receta.js"></script> no se ocupa pero dejarlo comentado-->
+
+  <script src="/Pantalla_principal/js/recetas-search.js"></script>  <!-- Busqueda de tarjetas en pp_recetas.html -->
   
 </body>
 
 </html>
 
 <script>
-  document.addEventListener("DOMContentLoaded", () => {
-  // Lógica para cargar contenido de los items normales
+document.addEventListener("DOMContentLoaded", () => {
   const contenido = document.getElementById("contenido-principal");
 
-  // Crear Recetas manual
+  const cargarScripts = (callback) => {
+    // Cargar SweetAlert2 si no está ya cargado
+    if (!window.Swal) {
+      const scriptSwal = document.createElement('script');
+      scriptSwal.src = 'https://cdn.jsdelivr.net/npm/sweetalert2@11';
+      scriptSwal.onload = callback;
+      document.body.appendChild(scriptSwal);
+    } else {
+      callback();
+    }
+  };
+
   const crearRecetasBtn = document.querySelector('[data-custom="crear-recetas"]');
   if (crearRecetasBtn) {
     crearRecetasBtn.addEventListener("click", () => {
@@ -168,6 +182,19 @@
         .then(res => res.text())
         .then(data => {
           contenido.innerHTML = data;
+          
+          // Cargar scripts y luego inicializar
+          cargarScripts(() => {
+            const scriptRecetas = document.createElement('script');
+            scriptRecetas.src = '/Pantalla_principal/js/recetas.js';
+            scriptRecetas.onload = () => {
+              console.log('recetas.js cargado');
+              if (window.cargarRecetas) {
+                cargarRecetas();
+              }
+            };
+            document.body.appendChild(scriptRecetas);
+          });
         })
         .catch(err => {
           console.error("Error cargando Crear Recetas:", err);
@@ -175,7 +202,6 @@
     });
   }
 });
-
 </script>
 
 
