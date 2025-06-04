@@ -105,18 +105,21 @@
     <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
     <script>
 
+//Notificacion
         window.mostrarNotificacion = false;
 
         function solicitarPermisoNotificaciones(){
             Notification.requestPermission().then(permission => {
                 permisoNotificar = result;
+                consola.log(permisoNotificar);
             })
         }
 
         function crearNotificacion(mensaje){
             if(permisoNotificar === 'granted'){
                 let notification = new Notification('Chat amigo', {
-                    body: mensaje
+                    body: mensaje,
+                    icon:'notificacion.ico'
                 });
                 notification.onclick = function(){
                     window.open('/');
