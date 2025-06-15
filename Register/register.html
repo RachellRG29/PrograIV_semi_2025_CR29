@@ -158,44 +158,52 @@
 
   </div>
 
+  <?php if (isAdmin()): ?>
+    <!-- Sección de la tabla de usuarios segun administrador -->
+    <div data-admin-only>
       <!-- Sección de la tabla de usuarios -->
-  <div class="row justify-content-center mt-5">
-    <div class="col-xxl-10 col-12 px-4 pb-5">
-      <div class="card shadow-lg">
-         <div class="card-header bg-dark text-white text-center">
-            <h5 class="mb-0">Usuarios Registrados</h5>
+      <div class="row justify-content-center mt-5">
+        <div class="col-xxl-10 col-12 px-4 pb-5">
+          <div class="card shadow-lg">
+            <div class="card-header bg-dark text-white text-center">
+                <h5 class="mb-0">Usuarios Registrados</h5>
+              </div>
           </div>
-      </div>
-      <div class="card-body">
-        <div class="row mb-3">
-          <div class="col-md-6 position-relative mx-auto">
-            <i class="fas fa-search position-absolute" style="top: 50%; left: 15px; transform: translateY(-50%); color: #4e4c4c;"></i>
-            <input type="text" id="busquedaUsuarios" class="form-control ps-4" placeholder="Buscar por nombre, email o género...">
+          <div class="card-body">
+            <div class="row mb-3">
+              <div class="col-md-6 position-relative mx-auto">
+                <i class="fas fa-search position-absolute" style="top: 50%; left: 15px; transform: translateY(-50%); color: #888;"></i>
+                <input type="text" id="busquedaUsuarios" class="form-control ps-4" placeholder="Buscar por nombre, email o género...">
+              </div>
+            </div>
+            <div class="table-responsive">
+              <table class="table table-bordered table-striped table-hover">
+                <thead class="table-dark text-center">
+                  <tr>
+                    <th>Nombre</th>
+                    <th>Email</th>
+                    <th>Fecha Nacimiento</th>
+                    <th>Género</th>
+                    <th>Fecha Registro</th>
+                    <th>Acciones</th>
+                  </tr>
+                </thead>
+                <tbody id="tablaUsuarios">
+                  <tr>
+                    <td colspan="7" class="text-center">Cargando usuarios...</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
           </div>
-        </div>
-        <div class="table-responsive">
-          <table class="table table-bordered table-striped table-hover">
-            <thead class="table-dark text-center">
-              <tr>
-                <th>Nombre</th>
-                <th>Email</th>
-                <th>Fecha Nacimiento</th>
-                <th>Género</th>
-                <th>Fecha Registro</th>
-                <th>Acciones</th>
-              </tr>
-            </thead>
-            <tbody id="tablaUsuarios">
-              <tr>
-                <td colspan="7" class="text-center">Cargando usuarios...</td>
-              </tr>
-            </tbody>
-          </table>
         </div>
       </div>
     </div>
-  </div>
+  <?php endif; ?>
 
+  <!-- Bootstrap JS y dependencias -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
 
 
   
@@ -217,7 +225,12 @@
   </script>
 
   <script src="/Register/register_validacion.js"></script>
-  <script src="/Register/usuarios.js"></script>
+
+  <!-- Solo cargar estos scripts si es admin -->
+  <?php if (isAdmin()): ?>
+    <script src="/Register/usuarios.js"></script>
+  <?php endif; ?>
+
   <!-- <script src="/Register/register.js"></script> -->
   
 

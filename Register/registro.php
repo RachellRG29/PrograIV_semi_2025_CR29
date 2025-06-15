@@ -1,7 +1,12 @@
 <?php
-require_once __DIR__ . '/../misc/db_config.php';
-require_once __DIR__ . '/../misc/phpmailer_config.php';
+require_once __DIR__ . '/../misc/db_config.php'; // Configuración de la base de datos
+require_once __DIR__ . '/../misc/phpmailer_config.php'; // Configuración de PHPMailer
 session_start();
+
+if (strpos($_SERVER['REQUEST_URI'], 'usuarios.php') !== false) {
+    require_once __DIR__ . '/../misc/auth_functions.php';
+    checkAdminAccess();
+}
 
 // Verificar si es una solicitud de verificación
 if (isset($_POST['verification_code'])) {
@@ -93,7 +98,8 @@ $_SESSION['user_data'] = [
     'email' => $email,
     'password' => password_hash($_POST['password'], PASSWORD_DEFAULT),
     'created_at' => new MongoDB\BSON\UTCDateTime(),
-    'verified' => false
+    'verified' => false,
+    'role' => 'user'
 ];
 $_SESSION['verification_code'] = $verificationCode;
 

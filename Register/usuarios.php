@@ -1,6 +1,10 @@
 <?php
 require_once __DIR__ . '/../misc/db_config.php';
+require_once __DIR__ . '/../misc/auth_functions.php'; // Funciones de autenticación
 header('Content-Type: application/json');
+
+// Verificar permisos de administrador
+checkAdminAccess();
 
 try {
     $method = $_SERVER['REQUEST_METHOD'];

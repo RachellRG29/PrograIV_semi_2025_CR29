@@ -88,3 +88,4 @@ createApp({
     }
   }
 }).mount('#mainBody'); //  app en el body principal
+

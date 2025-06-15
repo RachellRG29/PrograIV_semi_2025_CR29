@@ -22,9 +22,7 @@ async function cargarContenido(pagina) {
   }
 }
 
-
- //Actualiza la información del perfil del usuario en toda la aplicación
-
+//Actualiza la información del perfil del usuario en toda la aplicación
 async function actualizarPerfilUsuario() {
   try {
     let nombreUsuario = localStorage.getItem('userDisplayName');
@@ -57,9 +55,32 @@ async function verificarSesion() {
   return await response.json();
 }
 
+
+//Verifica el rol del usuario y muestra/oculta elementos de admin
+async function verificarRolUsuario() {
+  try {
+    const response = await fetch('/Login/check_session.php');
+    if (!response.ok) throw new Error('Error verificando sesión');
+    const data = await response.json();
+    
+    // Mostrar/ocultar elementos de admin
+    const adminElements = document.querySelectorAll('[data-admin-only]');
+    const isAdmin = data.role === 'admin';
+    
+    adminElements.forEach(el => {
+      el.style.display = isAdmin ? '' : 'none';
+    });
+    
+    return data.role;
+  } catch (error) {
+    console.error('Error verificando rol:', error);
+    return 'user'; // Por defecto
+  }
+}
+
  //Aplica estilos de fondo según la página cargada
 function aplicarEstilosFondo(pagina) {
-  const paginasVerdes = ["pp_inicio.html", "pp_mi_plan.html","pp_crear_recetas.html"];
+  const paginasVerdes = ["pp_inicio.php", "pp_mi_plan.html","pp_crear_receta.php"];
   document.getElementById("contenido-principal").style.backgroundColor = 
     paginasVerdes.includes(pagina) ? "#007848" : "#F6FFFE";
 }
@@ -67,19 +88,30 @@ function aplicarEstilosFondo(pagina) {
  //Ejecuta scripts específicos para cada página
 
 function ejecutarScriptsPagina(pagina) {
-  // Lógica específica para "Crear Recetas"
-  if (pagina === "crear-recetas.html") {
+  if (pagina === "pp_crear_receta.php") {
     inicializarCrearRecetas();
   }
+
+  if (pagina === "pp_recetas.php") {
+    setTimeout(() => {
+      if (typeof cargarRecetas === 'function') {
+        cargarRecetas();
+      } else {
+        console.error("❌ La función cargarRecetas no está definida.");
+      }
+    }, 100);
+  }
+
 }
 
 
  //* Inicializa la funcionalidad de "Crear Recetas"
 
 function inicializarCrearRecetas() {
-  console.log("Inicializando creación de recetas...");
-  //agregar toda la lógica específica para crear recetas
+  console.log("✅ Inicializando creación de recetas...");
+  iniciarValidacionCrearReceta();
 }
+
 
 function mostrarErrorCarga() {
   const contenido = document.getElementById("contenido-principal");
@@ -108,6 +140,7 @@ function scrollToSection(sectionName) {
 // Inicialización de la aplicación
 document.addEventListener("DOMContentLoaded", async () => {
   await actualizarPerfilUsuario();
+  await verificarRolUsuario();
   
   const navItems = document.querySelectorAll(".nav-item");
   const subItems = document.querySelectorAll(".submenu li");
@@ -179,22 +212,33 @@ document.addEventListener("DOMContentLoaded", async () => {
   });
 
   // Manejar parámetros de URL
-  const params = new URLSearchParams(window.location.search);
-  const seccion = params.get('seccion');
+const params = new URLSearchParams(window.location.search);
+const seccion = params.get('seccion');
+const ultimaPagina = localStorage.getItem('ultimaPaginaCargada');
+let paginaInicial = "pp_inicio.php"; // Default
 
-  if (seccion === 'recetas') {
-    const recetasItem = [...document.querySelectorAll('.nav-item')].find(item => 
-      item.textContent.trim().includes('Recetas')
-    );
-    recetasItem?.click();
-  } else if (seccion === 'informate') {
-    const informateItem = [...document.querySelectorAll('.has-submenu')].find(item => 
-      item.textContent.trim().includes('Infórmate')
-    );
-    informateItem?.querySelector('.nav-trigger')?.click();
-  } else {
-    cargarContenido("pp_inicio.html");
+if (seccion === 'recetas') {
+  paginaInicial = "pp_recetas.php";
+} else if (seccion === 'informate') {
+  paginaInicial = "pp_informate.html";
+} else if (ultimaPagina) {
+  paginaInicial = ultimaPagina;
+}
+
+// Buscar y marcar el ítem correspondiente como activo
+const navItem = [...document.querySelectorAll('.nav-item')].find(item =>
+  item.getAttribute('data-page') === paginaInicial
+);
+if (navItem) {
+  navItem.classList.add('active', 'highlight');
+  if (navItem.closest('.has-submenu')) {
+    navItem.closest('.has-submenu').classList.add('open-submenu');
   }
+}
+
+cargarContenido(paginaInicial);
+
+
 });
 
  //* Maneja acciones personalizadas como "Crear Recetas"
@@ -202,7 +246,7 @@ function manejarAccionPersonalizada(accion) {
   switch(accion) {
     case 'crear-recetas':
       console.log("Iniciando creación de recetas...");
-      cargarContenido("pp_crear_recetas.html")
+      cargarContenido("pp_crear_recetas.php")
         .then(() => {
           // Actualización específica para crear recetas
           actualizarPerfilUsuario();
@@ -213,6 +257,8 @@ function manejarAccionPersonalizada(accion) {
       console.warn(`Acción personalizada no reconocida: ${accion}`);
   }
 }
+
+
 
 // Nueva función para verificar y forzar actualización
 function verificarActualizacionPerfil() {
@@ -244,10 +290,14 @@ async function cargarContenido(pagina) {
     
     ejecutarScriptsPagina(pagina);
     
-    return true;
+    localStorage.setItem('ultimaPaginaCargada', pagina);
+
+    return true; 
+
   } catch (error) {
     console.error('⚠️ Error al cargar contenido:', error);
     mostrarErrorCarga();
     return false;
   }
 }
+
