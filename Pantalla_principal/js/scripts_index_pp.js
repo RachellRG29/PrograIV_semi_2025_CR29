@@ -80,7 +80,7 @@ async function verificarRolUsuario() {
 
  //Aplica estilos de fondo según la página cargada
 function aplicarEstilosFondo(pagina) {
-  const paginasVerdes = ["pp_inicio.php", "pp_mi_plan.html","pp_crear_receta.php"];
+  const paginasVerdes = ["pp_inicio.php", "pp_mi_plan.html", "pp_comunidad.php","pp_crear_receta.php"];
   document.getElementById("contenido-principal").style.backgroundColor = 
     paginasVerdes.includes(pagina) ? "#007848" : "#F6FFFE";
 }
@@ -102,6 +102,10 @@ function ejecutarScriptsPagina(pagina) {
     }, 100);
   }
 
+  if (pagina === "pp_comunidad.php") {
+    // Aquí solo llamamos la función que está en comunidad.js
+    inicializarChatComunidad();
+  }
 }
 
 

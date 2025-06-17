@@ -1,0 +1,107 @@
+
+
+ .lbl_bienvenida_vg_comunidad{
+    font-family: 'Gloock', Verdana;
+    font-weight: 400; font-size: 30px; letter-spacing: 1.5px;
+    color: #1A1C1C;
+ }
+
+.chat-container {
+  max-width: 700px;
+  margin: 0 auto;
+  background: #f1f1f1;
+  padding: 10px;
+  border-radius: 10px;
+  height: 500px;
+  display: flex;
+  flex-direction: column;
+}
+
+#chat-mensajes {
+  flex: 1;
+  overflow-y: auto;
+  padding: 10px;
+}
+
+.mensaje-chat {
+  margin-bottom: 10px;
+  display: flex;
+}
+
+.mensaje-yo {
+  justify-content: flex-end;
+}
+
+.mensaje-otro {
+  justify-content: flex-start;
+}
+
+.mensaje-burbuja {
+  max-width: 60%;
+  padding: 8px 12px;
+  border-radius: 12px;
+  background-color: #a5eb6f; /* Verde claro estilo WhatsApp */
+  position: relative;
+  word-wrap: break-word;
+}
+
+.mensaje-yo .mensaje-burbuja {
+  background-color: #6bcbf5;
+  text-align: right;
+}
+
+.mensaje-autor {
+  margin: 0 0 4px 0;
+  font-size: 1em; /* más grande */
+  color: #222;    /* más oscuro para destacar */
+  font-weight: bold;
+}
+
+.mensaje-texto {
+  margin: 0;
+  font-size: 0.85em; /* un poco más pequeño */
+  color: #555;       /* más tenue */
+}
+
+.mensaje-info {
+  text-align: right;
+  font-size: 0.7em;
+  color: #aaa;
+  margin-top: 4px;
+}
+
+
+#form-enviar-mensaje {
+  display: flex;
+  margin-top: 10px;
+}
+
+#form-enviar-mensaje input[type="text"] {
+  flex: 1;
+  padding: 12px 15px;
+  font-size: 1em;
+  border: 1px solid #ccc;
+  border-radius: 20px;
+  outline: none;
+  background: #fff;
+  margin-right: 10px;
+}
+
+#form-enviar-mensaje button {
+  padding: 12px 20px;
+  font-size: 1em;
+  background-color: #5ec45e;
+  color: #fff;
+  border: none;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+#form-enviar-mensaje button:hover {
+  background-color: #4aaa4a;
+}
+
+
+
+
