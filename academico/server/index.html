@@ -109,7 +109,7 @@
         window.mostrarNotificacion = false;
 
         function solicitarPermisoNotificaciones(){
-            Notification.requestPermission().then(permission => {
+            Notification.requestPermission().then(result => {
                 permisoNotificar = result;
                 consola.log(permisoNotificar);
             })
@@ -117,7 +117,7 @@
 
         function crearNotificacion(mensaje){
             if(permisoNotificar === 'granted'){
-                let notification = new Notification('Chat amigo', {
+                var notification = new Notification('Chat amigo', {
                     body: mensaje,
                     icon:'notificacion.ico'
                 });
